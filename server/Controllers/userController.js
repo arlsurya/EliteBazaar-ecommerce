@@ -35,11 +35,36 @@ module.exports = {
             })
         }
 
+        let existEmail = await userModel.findOne({email:email})
+        if(existEmail){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "email is registered with another account"
+            })
+        }
+
+        let existMobile = await userModel.findOne({mobile:mobile})
+        if(existMobile){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "mobile is registered with another account"
+            })
+        }
+
         let hashedPassword = await bcrypt.hash(req.body.password,saltRound)
         
         req.body.password = hashedPassword;
-        console.log(req.body.password)
         
+        let user = new userModel(req.body)
+        user = await user.save()
+        console.log(user)
+        res.send(user)
+
+
+    
+
 
             
             
