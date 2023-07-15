@@ -92,28 +92,31 @@ module.exports = {
         try {
            let {email, password} = req.body
 
-            // if(!email){
-            //     return res.status(400).json({
-            //         statusCode: 400,
-            //         Code: 0,
-            //         message: "email is required"
-            //     })
-            // }
-            // if(!password){
-            //     return res.status(400).json({
-            //         statusCode: 400,
-            //         Code: 0,
-            //         message: "password is required"
-            //     })
-            // }
+            if(!email){
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "email is required"
+                })
+            }
+            if(!password){
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "password is required"
+                })
+            } 
+
+            // validate the email 
 
            if(!Utilities.validateEmail(email)){
-            console.log('invalid')
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "please provide valid email address"
+            })
            }
-           else{
-            console.log('valid  ')
-            
-           }
+          
             
         } catch (error) {
             console.log(error)
