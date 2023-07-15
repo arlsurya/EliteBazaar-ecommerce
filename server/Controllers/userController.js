@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt')
+const saltRound = 10
 const userModel = require('../Models/userModel')
 module.exports = {
     register: async(req,res)=>{
@@ -32,6 +34,13 @@ module.exports = {
                 message: "password is required"
             })
         }
+
+        let hashedPassword = await bcrypt.hash(req.body.password,saltRound)
+        
+        req.body.password = hashedPassword;
+        console.log(req.body.password)
+        
+
             
             
         } catch (error) {
