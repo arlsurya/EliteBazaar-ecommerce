@@ -116,6 +116,30 @@ module.exports = {
                 message: "please provide valid email address"
             })
            }
+
+           let user = await userModel.findOne({email:email})
+           if(!user){
+            return res.status(404).json({
+                statusCode: 404,
+                Code: 0,
+                message: "user not found !"
+            })
+           }
+
+        // user found with the provided email section
+
+        // compare provided password and stored password
+        comparePassword = await bcrypt.compare(password,user.password)
+        
+        if(!comparePassword){
+            return res.status(401).json({
+                statusCode: 401,
+                Code: 0,
+                message: "email or password is invalid !"
+            })
+        }
+
+        
           
             
         } catch (error) {
