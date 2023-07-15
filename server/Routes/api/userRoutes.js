@@ -8,7 +8,7 @@ router.get('/', (req,res)=>{
     res.send('user routes')
 })
 
-router.post('/register',isAuth, userController.register)
+router.post('/register', userController.register)
 router.post('/login', userController.login)
 
 

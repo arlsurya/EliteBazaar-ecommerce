@@ -3,6 +3,7 @@ const saltRound = 10
 const jwt = require('jsonwebtoken')
 const userModel = require('../Models/userModel')
 const Constants = require('../Constants')
+const Utilities = require('../Utilities')
 module.exports = {
     register: async(req,res)=>{
         console.log(req.body)
@@ -89,7 +90,30 @@ module.exports = {
     ,
     login: async(req,res)=>{
         try {
-            res.send('login routes')
+           let {email, password} = req.body
+
+            // if(!email){
+            //     return res.status(400).json({
+            //         statusCode: 400,
+            //         Code: 0,
+            //         message: "email is required"
+            //     })
+            // }
+            // if(!password){
+            //     return res.status(400).json({
+            //         statusCode: 400,
+            //         Code: 0,
+            //         message: "password is required"
+            //     })
+            // }
+
+           if(!Utilities.validateEmail(email)){
+            console.log('invalid')
+           }
+           else{
+            console.log('valid  ')
+            
+           }
             
         } catch (error) {
             console.log(error)
