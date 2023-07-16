@@ -163,5 +163,8 @@ module.exports = {
             })
 
         }
+    },
+    forgotPassword: async(req,res)=>{
+         res.send('forgotpassword')
     }
 }
