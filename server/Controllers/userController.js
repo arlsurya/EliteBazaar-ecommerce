@@ -164,7 +164,17 @@ module.exports = {
 
         }
     },
-    forgotPassword: async(req,res)=>{
-         res.send('forgotpassword')
+    changePassword: async(req,res)=>{
+       try {
+
+        
+       } catch (error) {
+        console.log(error)
+        return res.status(409).json({
+            statusCode: 409,
+            message:"something went wrong!"
+        })
+        
+       }
     }
 }

@@ -10,7 +10,7 @@ router.get('/', (req,res)=>{
 
 router.post('/register', userController.register)
 router.post('/login', userController.login)
-router.post('/forgotpassword', userController.forgotPassword)
+router.post('/changepassword', userController.changePassword)
 
 
 module.exports = router;
