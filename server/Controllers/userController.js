@@ -166,6 +166,36 @@ module.exports = {
     },
     changePassword: async(req,res)=>{
        try {
+        let {oldPassword, newPassword, reNewPassword} = req.body;
+
+        if(!oldPassword){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "old password is required"
+            })
+        }
+        if(!newPassword){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "new password is required"
+            })
+        }
+        if(!reNewPassword){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "re-new password is required"
+            })
+        }
+
+        // getting data from the user token 
+        
+
+        
+
+
 
         
        } catch (error) {
