@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const saltRound = 10;
 const jwt = require('jsonwebtoken')
 const adminModel = require('../Models/adminModel')
+const productModel = require('../Models/productModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities')
 
@@ -64,8 +65,8 @@ module.exports = {
             const authToken = jwt.sign(
                 payload,
                 Constants.jwtSectet,
-                {expiresIn: '7days'}
-                )
+                { expiresIn: '7days' }
+            )
 
             return res.status(200).json({
                 statusCode: 200,
@@ -77,7 +78,7 @@ module.exports = {
             console.log(error)
             return res.status(409).json({
                 statusCode: 409,
-                message:"something went wrong!"
+                message: "something went wrong!"
             })
 
         }
@@ -164,152 +165,161 @@ module.exports = {
 
         }
     },
-    changePassword: async(req,res)=>{
+    changePassword: async (req, res) => {
         try {
-         let {oldPassword, newPassword, reNewPassword} = req.body;
- 
-         if(!oldPassword){
-             return res.status(400).json({
-                 statusCode: 400,
-                 Code: 0,
-                 message: "old password is required"
-             })
-         }
-         if(!newPassword){
-             return res.status(400).json({
-                 statusCode: 400,
-                 Code: 0,
-                 message: "new password is required"
-             })
-         }
-         if(!reNewPassword){
-             return res.status(400).json({
-                 statusCode: 400,
-                 Code: 0,
-                 message: "re-new password is required"
-             })
-         }
- 
-         // getting data from the admin token 
- 
-         let  adminId = req.userAuth.id
-         console.log(adminId)
- 
-         let admin = await adminModel.findOne({_id:adminId})
-         
-         if(!admin){
-             return res.status(404).json({
-                 statusCode: 404,
-                 message:"admin not found !"
-             })
-         }
- 
-         // compare entered old password with actually old password
- 
-         let passwordCheck =await bcrypt.compare(oldPassword , admin.password)
-         
-         // if password not match 
-         if(!passwordCheck){
-             return res.status(401).json({
-                 statusCode: 401,
-                 message:"your old password is invalid"
-             })
-         }
- 
-         // check new password and re-new password match
-         if(newPassword != reNewPassword){
-             return res.status(401).json({
-                 statusCode: 401,
-                 message:"new password and the re-entered password do not match."
-             })
-         }
-         // check old password and new password should not same
-         if(oldPassword === newPassword){
-             return res.status(401).json({
-                 statusCode: 401,
-                 message:"new password must be different from the old password."
-             })
-         }
- 
-         let hashedNewPassword = await bcrypt.hash(newPassword,saltRound)
-         console.log(hashedNewPassword)
- 
-         let updatePassword = await adminModel.findOneAndUpdate({_id: adminId},{password: hashedNewPassword})
- 
-         if(!updatePassword){
-             return res.status(401).json({
-                 statusCode: 401,
-                 message:"error while updating the password"
-             })
-         }
- 
-         // if everything works 
-         return res.status(200).json({
-             statusCode: 200,
-             message:"password successfully updated !"
-         })
-         
+            let { oldPassword, newPassword, reNewPassword } = req.body;
+
+            if (!oldPassword) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "old password is required"
+                })
+            }
+            if (!newPassword) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "new password is required"
+                })
+            }
+            if (!reNewPassword) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "re-new password is required"
+                })
+            }
+
+            // getting data from the admin token 
+
+            let adminId = req.userAuth.id
+            console.log(adminId)
+
+            let admin = await adminModel.findOne({ _id: adminId })
+
+            if (!admin) {
+                return res.status(404).json({
+                    statusCode: 404,
+                    message: "admin not found !"
+                })
+            }
+
+            // compare entered old password with actually old password
+
+            let passwordCheck = await bcrypt.compare(oldPassword, admin.password)
+
+            // if password not match 
+            if (!passwordCheck) {
+                return res.status(401).json({
+                    statusCode: 401,
+                    message: "your old password is invalid"
+                })
+            }
+
+            // check new password and re-new password match
+            if (newPassword != reNewPassword) {
+                return res.status(401).json({
+                    statusCode: 401,
+                    message: "new password and the re-entered password do not match."
+                })
+            }
+            // check old password and new password should not same
+            if (oldPassword === newPassword) {
+                return res.status(401).json({
+                    statusCode: 401,
+                    message: "new password must be different from the old password."
+                })
+            }
+
+            let hashedNewPassword = await bcrypt.hash(newPassword, saltRound)
+            console.log(hashedNewPassword)
+
+            let updatePassword = await adminModel.findOneAndUpdate({ _id: adminId }, { password: hashedNewPassword })
+
+            if (!updatePassword) {
+                return res.status(401).json({
+                    statusCode: 401,
+                    message: "error while updating the password"
+                })
+            }
+
+            // if everything works 
+            return res.status(200).json({
+                statusCode: 200,
+                message: "password successfully updated !"
+            })
+
         } catch (error) {
-         console.log(error)
-         return res.status(409).json({
-             statusCode: 409,
-             message:"something went wrong!"
-         })
-         
-        }
-     },
-    //  Add product section
-    addProduct: async(req,res)=>{
-        try {
-            
-     
-        let {productName, productPrice, productDiscountedPrice, productDescription, productQuantity} = req.body;
-
-        if(!productName){
-            return res.status(400).json({
-                statusCode: 400,
-                Code: 0,
-                message: "product name is required"
-            })
-        }
-        if(!productPrice){
-            return res.status(400).json({
-                statusCode: 400,
-                Code: 0,
-                message: "product price is required"
-            })
-        }
-        if(!productDiscountedPrice){
-            return res.status(400).json({
-                statusCode: 400,
-                Code: 0,
-                message: "product discounted price is required"
-            })
-        }
-        if(!productDescription){
-            return res.status(400).json({
-                statusCode: 400,
-                Code: 0,
-                message: "product discription is required"
-            })
-        }
-        if(!productQuantity){
-            return res.status(400).json({
-                statusCode: 400,
-                Code: 0,
-                message: "product quantity price is required"
-            })
-        }
-       
-
-       
-    } catch (error) {
             console.log(error)
             return res.status(409).json({
                 statusCode: 409,
-                message:"something went wrong!"
+                message: "something went wrong!"
             })
 
-    }
+        }
+    },
+    //  Add product section
+    addProduct: async (req, res) => {
+        try {
+
+            let { productName, productPrice, productDiscountedPrice, productDescription, productQuantity } = req.body;
+
+            if (!productName) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product name is required"
+                })
+            }
+            if (!productPrice) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product price is required"
+                })
+            }
+            if (!productDiscountedPrice) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product discounted price is required"
+                })
+            }
+            if (!productDescription) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product discription is required"
+                })
+            }
+            if (!productQuantity) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product quantity price is required"
+                })
+            }
+
+            let product = new productModel(req.body)
+
+            product = await product.save()
+
+            return res.status(200).json({
+                statusCode: 200,
+                Code: 1,
+                message: "product sucessfully added."
+            })
+
+
+
+        } catch (error) {
+            console.log(error)
+            return res.status(409).json({
+                statusCode: 409,
+                message: "something went wrong!"
+            })
+
+        }
     }
 }
