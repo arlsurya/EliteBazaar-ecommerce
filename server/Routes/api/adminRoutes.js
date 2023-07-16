@@ -11,5 +11,6 @@ router.get('/', (req,res)=>{
 router.post('/register',adminController.register)
 router.post('/login',adminController.login)
 router.post('/changepassword',isAuth,adminController.changePassword)
+router.post('/addproduct',isAuth,adminController.addProduct)
 
 module.exports = router;

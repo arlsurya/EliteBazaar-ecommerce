@@ -257,5 +257,59 @@ module.exports = {
          })
          
         }
-     }
+     },
+    //  Add product section
+    addProduct: async(req,res)=>{
+        try {
+            
+     
+        let {productName, productPrice, productDiscountedPrice, productDescription, productQuantity} = req.body;
+
+        if(!productName){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "product name is required"
+            })
+        }
+        if(!productPrice){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "product price is required"
+            })
+        }
+        if(!productDiscountedPrice){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "product discounted price is required"
+            })
+        }
+        if(!productDescription){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "product discription is required"
+            })
+        }
+        if(!productQuantity){
+            return res.status(400).json({
+                statusCode: 400,
+                Code: 0,
+                message: "product quantity price is required"
+            })
+        }
+       
+
+       
+    } catch (error) {
+            console.log(error)
+            return res.status(409).json({
+                statusCode: 409,
+                message:"something went wrong!"
+            })
+
+    }
+    }
 }
