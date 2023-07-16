@@ -35,19 +35,19 @@ module.exports = {
                 })
             }
 
-            let user = await adminModel.findOne({ email: email })
-            if (!user) {
+            let admin = await adminModel.findOne({ email: email })
+            if (!admin) {
                 return res.status(404).json({
                     statusCode: 404,
                     Code: 0,
-                    message: "user not found !"
+                    message: "admin not found !"
                 })
             }
 
-            // user found with the provided email section
+            // admin found with the provided email section
 
             // compare provided password and stored password
-            comparePassword = await bcrypt.compare(password, user.password)
+            comparePassword = await bcrypt.compare(password, admin.password)
 
             if (!comparePassword) {
                 return res.status(401).json({
@@ -58,7 +58,7 @@ module.exports = {
             }
 
             let payload = {
-                id: user._id
+                id: admin._id
             }
 
             const authToken = jwt.sign(
@@ -163,5 +163,99 @@ module.exports = {
             })
 
         }
-    }
+    },
+    changePassword: async(req,res)=>{
+        try {
+         let {oldPassword, newPassword, reNewPassword} = req.body;
+ 
+         if(!oldPassword){
+             return res.status(400).json({
+                 statusCode: 400,
+                 Code: 0,
+                 message: "old password is required"
+             })
+         }
+         if(!newPassword){
+             return res.status(400).json({
+                 statusCode: 400,
+                 Code: 0,
+                 message: "new password is required"
+             })
+         }
+         if(!reNewPassword){
+             return res.status(400).json({
+                 statusCode: 400,
+                 Code: 0,
+                 message: "re-new password is required"
+             })
+         }
+ 
+         // getting data from the admin token 
+ 
+         let  adminId = req.userAuth.id
+         console.log(adminId)
+ 
+         let admin = await adminModel.findOne({_id:adminId})
+         
+         if(!admin){
+             return res.status(404).json({
+                 statusCode: 404,
+                 message:"admin not found !"
+             })
+         }
+ 
+         // compare entered old password with actually old password
+ 
+         let passwordCheck =await bcrypt.compare(oldPassword , admin.password)
+         
+         // if password not match 
+         if(!passwordCheck){
+             return res.status(401).json({
+                 statusCode: 401,
+                 message:"your old password is invalid"
+             })
+         }
+ 
+         // check new password and re-new password match
+         if(newPassword != reNewPassword){
+             return res.status(401).json({
+                 statusCode: 401,
+                 message:"new password and the re-entered password do not match."
+             })
+         }
+         // check old password and new password should not same
+         if(oldPassword === newPassword){
+             return res.status(401).json({
+                 statusCode: 401,
+                 message:"new password must be different from the old password."
+             })
+         }
+ 
+         let hashedNewPassword = await bcrypt.hash(newPassword,saltRound)
+         console.log(hashedNewPassword)
+ 
+         let updatePassword = await adminModel.findOneAndUpdate({_id: adminId},{password: hashedNewPassword})
+ 
+         if(!updatePassword){
+             return res.status(401).json({
+                 statusCode: 401,
+                 message:"error while updating the password"
+             })
+         }
+ 
+         // if everything works 
+         return res.status(200).json({
+             statusCode: 200,
+             message:"password successfully updated !"
+         })
+         
+        } catch (error) {
+         console.log(error)
+         return res.status(409).json({
+             statusCode: 409,
+             message:"something went wrong!"
+         })
+         
+        }
+     }
 }
