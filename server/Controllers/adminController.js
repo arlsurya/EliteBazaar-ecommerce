@@ -6,13 +6,80 @@ const Constants = require('../Constants')
 const Utilities = require('../Utilities')
 
 module.exports = {
-    login: async(req,res)=>{
+    login: async (req, res) => {
         try {
-            res.send('login routes')
-            
+            let { email, password } = req.body
+
+            if (!email) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "email is required"
+                })
+            }
+            if (!password) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "password is required"
+                })
+            }
+
+            // validate the email 
+
+            if (!Utilities.validateEmail(email)) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "please provide valid email address"
+                })
+            }
+
+            let user = await adminModel.findOne({ email: email })
+            if (!user) {
+                return res.status(404).json({
+                    statusCode: 404,
+                    Code: 0,
+                    message: "user not found !"
+                })
+            }
+
+            // user found with the provided email section
+
+            // compare provided password and stored password
+            comparePassword = await bcrypt.compare(password, user.password)
+
+            if (!comparePassword) {
+                return res.status(401).json({
+                    statusCode: 401,
+                    Code: 0,
+                    message: "email or password is invalid !"
+                })
+            }
+
+            let payload = {
+                id: user._id
+            }
+
+            const authToken = jwt.sign(
+                payload,
+                Constants.jwtSectet,
+                {expiresIn: '7days'}
+                )
+
+            return res.status(200).json({
+                statusCode: 200,
+                Code: 1,
+                token: `Bearer ${authToken}`
+            })
+
         } catch (error) {
             console.log(error)
-            
+            return res.status(409).json({
+                statusCode: 409,
+                message:"something went wrong!"
+            })
+
         }
     },
     register: async (req, res) => {

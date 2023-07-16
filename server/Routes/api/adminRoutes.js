@@ -8,5 +8,6 @@ router.get('/', (req,res)=>{
 }),
 
 router.post('/register',adminController.register)
+router.post('/login',adminController.login)
 
 module.exports = router;
