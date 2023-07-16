@@ -191,10 +191,39 @@ module.exports = {
         }
 
         // getting data from the user token 
-        
 
-        
+        let  userId = req.userAuth.id
+        console.log(userId)
 
+        let user = await userModel.findOne({_id:userId})
+        
+        if(!user){
+            return res.status(404).json({
+                statusCode: 404,
+                message:"user not found !"
+            })
+        }
+
+        // compare entered old password with actually old password
+
+        let passwordCheck =await bcrypt.compare(oldPassword , user.password)
+        
+        // if password not match 
+        if(!passwordCheck){
+            return res.status(401).json({
+                statusCode: 401,
+                message:"your old password is invalid"
+            })
+        }
+
+        // check new password and re-new password match
+        if(newPassword != reNewPassword){
+            return res.status(401).json({
+                statusCode: 401,
+                message:"new password and the re-entered password do not match."
+            })
+        }
+        
 
 
         
