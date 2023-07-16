@@ -223,9 +223,31 @@ module.exports = {
                 message:"new password and the re-entered password do not match."
             })
         }
-        
+        // check old password and new password should not same
+        if(oldPassword === newPassword){
+            return res.status(401).json({
+                statusCode: 401,
+                message:"new password must be different from the old password."
+            })
+        }
 
+        let hashedNewPassword = await bcrypt.hash(newPassword,saltRound)
+        console.log(hashedNewPassword)
 
+        let updatePassword = await userModel.findOneAndUpdate({_id: userId},{password: hashedNewPassword})
+
+        if(!updatePassword){
+            return res.status(401).json({
+                statusCode: 401,
+                message:"error while updating the password"
+            })
+        }
+
+        // if everything works 
+        return res.status(200).json({
+            statusCode: 200,
+            message:"password successfully updated !"
+        })
         
        } catch (error) {
         console.log(error)
