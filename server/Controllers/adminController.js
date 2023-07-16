@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId
 const bcrypt = require('bcrypt')
 const saltRound = 10;
 const jwt = require('jsonwebtoken')
@@ -320,6 +322,76 @@ module.exports = {
                 message: "something went wrong!"
             })
 
+        }
+    },
+
+    editProduct: async(req,res)=>{
+        try{
+            let {productId} = req.query
+            let { productName, productPrice, productDiscountedPrice, productDescription, productQuantity } = req.body;
+
+
+            let product = await productModel.findOne({_id: productId})
+            
+            if(!product){
+                return res.status(404).json({
+                    statusCode: 404,
+                    message: "product not found with this id."
+                })
+            }
+
+            if (!productName) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product name is required"
+                })
+            }
+            if (!productPrice) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product price is required"
+                })
+            }
+            if (!productDiscountedPrice) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product discounted price is required"
+                })
+            }
+            if (!productDescription) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product discription is required"
+                })
+            }
+            if (!productQuantity) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product quantity price is required"
+                })
+            }
+
+            let updateProduct = await productModel.findOneAndUpdate({_id: req.query.productId},req.body, {new:true})
+            
+            return res.status(200).json({
+                statusCode: 200,
+                Code: 1,
+                message: "product successfully updated."
+            })
+
+
+        }
+        catch(error){
+            console.log(error)
+            return res.status(409).json({
+                statusCode: 409,
+                message: "something went wrong!"
+            })
         }
     }
 }

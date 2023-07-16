@@ -12,5 +12,6 @@ router.post('/register',adminController.register)
 router.post('/login',adminController.login)
 router.post('/changepassword',isAuth,adminController.changePassword)
 router.post('/addproduct',isAuth,adminController.addProduct)
+router.post('/editproduct',isAuth, adminController.editProduct)
 
 module.exports = router;
