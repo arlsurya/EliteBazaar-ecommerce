@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const saltRound = 10
 const jwt = require('jsonwebtoken')
 const userModel = require('../Models/userModel')
+const productModel = require('../Models/productModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities')
 module.exports = {
@@ -257,5 +258,40 @@ module.exports = {
         })
         
        }
+    },
+
+    getProductById: async(req,res)=>{
+        try {
+            let {id} = req.query;
+
+            if(!id){
+                return res.status(409).json({
+                    statusCode: 409,
+                    message:"please provide product id"
+                }) 
+            }
+
+            let product = await productModel.findById({_id:id})
+            
+            return res.status(200).json({
+                statusCode: 200,
+                Code: 1,
+                data: product,
+                message:"Product details by id"
+            }) 
+
+
+            
+        } catch (error) {
+            console.log(error)
+            return res.status(409).json({
+                statusCode: 409,
+                message:"something went wrong!"
+            })
+            
+        }
     }
+
+
+
 }
