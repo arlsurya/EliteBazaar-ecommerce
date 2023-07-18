@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken')
 const adminModel = require('../Models/adminModel')
 const productModel = require('../Models/productModel')
 const Constants = require('../Constants')
-const Utilities = require('../Utilities')
+const Utilities = require('../Utilities');
+const fileService = require('../Services/fileService');
 
 module.exports = {
     login: async (req, res) => {
@@ -301,6 +302,12 @@ module.exports = {
                     Code: 0,
                     message: "product quantity price is required"
                 })
+            }
+            if(req.files){
+               
+                let productImage = await fileService.uploadImage(req.files.productImage, multi = false);
+                req.body.productImage = productImage;
+                
             }
 
             let product = new productModel(req.body)
