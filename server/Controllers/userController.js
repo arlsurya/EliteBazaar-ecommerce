@@ -5,6 +5,7 @@ const userModel = require('../Models/userModel')
 const productModel = require('../Models/productModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities')
+const FileService = require('../Services/fileService')
 module.exports = {
     register: async (req, res) => {
         console.log(req.body)
@@ -280,7 +281,6 @@ module.exports = {
                 message:"Product details by id"
             }) 
 
-
             
         } catch (error) {
             console.log(error)
@@ -290,8 +290,7 @@ module.exports = {
             })
             
         }
-    }
-
+    },
 
 
 }
