@@ -5,6 +5,8 @@ const DB = require('./Core/db')
 const indexRoutes = require('./Routes/index')
 const apiRoutes = require('./Routes/api')
 const logger = require('morgan')
+const fileUpload = require('express-fileupload')
+app.use(fileUpload())
 DB()
 
 
