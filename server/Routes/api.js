@@ -4,6 +4,7 @@ const router = express.Router()
 const userRoutes = require('./api/userRoutes')
 const adminRoutes = require('./api/adminRoutes')
 
+
 router.get('/',(req,res)=>{
     res.send('api routes')
 })
