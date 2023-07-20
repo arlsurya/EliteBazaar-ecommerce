@@ -9,9 +9,11 @@ module.exports = {
                 let fileName = await uploadImageToDirectory(file, typeOf)
                 return multi === true ? [fileName] : fileName
             } else {
+        console.log(file)
+
                 let arr = []
                 for (let i = 0; i < file.length; i++) {
-                    let newFileName = await uploadImageToDirectory(file[i])
+                    let newFileName = await uploadImageToDirectory(file[i],typeOf)
                     arr.push(newFileName)
                 }
                 return arr;

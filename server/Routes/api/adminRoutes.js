@@ -13,5 +13,6 @@ router.post('/login',adminController.login)
 router.post('/changepassword',isAuth,adminController.changePassword)
 router.post('/addproduct',isAuth,adminController.addProduct)
 router.post('/editproduct',isAuth, adminController.editProduct)
+router.post('/uploadSliderImage',isAuth, adminController.uploadSliderImage)
 
 module.exports = router;

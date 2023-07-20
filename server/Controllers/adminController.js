@@ -5,6 +5,7 @@ const saltRound = 10;
 const jwt = require('jsonwebtoken')
 const adminModel = require('../Models/adminModel')
 const productModel = require('../Models/productModel')
+const sliderImageModel = require('../Models/sliderImageModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities');
 const fileService = require('../Services/fileService');
@@ -399,6 +400,39 @@ module.exports = {
                 statusCode: 409,
                 message: "something went wrong!"
             })
+        }
+    },
+    uploadSliderImage: async(req,res)=>{
+        try {
+
+            let images = await fileService.uploadImage(req.files.sliderImage, multi=false, "slider")
+            req.body.imageName = images
+       
+            // multiple files uploaded
+            if(typeof images === 'object'){
+               
+            }else{
+            // single file uploaded
+            console.log(req.body)
+            let uploadImage = sliderImageModel(req.body)
+            uploadImage = uploadImage.save()
+            
+            return res.status(200).json({
+                statusCode: 200,
+                Code: 1,
+                message: "Slider images uploaded"
+            })
+            }
+      
+       
+
+           
+        } catch (error) {
+            return res.status(409).json({
+                statusCode: 409,
+                message: "something went wrong!"
+            })
+            
         }
     }
 }
