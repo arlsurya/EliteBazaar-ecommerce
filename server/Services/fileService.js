@@ -41,7 +41,7 @@ uploadImageToDirectory = (file, typeOf) => {
     else if(typeOf === "slider"){
         
         let fileName = Date.now() + path.extname(file.name)
-        let pathName = path.join(appRoot, 'uploads', 'slider', fileName)
+        let pathName = path.join(appRoot, 'uploads', 'sliders', fileName)
     
         let = file.mv(pathName)
         return fileName;
