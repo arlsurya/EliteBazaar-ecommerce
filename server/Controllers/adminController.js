@@ -305,7 +305,7 @@ module.exports = {
             }
             if(req.files){
                
-                let productImage = await fileService.uploadImage(req.files.productImage, multi = false);
+                let productImage = await fileService.uploadImage(req.files.productImage, multi = false, 'product');
                 req.body.productImage = productImage;
                 
             }
