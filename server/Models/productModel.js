@@ -21,6 +21,10 @@ const productSchema = new Schema({
     productQuantity:{
         type: Number,
         required: true
+    },
+    productImage:{
+        type: String,
+        required:true
     }
 },
 {

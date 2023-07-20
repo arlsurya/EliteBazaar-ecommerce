@@ -5,8 +5,10 @@ const saltRound = 10;
 const jwt = require('jsonwebtoken')
 const adminModel = require('../Models/adminModel')
 const productModel = require('../Models/productModel')
+const sliderImageModel = require('../Models/sliderImageModel')
 const Constants = require('../Constants')
-const Utilities = require('../Utilities')
+const Utilities = require('../Utilities');
+const fileService = require('../Services/fileService');
 
 module.exports = {
     login: async (req, res) => {
@@ -302,6 +304,12 @@ module.exports = {
                     message: "product quantity price is required"
                 })
             }
+            if (req.files) {
+
+                let productImage = await fileService.uploadImage(req.files.productImage, multi = false, 'product');
+                req.body.productImage = productImage;
+
+            }
 
             let product = new productModel(req.body)
 
@@ -325,15 +333,15 @@ module.exports = {
         }
     },
 
-    editProduct: async(req,res)=>{
-        try{
-            let {productId} = req.query
+    editProduct: async (req, res) => {
+        try {
+            let { productId } = req.query
             let { productName, productPrice, productDiscountedPrice, productDescription, productQuantity } = req.body;
 
 
-            let product = await productModel.findOne({_id: productId})
-            
-            if(!product){
+            let product = await productModel.findOne({ _id: productId })
+
+            if (!product) {
                 return res.status(404).json({
                     statusCode: 404,
                     message: "product not found with this id."
@@ -376,8 +384,8 @@ module.exports = {
                 })
             }
 
-            let updateProduct = await productModel.findOneAndUpdate({_id: req.query.productId},req.body, {new:true})
-            
+            let updateProduct = await productModel.findOneAndUpdate({ _id: req.query.productId }, req.body, { new: true })
+
             return res.status(200).json({
                 statusCode: 200,
                 Code: 1,
@@ -386,12 +394,48 @@ module.exports = {
 
 
         }
-        catch(error){
+        catch (error) {
             console.log(error)
             return res.status(409).json({
                 statusCode: 409,
                 message: "something went wrong!"
             })
+        }
+    },
+    uploadSliderImage: async (req, res) => {
+        try {
+
+            let images = await fileService.uploadImage(req.files.sliderImage, multi = false, "slider")
+
+            // multiple files uploaded
+            if (typeof images === 'object') {
+
+            
+            }
+            // single file uploaded
+            else {
+                req.body.imageName = images
+
+                console.log(req.body)
+                let uploadImage = sliderImageModel(req.body)
+                uploadImage = uploadImage.save()
+
+                return res.status(200).json({
+                    statusCode: 200,
+                    Code: 1,
+                    message: "Slider images uploaded"
+                })
+            }
+
+
+
+
+        } catch (error) {
+            return res.status(409).json({
+                statusCode: 409,
+                message: "something went wrong!"
+            })
+
         }
     }
 }
