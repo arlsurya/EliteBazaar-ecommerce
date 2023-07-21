@@ -9,7 +9,7 @@ const logger = require('morgan')
 const fileUpload = require('express-fileupload')
 app.use(fileUpload())
 DB()
-app.use(cors)
+app.use(cors())
 
 
 app.use(express.json())
