@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const app = express()
+const cors = require('cors')
 const dotenv = require('./env')
 const DB = require('./Core/db')
 const indexRoutes = require('./Routes/index')
@@ -11,6 +12,7 @@ app.use(cors())
 
 app.use(fileUpload())
 DB()
+app.use(cors())
 
 
 app.use(express.json())
