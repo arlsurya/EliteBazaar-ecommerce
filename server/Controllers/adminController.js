@@ -267,7 +267,7 @@ module.exports = {
     addProduct: async (req, res) => {
         try {
 
-            let { productName, productPrice, productDiscountedPrice, productDescription, productQuantity } = req.body;
+            let { productName, productPrice, productDiscountedPrice, productDescription, productQuantity, productCategory } = req.body;
 
             if (!productName) {
                 return res.status(400).json({
@@ -302,6 +302,13 @@ module.exports = {
                     statusCode: 400,
                     Code: 0,
                     message: "product quantity price is required"
+                })
+            }
+            if (!productCategory) {
+                return res.status(400).json({
+                    statusCode: 400,
+                    Code: 0,
+                    message: "product category is required"
                 })
             }
             if (req.files) {

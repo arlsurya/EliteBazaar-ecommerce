@@ -300,13 +300,13 @@ module.exports = {
         // getting data from the user token 
         let userId = req.userAuth.id
         console.log(userId)
-        let {id } = req.params
-      
+        let { id } = req.params
+
         try {
 
-            let product = await productModel.findOne({_id: id})
+            let product = await productModel.findOne({ _id: id })
 
-            if(!product){
+            if (!product) {
                 return res.status(404).json({
                     statusCode: 404,
                     message: "Product Not found with this id"
@@ -331,26 +331,63 @@ module.exports = {
         }
     },
 
-    products: async(req,res)=>{
-     try {
-        let {search, category, page, limit, sort, order } = req.query
+    products: async (req, res) => {
+        try {
+            let { search, category, page, limit, sort, order, skip } = req.query
 
-        page = page || 1;
-        limit = limit || 10;
-        order = order == 'desc' ? -1 : 1 ;
-        skip = page * limit - limit || 0;
-        sort = {
+            page = parseInt(page) || 1;
+            limit = parseInt(limit) || 3;
+            order = order == 'desc' ? -1 : 1;
+            skip = (page - 1) * limit;
+            sort = {
 
-        [sort || 'createdAt'] : order
-        
+                [sort || 'createdAt']: order
+
+            }
+
+            let query = {}
+
+            if(search != undefined && search != ""){
+                 query = {
+                 "productName": {$regex: ".*" + search + ".*" , $options: 'i'}   
+                }
+            }
+            console.log(query)
+
+            const pipeline = [
+                { $match: query },
+                {
+                    $project:
+                    {
+                        productName: 1,
+                        productDescription: 1,
+                        productPrice: 1,
+                        productDiscountedPrice: 1,
+                        productCategory: 1,
+                        productImage: 1
+                    }
+                },
+                { $sort: sort },
+                { $skip: skip },
+                { $limit: limit }
+            ]
+            console.log(pipeline)
+
+            let products = await productModel.aggregate(pipeline)
+
+            res.status(200).json({
+                statusCode: 200,
+                Code: 1,
+                message: 'Product list',
+                data: { page: page, products }
+            })
+
+
+        } catch (error) {
+            console.log(error)
+
+
         }
-      
-
-     } catch (error) {
-        console.log(error)
-
-        
-     }  
     }
 
 
