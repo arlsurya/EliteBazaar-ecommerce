@@ -18,9 +18,17 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
+    productCategory:{
+        type: String,
+        required: true
+    },
     productQuantity:{
         type: Number,
         required: true
+    },  
+    productStatus:{
+        type: Boolean,
+        default: true
     },
     productImage:{
         type: String,
