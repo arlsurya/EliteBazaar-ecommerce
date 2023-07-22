@@ -13,6 +13,7 @@ router.post('/login', userController.login)
 router.post('/changepassword',isAuth, userController.changePassword)
 router.get('/product',isAuth, userController.getProductById)
 router.get('/product/:id',isAuth, userController.getProductByParams)
+router.get('/products/',isAuth, userController.products)
 
 
 
