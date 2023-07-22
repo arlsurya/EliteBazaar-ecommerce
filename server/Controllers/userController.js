@@ -329,6 +329,19 @@ module.exports = {
             })
 
         }
+    },
+
+    products: async(req,res)=>{
+     try {
+        let {search } = req.query
+        console.log(search
+            )
+        
+     } catch (error) {
+        console.log(error)
+
+        
+     }  
     }
 
 
