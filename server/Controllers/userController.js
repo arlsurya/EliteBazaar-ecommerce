@@ -333,10 +333,19 @@ module.exports = {
 
     products: async(req,res)=>{
      try {
-        let {search } = req.query
-        console.log(search
-            )
+        let {search, category, page, limit, sort, order } = req.query
+
+        page = page || 1;
+        limit = limit || 10;
+        order = order == 'desc' ? -1 : 1 ;
+        skip = page * limit - limit || 0;
+        sort = {
+
+        [sort || 'createdAt'] : order
         
+        }
+      
+
      } catch (error) {
         console.log(error)
 
