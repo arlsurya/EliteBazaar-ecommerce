@@ -12,7 +12,7 @@ app.use(cors())
 
 app.use(fileUpload())
 DB()
-app.use(cors())
+
 
 
 app.use(express.json())
