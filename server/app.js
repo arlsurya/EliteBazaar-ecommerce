@@ -12,6 +12,9 @@ app.use(fileUpload())
 DB()
 app.use(cors())
 
+app.disable("x-powered-by");
+
+
 
 
 app.use(express.json())
