@@ -157,7 +157,8 @@ module.exports = {
             return res.status(200).json({
                 statusCode: 200,
                 Code: 1,
-                token: `Bearer ${authToken}`
+                token: `Bearer ${authToken}`,
+                message: 'user logged in'
             })
 
         } catch (error) {
