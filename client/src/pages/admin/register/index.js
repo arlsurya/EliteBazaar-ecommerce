@@ -13,13 +13,36 @@ const SignupSchema = Yup.object().shape({
         .positive("A phone number can't start with a minus")
         .integer("A phone number can't include a decimal point")
         .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
+        // .max(50, 'Too Long!')
         .required('Required'),
     password: Yup.string()
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('Required'),
 });
+
+
+const signUpSubmit = async(data)=>{
+    try {
+      
+      const response = await fetch('http://127.0.0.1:3001/api/admin/register',{
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      console.log(response)
+  
+      const responseData = await response.json();
+      console.log(responseData)
+      
+    } catch (error) {
+      console.log(error)
+      
+    }
+  }
 
 export const registerAdmin = () => (
     <div>
@@ -32,10 +55,7 @@ export const registerAdmin = () => (
                 password: ''
             }}
             validationSchema={SignupSchema}
-            onSubmit={values => {
-                // same shape as initial values
-                console.log(values);
-            }}
+            onSubmit={signUpSubmit}
         >
             {({ errors, touched }) => (
                 <Form>
@@ -43,14 +63,14 @@ export const registerAdmin = () => (
                     {errors.fullName && touched.fullName ? (
                         <div>{errors.fullName}</div>
                     ) : null}
+                    <Field placeholder="email" name="email" type="email" />
+                    {errors.email && touched.email ? <div>{errors.email}</div> : null}
                     <Field placeholder="mobile" name="mobile" />
                     {errors.mobile && touched.mobile ? (
                         <div>{errors.mobile}</div>
                     ) : null}
-                    <Field placeholder="email" name="email" type="email" />
-                    {errors.email && touched.email ? <div>{errors.email}</div> : null}
 
-                    <Field placeholder="password" name="password" />
+                    <Field type="password" placeholder="password" name="password" />
                     {errors.password && touched.password ? (
                         <div>{errors.password}</div>
                     ) : null}
