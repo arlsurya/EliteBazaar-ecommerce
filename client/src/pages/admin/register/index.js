@@ -24,7 +24,6 @@ const SignupSchema = Yup.object().shape({
 export const registerAdmin = () => (
     <div>
         <h1>Admin Register</h1>
-
         <Formik
             initialValues={{
                 fullName: '',
@@ -35,14 +34,6 @@ export const registerAdmin = () => (
             validationSchema={SignupSchema}
             onSubmit={values => {
                 // same shape as initial values
-                    <Field placeholder="email" name="email" type="email" />
-                    {errors.email && touched.email ? <div>{errors.email}</div> : null}
-
-                    <Field placeholder="password" name="password" />
-                    {errors.password && touched.password ? (
-                        <div>{errors.password}</div>
-                    ) : null}
-           
                 console.log(values);
             }}
         >
@@ -55,11 +46,18 @@ export const registerAdmin = () => (
                     <Field placeholder="mobile" name="mobile" />
                     {errors.mobile && touched.mobile ? (
                         <div>{errors.mobile}</div>
-                    ) : null}         <button type="submit">Submit</button>
+                    ) : null}
+                    <Field placeholder="email" name="email" type="email" />
+                    {errors.email && touched.email ? <div>{errors.email}</div> : null}
+
+                    <Field placeholder="password" name="password" />
+                    {errors.password && touched.password ? (
+                        <div>{errors.password}</div>
+                    ) : null}
+                    <button type="submit">Submit</button>
                 </Form>
             )}
         </Formik>
-        
     </div>
 );
 
