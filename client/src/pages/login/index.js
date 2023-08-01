@@ -12,7 +12,32 @@ const LoginSchema = Yup.object().shape({
 
 });
 
+const loginSubmit = async(data)=>{
+  try {
+    
+    const response = await fetch('http://127.0.0.1:3001/api/user/login',{
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    console.log(response)
+
+    const responseData = await response.json();
+    console.log(responseData)
+    
+  } catch (error) {
+    console.log(error)
+    
+  }
+}
+
 export const loginValidation = () => (
+
+
+
   <div>
     <h1>Login</h1>
     <Formik
@@ -21,10 +46,7 @@ export const loginValidation = () => (
         password:''
       }}
       validationSchema={LoginSchema}
-      onSubmit={values => {
-        // same shape as initial values
-        console.log(values);
-      }}
+      onSubmit= {loginSubmit }
     >
       {({ errors, touched }) => (
         <Form>
