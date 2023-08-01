@@ -6,10 +6,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/router';
 
- const registerAdmin = () => {
 
-const router = useRouter();
-    
+const registerAdmin = () => {
+     const router = useRouter();
+
+
 // const router = useRouter();
 const SignupSchema = Yup.object().shape({
     fullName: Yup.string()

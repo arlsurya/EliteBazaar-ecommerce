@@ -1,0 +1,55 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+.sidebar {
+    background-color: #333;
+    color: #fff;
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px; 
+    transition: left 0.3s ease-in-out;
+    padding: 20px;
+  }
+  
+  .open {
+    left: 0;
+  }
+  
+  .toggleBtn {
+    display: inline-block;
+    cursor: pointer;
+    padding: 5px;
+    position: absolute;
+    right: 7px;
+
+  }
+  
+  .bar {
+    
+    width: 18px; 
+    height: 3px; 
+    background-color: #fff;
+    border-radius: 2px;
+    margin: 1px;
+  }
+  
+  
+  
+  .toggleBtn.open .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-4px, 4px);
+  }
+  
+  .toggleBtn.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .toggleBtn.open .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-4px, -4px);
+  }
+  

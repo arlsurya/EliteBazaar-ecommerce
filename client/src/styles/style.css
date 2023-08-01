@@ -1,0 +1,43 @@
+/* Sidebar.module.css */
+
+.sidebar {
+    background-color: #333;
+    color: #fff;
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px; /* Start with the sidebar hidden off-screen */
+    transition: left 0.3s ease-in-out;
+    padding: 20px;
+  }
+  
+  .open {
+    left: 0; /* Show the sidebar when the "open" class is applied */
+  }
+  
+  .toggleBtn {
+    cursor: pointer;
+    padding: 5px;
+    display: inline-block;
+  }
+  
+  .bar {
+    height: 2px;
+    background-color: #fff;
+    margin: 4px 0;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .toggleBtn.open .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-4px, 4px);
+  }
+  
+  .toggleBtn.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .toggleBtn.open .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-4px, -4px);
+  }
+  
