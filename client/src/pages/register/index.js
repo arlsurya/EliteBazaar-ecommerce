@@ -19,7 +19,7 @@ export const registrationValidation = () => (
     <h1>Signup</h1>
     <Formik
       initialValues={{
-        firstName: 'dd',
+        firstName: '',
         lastName: '',
         email: '',
       }}
