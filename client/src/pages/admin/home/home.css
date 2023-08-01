@@ -16,6 +16,15 @@
     transition: left 0.3s ease-in-out;
     padding: 20px;
   }
+  .subHeading{
+    position: absolute;
+    left: 280px;
+   display: flex;
+   
+
+
+
+  }
   
   .open {
     left: 0;
@@ -53,3 +62,21 @@
     transform: rotate(45deg) translate(-4px, -4px);
   }
   
+
+  .dashboard-card {
+    width: 250px; /* Set the width of the card */
+    height: 150px; /* Set the height of the card */
+    background-color: #fff; /* Set the background color */
+    border-radius: 8px; /* Round the corners of the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a box shadow */
+    padding: 16px; /* Add some padding to the card content */
+    margin: 16px; /* Add some margin between cards */
+  }
+  
+  .card-content h2 {
+    margin-top: 0; /* Remove the default margin from the heading */
+  }
+  
+  .card-content p {
+    margin-bottom: 0; /* Remove margin from the paragraph to avoid extra space */
+  }
