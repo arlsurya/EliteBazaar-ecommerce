@@ -16,7 +16,7 @@ const SignupSchema = Yup.object().shape({
 
 export const registrationValidation = () => (
   <div>
-    <h1>Signup</h1>
+    <h1>User Register</h1>
     <Formik
       initialValues={{
         firstName: '',
