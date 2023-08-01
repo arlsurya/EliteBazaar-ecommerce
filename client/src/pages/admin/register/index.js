@@ -1,7 +1,16 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import { useRouter } from 'next/router';
 
+ const registerAdmin = () => {
+
+const router = useRouter();
+    
+// const router = useRouter();
 const SignupSchema = Yup.object().shape({
     fullName: Yup.string()
         .min(2, 'Too Short!')
@@ -22,31 +31,55 @@ const SignupSchema = Yup.object().shape({
 });
 
 
-const signUpSubmit = async(data)=>{
+const signUpSubmit = async (data) => {
     try {
-      
-      const response = await fetch('http://127.0.0.1:3001/api/admin/register',{
-        method:'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-  
-      console.log(response)
-  
-      const responseData = await response.json();
-      console.log(responseData)
-      
-    } catch (error) {
-      console.log(error)
-      
-    }
-  }
 
-export const registerAdmin = () => (
+        const response = await fetch('http://127.0.0.1:3001/api/admin/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+
+        const responseData = await response.json();
+        console.log(responseData)
+
+        // if error then show error on toast and throw error message
+
+        if (responseData.Code == 0) {
+            toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+
+        }
+        // if success then show success on toast and throw success message
+        if (responseData.Code == 1) {
+            toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+        
+        // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
+
+        const token = responseData.token.split(' ')[1]
+        localStorage.setItem('_token',token)
+
+        router.push('/admin/home');
+
+
+        }
+
+    } catch (error) {
+        console.log(error)
+
+    }
+}
+
+
+
+
+ return(
+    
     <div>
         <h1>Admin Register</h1>
+
         <Formik
             initialValues={{
                 fullName: '',
@@ -75,10 +108,12 @@ export const registerAdmin = () => (
                         <div>{errors.password}</div>
                     ) : null}
                     <button type="submit">Submit</button>
+                    <ToastContainer />
+
                 </Form>
             )}
         </Formik>
     </div>
-);
+);}
 
 export default registerAdmin;
