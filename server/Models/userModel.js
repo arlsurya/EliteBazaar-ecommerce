@@ -18,7 +18,20 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    device:[
+        {
+            deviceName:{
+                type:String
+            },
+            deviceToken:{
+                type:String
+            },
+            lastLoggedIn:{
+                type:Date
+            }
+        }
+    ]
 
 },
     {

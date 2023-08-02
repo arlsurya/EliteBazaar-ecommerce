@@ -10,7 +10,7 @@ const Utilities = require('../Utilities')
 const FileService = require('../Services/fileService')
 module.exports = {
     register: async (req, res) => {
-        console.log(req.body)
+    
         try {
             let { fullName, email, mobile, password } = req.body;
             if (!fullName) {
@@ -64,16 +64,30 @@ module.exports = {
 
             req.body.password = hashedPassword;
 
+            // req.body save to userModel
             let user = new userModel(req.body)
             user = await user.save()
 
             let payload = {
                 id: user._id
             }
+            // create jwt token 
 
             const authToken = jwt.sign(payload, Constants.jwtSectet, {
                 expiresIn: '7days'
             })
+
+            let currentDate = new Date()
+
+            let device = {
+                deviceName: req.body.deviceName,
+                deviceToken: authToken.split(' ')[0],
+                lastLoggedIn:currentDate
+            }
+
+            // device details push to device array
+            user.device.push(device)
+            user = await user.save()
 
             return res.status(200).json({
                 statusCode: 200,
