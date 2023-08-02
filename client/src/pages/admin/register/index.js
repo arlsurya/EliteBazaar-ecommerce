@@ -60,7 +60,7 @@ const signUpSubmit = async (data) => {
         // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
 
         const token = responseData.token.split(' ')[1]
-        localStorage.setItem('_token',token)
+        localStorage.setItem('devToken',token)
 
         router.push('/admin/home');
 

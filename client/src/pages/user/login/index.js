@@ -1,40 +1,72 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import { useRouter } from 'next/router';
 
-const LoginSchema = Yup.object().shape({
+
+
+
+export const userLogin = () => {
+  const router = useRouter();
+
+  const LoginSchema = Yup.object().shape({
   
-  email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string()
-  .min(2, 'Too Short!')
-  .max(50, 'Too Long!')
-  .required('Required')
-
-});
-
-const loginSubmit = async(data)=>{
-  try {
-    
-    const response = await fetch('http://127.0.0.1:3001/api/user/login',{
-      method:'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    console.log(response)
-
-    const responseData = await response.json();
-    console.log(responseData)
-    
-  } catch (error) {
-    console.log(error)
-    
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required')
+  
+  });
+  
+  const loginSubmit = async(data)=>{
+    try {
+      
+      const response = await fetch('http://127.0.0.1:3001/api/user/login',{
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      console.log(response)
+  
+      const responseData = await response.json();
+      console.log(responseData)
+         // if error then show error on toast and throw error message
+  
+         if (responseData.Code == 0) {
+          toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+  
+      }
+      // if success then show success on toast and throw success message
+      if (responseData.Code == 1) {
+          toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+      
+      // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
+  
+      const token = responseData.token.split(' ')[1]
+      localStorage.setItem('authToken',token)
+  
+      router.push('/');
+  
+  
+      }
+  
+      
+    } catch (error) {
+      console.log(error)
+      
+    }
   }
-}
 
-export const loginValidation = () => (
+
+
+return(
 
 
 
@@ -60,10 +92,12 @@ export const loginValidation = () => (
           ) : null}
  
           <button type="submit">Submit</button>
+          <ToastContainer />
+
         </Form>
       )}
     </Formik>
   </div>
 );
-
-export default loginValidation
+}
+export default userLogin
