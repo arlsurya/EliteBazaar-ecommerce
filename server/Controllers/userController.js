@@ -167,6 +167,42 @@ module.exports = {
                 Constants.jwtSectet,
                 { expiresIn: '7days' }
             )
+       
+            const currentDate = new Date(); 
+
+
+            // Payload for the new device
+            const device = {
+                deviceName: req.body.deviceName,
+                deviceToken: authToken,
+                lastLoggedIn: currentDate,
+            };
+
+            console.log(device)
+
+
+
+            // Check if the 'deviceName' already exists in the 'user.device' array
+            const isSameDevice = user.device.some(item => item.deviceName === device.deviceName);
+
+            if (!isSameDevice) {
+                // If the 'deviceName' is not already present, add the new device to the 'user.device' array
+                user.device.push(device);
+            } else {
+                // If the 'deviceName' already exists, update the 'lastLoggedIn' property of the existing device
+                user.device.forEach(item => {
+                    if (item.deviceName === device.deviceName) {
+                        item.lastLoggedIn = currentDate; // Update 'lastLoggedIn' to the current date and time
+                    }
+                });
+            }
+
+            user.lastLoggedIn = currentDate; 
+
+            user = await user.save();
+
+
+
 
             return res.status(200).json({
                 statusCode: 200,
