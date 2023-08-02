@@ -1,13 +1,50 @@
 import React, { useState } from 'react'
+import Modal from '../home/modal';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
 
 
 function home() {
     const [isOpen, setIsOpen] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen)
     }
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+      };
+    
+      const handleCloseModal = () => {
+        setIsModalOpen(false);
+      };
 
+
+
+    //   
+    const categorySchema = Yup.object().shape({
+  
+        categoryName: Yup.string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required('Required')
+      
+      });
+
+      const categorySubmit = async(data)=>{
+      try {
+        console.log(data)
+        
+      } catch (error) {
+        console.log(error)
+        
+      }
+      }
+  
     return (
         <div className='main'>
             <div className='header'>
@@ -65,7 +102,7 @@ function home() {
             </div>
         <div className='btnPosition'>
 
-            <button className='addButton'>Add Category</button>
+            <button  onClick={handleOpenModal} className='addButton'>Add Category</button>
 
         </div>
 
@@ -95,6 +132,41 @@ function home() {
       </tbody>
     </table>
                 </div>
+
+                <div>
+
+             
+
+   
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <h1>Add Category</h1> 
+
+           <Formik
+      initialValues={{
+        categoryName: '',
+      }}
+      validationSchema={categorySchema}
+      onSubmit= {categorySubmit }
+    >
+      {({ errors, touched }) => (
+        <Form>
+          
+          <Field  type="text" placeholder="product category name" name="categoryName" />
+          {errors.categoryName && touched.categoryName ? (
+            <div>{errors.categoryName}</div>
+          ) : null}
+ 
+          <button type="submit">Add</button>
+          <ToastContainer />
+
+        </Form>
+      )}
+    </Formik>
+     
+        <button onClick={handleCloseModal}>Close Modal</button>
+      </Modal>
+    </div>
+
             </div>
 
         </div>
