@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from '../home/modal';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -8,9 +8,61 @@ import { ToastContainer } from 'react-toastify';
 
 
 
+
+
 function home() {
     const [isOpen, setIsOpen] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [categories, setCategories] = useState([]);
+
+    const tableData = [
+        {
+            description: 'This is something desc 1',
+            status: 'Active',
+            date: 'July 12, 2023',
+            id: 1,
+        },
+        {
+            description: 'This is something desc 2',
+            status: 'Inactive',
+            date: 'July 15, 2023',
+            id: 2,
+        },
+        // Add more data objects as needed
+    ];
+
+
+    useState(async () => {
+        try {
+            let token = localStorage.getItem("_token")
+            console.log(token)
+
+            const response = await fetch('http://127.0.0.1:3001/api/admin/categories', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+
+            });
+
+
+            const responseData = await response.json();
+            console.log(responseData)
+
+            setCategories(responseData.data);
+
+
+
+
+
+        } catch (error) {
+            console.log(error)
+
+        }
+
+    }, [])
+
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen)
@@ -36,6 +88,7 @@ function home() {
     });
 
     const categorySubmit = async (data) => {
+
         try {
 
             let token = localStorage.getItem('_token')
@@ -65,9 +118,9 @@ function home() {
             // if success then show success on toast and throw success message
             if (responseData.Code == 1) {
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                setTimeout(()=>{
+                setTimeout(() => {
                     setIsModalOpen(false);
-                },2000)
+                }, 2000)
 
 
                 // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
@@ -150,26 +203,38 @@ function home() {
 
                 </div>
                 <div className='categoryTable'>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Category Description</th>
-                                <th>Status</th>
-                                <th>Created At</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <tr>
-                                <td>this is something desc</td>
-                                <td><button className='btn btn-primary'>Active</button></td>
-                                <td>July 12, 2023</td>
-                                <td><button>E</button><button>D</button></td>
-                            </tr>
-
-                        </tbody>
-                    </table>
+                {categories.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+              <th>Category Name</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((category) => (
+               
+              <tr key={category.id}>
+                <td>{category.categoryName}</td>
+                <td>
+                  <button className={category.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
+                    {category.status == false ? 'Inactive' : 'Active'}
+                  </button>
+                </td>
+                <td>{category.updatedAt}</td>
+                <td>
+                  <button>E</button>
+                  <button>D</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No data to display.</p>
+      )}
                 </div>
 
                 <div>
