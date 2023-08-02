@@ -37,7 +37,42 @@ function home() {
 
       const categorySubmit = async(data)=>{
       try {
-        console.log(data)
+       
+        let token = localStorage.getItem('_token')
+        let payload = {
+            token:token,
+            categoryName:data.categoryName
+        }
+        console.log(payload)
+        const response = await fetch('http://127.0.0.1:3001/api/admin/addcategory',{
+            method:'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+      
+          console.log(response)
+      
+          const responseData = await response.json();
+          console.log(responseData)
+             // if error then show error on toast and throw error message
+      
+             if (responseData.Code == 0) {
+              toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+      
+          }
+          // if success then show success on toast and throw success message
+          if (responseData.Code == 1) {
+              toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+          
+          // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
+    
+      
+      
+          }
+
+
         
       } catch (error) {
         console.log(error)

@@ -445,5 +445,15 @@ module.exports = {
             })
 
         }
+    },
+    addCategory: async(req,res)=>{
+        try {
+           let {categoryName} = req.body;
+           
+            
+        } catch (error) {
+            console.log(error)
+            
+        }
     }
 }

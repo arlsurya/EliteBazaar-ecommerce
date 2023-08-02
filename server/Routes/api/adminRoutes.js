@@ -15,4 +15,7 @@ router.post('/addproduct',isAuth,adminController.addProduct)
 router.post('/editproduct',isAuth, adminController.editProduct)
 router.post('/uploadSliderImage',isAuth, adminController.uploadSliderImage)
 
+// add category
+router.post('/addcategory',isAuth,adminController.addCategory)
+
 module.exports = router;

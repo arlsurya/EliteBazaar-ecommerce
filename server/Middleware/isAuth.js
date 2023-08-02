@@ -3,7 +3,9 @@ const Constants = require('../Constants')
 
 module.exports = (req,res,next)=>{
     try {
-        let token = (req.headers.authorization ? req.headers.authorization.replace("Bearer ", "") : "")
+        let token = (req.headers.authorization ? req.headers.authorization.replace("Bearer ", "") : "") ||
+            req.body.token
+    
         
         // decode the Bearer token 
         const decode = jwt.verify(token,Constants.jwtSectet)
