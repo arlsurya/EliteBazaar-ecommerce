@@ -80,3 +80,34 @@
   .card-content p {
     margin-bottom: 0; /* Remove margin from the paragraph to avoid extra space */
   }
+
+  .sideNav{
+    margin-top: 50px;
+  }
+  .customUl{
+    padding-left: 0;
+    list-style: none;
+    /* border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; */
+  }
+
+ .customUl li{
+    text-align: center;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    padding: 40px; 
+    margin: 16px;
+
+  }
+ .customUl li:hover{
+    font-size: large;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(217, 202, 202, 0.1); 
+    padding: 40px; 
+    margin: 16px;
+
+  }

@@ -24,9 +24,9 @@ function home() {
                     <div className='bar'></div>
                     <div className='bar'></div>
                 </div>
-                <nav>
+                <nav className='sideNav'>
 
-                    <ul>
+                    <ul className='customUl'>
                         <li>Dashboard</li>
                         <li>Category</li>
                         <li>Product</li>
