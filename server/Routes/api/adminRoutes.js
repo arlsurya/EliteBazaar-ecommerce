@@ -17,5 +17,6 @@ router.post('/uploadSliderImage',isAuth, adminController.uploadSliderImage)
 
 // add category
 router.post('/addcategory',isAuth,adminController.addCategory)
+router.get('/categories',isAuth,adminController.getAllCategories)
 
 module.exports = router;

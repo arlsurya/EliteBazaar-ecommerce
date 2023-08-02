@@ -474,7 +474,46 @@ module.exports = {
             
         } catch (error) {
             console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
             
+        }
+    },
+
+    getAllCategories: async(req,res)=>{
+        try {
+
+            let categories = await categoryModel.aggregate([
+                {$match:{}},
+                {$project:{
+                    _id:0,
+                    categoryName:1,
+                    status:1,
+                    updatedAt:1,
+                   
+                }}
+
+            ])
+          
+            if(categories != undefined){
+                return res.status(200).json({
+                    statusCode:200,
+                    message:"all categories",
+                    data: categories
+                })
+            }
+            
+        } catch (error) {
+
+              console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
         }
     }
 }
