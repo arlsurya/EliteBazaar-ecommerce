@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const adminModel = require('../Models/adminModel')
 const productModel = require('../Models/productModel')
 const sliderImageModel = require('../Models/sliderImageModel')
+const categoryModel = require('../Models/categoryModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities');
 const fileService = require('../Services/fileService');
@@ -449,7 +450,27 @@ module.exports = {
     addCategory: async(req,res)=>{
         try {
            let {categoryName} = req.body;
-           
+           let payload = {
+            categoryName: categoryName
+           }
+
+           let category = categoryModel(payload)
+           category = await category.save()
+
+           if(category != null){
+            return res.status(200).json({
+                statusCode:200,
+                Code:1,
+                message: 'Category added'
+            })
+           }
+           return res.status(200).json({
+            statusCode:500,
+            Code:0,
+            message: 'Error while adding category'
+        })
+
+
             
         } catch (error) {
             console.log(error)

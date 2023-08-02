@@ -17,69 +17,73 @@ function home() {
     }
     const handleOpenModal = () => {
         setIsModalOpen(true);
-      };
-    
-      const handleCloseModal = () => {
+    };
+
+    const handleCloseModal = () => {
         setIsModalOpen(false);
-      };
+    };
 
 
 
     //   
     const categorySchema = Yup.object().shape({
-  
+
         categoryName: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required')
-      
-      });
+            .min(2, 'Too Short!')
+            .max(50, 'Too Long!')
+            .required('Required')
 
-      const categorySubmit = async(data)=>{
-      try {
-       
-        let token = localStorage.getItem('_token')
-        let payload = {
-            token:token,
-            categoryName:data.categoryName
+    });
+
+    const categorySubmit = async (data) => {
+        try {
+
+            let token = localStorage.getItem('_token')
+            let payload = {
+                token: token,
+                categoryName: data.categoryName
+            }
+            console.log(payload)
+            const response = await fetch('http://127.0.0.1:3001/api/admin/addcategory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            console.log(response)
+
+            const responseData = await response.json();
+            console.log(responseData)
+            // if error then show error on toast and throw error message
+
+            if (responseData.Code == 0) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+
+            }
+            // if success then show success on toast and throw success message
+            if (responseData.Code == 1) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+                setTimeout(()=>{
+                    setIsModalOpen(false);
+                },2000)
+
+
+                // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
+
+
+
+            }
+
+
+
+        } catch (error) {
+            console.log(error)
+
         }
-        console.log(payload)
-        const response = await fetch('http://127.0.0.1:3001/api/admin/addcategory',{
-            method:'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-          });
-      
-          console.log(response)
-      
-          const responseData = await response.json();
-          console.log(responseData)
-             // if error then show error on toast and throw error message
-      
-             if (responseData.Code == 0) {
-              toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
-      
-          }
-          // if success then show success on toast and throw success message
-          if (responseData.Code == 1) {
-              toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-          
-          // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
-    
-      
-      
-          }
+    }
 
-
-        
-      } catch (error) {
-        console.log(error)
-        
-      }
-      }
-  
     return (
         <div className='main'>
             <div className='header'>
@@ -135,72 +139,72 @@ function home() {
                     </div>
                 </div>
             </div>
-        <div className='btnPosition'>
+            <div className='btnPosition'>
 
-            <button  onClick={handleOpenModal} className='addButton'>Add Category</button>
+                <button onClick={handleOpenModal} className='addButton'>Add Category</button>
 
-        </div>
+            </div>
 
             <div className='category'>
                 <div className='addCatagory'>
-                    
+
                 </div>
                 <div className='categoryTable'>
-                <table>
-      <thead>
-        <tr>
-          <th>Category Description</th>
-          <th>Status</th>
-          <th>Created At</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-     
-          <tr>
-            <td>this is something desc</td>
-            <td><button className='btn btn-primary'>Active</button></td>
-            <td>July 12, 2023</td> 
-            <td><button>E</button><button>D</button></td> 
-          </tr>
-    
-      </tbody>
-    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category Description</th>
+                                <th>Status</th>
+                                <th>Created At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>this is something desc</td>
+                                <td><button className='btn btn-primary'>Active</button></td>
+                                <td>July 12, 2023</td>
+                                <td><button>E</button><button>D</button></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
                 </div>
 
                 <div>
 
-             
 
-   
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <h1>Add Category</h1> 
 
-           <Formik
-      initialValues={{
-        categoryName: '',
-      }}
-      validationSchema={categorySchema}
-      onSubmit= {categorySubmit }
-    >
-      {({ errors, touched }) => (
-        <Form>
-          
-          <Field  type="text" placeholder="product category name" name="categoryName" />
-          {errors.categoryName && touched.categoryName ? (
-            <div>{errors.categoryName}</div>
-          ) : null}
- 
-          <button type="submit">Add</button>
-          <ToastContainer />
 
-        </Form>
-      )}
-    </Formik>
-     
-        <button onClick={handleCloseModal}>Close Modal</button>
-      </Modal>
-    </div>
+                    <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                        <h1>Add Category</h1>
+
+                        <Formik
+                            initialValues={{
+                                categoryName: '',
+                            }}
+                            validationSchema={categorySchema}
+                            onSubmit={categorySubmit}
+                        >
+                            {({ errors, touched }) => (
+                                <Form>
+
+                                    <Field type="text" placeholder="product category name" name="categoryName" />
+                                    {errors.categoryName && touched.categoryName ? (
+                                        <div>{errors.categoryName}</div>
+                                    ) : null}
+
+                                    <button type="submit">Add</button>
+                                    <ToastContainer />
+
+                                </Form>
+                            )}
+                        </Formik>
+
+                        <button onClick={handleCloseModal}>Close Modal</button>
+                    </Modal>
+                </div>
 
             </div>
 
