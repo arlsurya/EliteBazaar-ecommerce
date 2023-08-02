@@ -63,25 +63,37 @@ function home() {
                     </div>
                 </div>
             </div>
+        <div className='btnPosition'>
+
+            <button className='addButton'>Add Category</button>
+
+        </div>
 
             <div className='category'>
                 <div className='addCatagory'>
                     
                 </div>
                 <div className='categoryTable'>
-                    {/* <table>
-                
-               
-                            <th>S.No</th>
-                            <th>Cat. Desc</th>
-                            <th>Status</th>
-                            <th>Created At</th>
-                            <th>Action</th>
-
-
-                    
-                        
-                    </table> */}
+                <table>
+      <thead>
+        <tr>
+          <th>Category Description</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+     
+          <tr>
+            <td>this is something desc</td>
+            <td><button className='btn btn-primary'>Active</button></td>
+            <td>July 12, 2023</td> 
+            <td><button>E</button><button>D</button></td> 
+          </tr>
+    
+      </tbody>
+    </table>
                 </div>
             </div>
 

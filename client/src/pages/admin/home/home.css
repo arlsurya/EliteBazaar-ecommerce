@@ -111,3 +111,66 @@
     margin: 16px;
 
   }
+
+  .btn{
+    background-color: green;
+    color: white;
+  }
+
+
+  /* tableStyles.css */
+
+/* Basic table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Table header styles */
+th {
+  background-color: #f2f2f2;
+}
+
+/* Table row styles */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Hover effect on rows */
+tr:hover {
+  background-color: #e0e0e0;
+}
+
+/* Optional: Add some responsive styles for smaller screens */
+@media (max-width: 768px) {
+  th,
+  td {
+    padding: 10px 12px;
+  }
+}
+
+.categoryTable{
+  width: 80%;
+  position: relative;
+  left: 290px;
+  top: 250px;
+}
+
+.addButton{
+  background-color: blue;
+  color: white;
+
+}
+.btnPosition{
+  position: relative;
+  top: 245px;
+  left: 290px
+}
