@@ -17,6 +17,7 @@ function home() {
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
+    const [orders, setOrders] = useState([]);
     const [categoryModule, setCategoryModule] = useState(false)
     const [productModule, setProductModule] = useState(true)
     const [orderModule, setOrderModule] = useState(false)
@@ -31,6 +32,12 @@ function home() {
         setCategoryModule(false)
 
         setProductModule(true)
+
+    }
+    const selectOrder = () => {
+        setCategoryModule(false)
+        setProductModule(false)
+        setOrderModule(true)
 
     }
 
@@ -263,7 +270,7 @@ function home() {
                         <li>Dashboard</li>
                         <li onClick={selectCatogary}>Category</li>
                         <li onClick={selectProduct}>Product</li>
-                        <li>Order</li>
+                        <li onClick={selectOrder} >Order</li>
                     </ul>
                 </nav>
             </div>
