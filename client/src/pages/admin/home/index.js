@@ -16,6 +16,7 @@ function home() {
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]);
     const [categoryModule, setCategoryModule] = useState(false)
     const [productModule, setProductModule] = useState(true)
     const [orderModule, setOrderModule] = useState(false)
@@ -30,6 +31,37 @@ function home() {
         setCategoryModule(false)
 
         setProductModule(true)
+
+    }
+
+    const getProducts = async()=>{
+        try {
+
+            let token = localStorage.getItem("_token")
+            console.log(token)
+
+            setToken(token)
+        
+            const response = await fetch('http://127.0.0.1:3001/api/admin/products', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+
+            });
+
+
+            const responseData = await response.json();
+            console.log(responseData)
+
+            setProducts(responseData.data);
+            
+        } catch (error) {
+            console.log(error)
+            
+        }
+
 
     }
 
@@ -66,6 +98,7 @@ function home() {
             console.log(error)
 
         }
+        getProducts()
 
     }, [])
 
