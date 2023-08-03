@@ -436,8 +436,25 @@ module.exports = {
 
         } catch (error) {
             console.log(error)
+            return res.status(401).json({
+                statusCode: 401,
+                message: "Internal Server Error"
+            })
+        }
+    },
 
+    orderProduct : async(req,res)=>{
+        try {
+            
+            
+        } catch (error) {
 
+            console.log(error)
+            return res.status(401).json({
+                statusCode: 401,
+                message: "Internal Server Error"
+            })
+            
         }
     }
 
