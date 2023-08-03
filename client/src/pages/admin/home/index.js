@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify';
 
 
 function home() {
+    const [token, setToken] = useState('')
     const [isOpen, setIsOpen] = useState(false)
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -39,6 +40,8 @@ function home() {
         try {
             let token = localStorage.getItem("_token")
             console.log(token)
+
+            setToken(token)
 
             const response = await fetch('http://127.0.0.1:3001/api/admin/categories', {
                 method: 'GET',
@@ -154,13 +157,7 @@ function home() {
                     setIsCategoryModalOpen(false);
                 }, 2000)
 
-
-                // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
-
-
-
             }
-
 
 
         } catch (error) {
@@ -170,7 +167,45 @@ function home() {
     }
 
     const productSubmit = async(data)=>{
-        console.log(data)
+        try {
+            
+            const response = await fetch('http://127.0.0.1:3001/api/admin/addproduct', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(data),
+            });
+
+            console.log(response)
+
+            const responseData = await response.json();
+            console.log(responseData)
+              // if error then show error on toast and throw error message
+
+              if (responseData.Code == 0) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+
+            }
+            // if success then show success on toast and throw success message
+            if (responseData.Code == 1) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+                setTimeout(() => {
+                    setIsProductModalOpen(false);
+                }, 2000)
+
+   
+
+            }
+
+          
+            
+        } catch (error) {
+            console.log(error)
+            
+        }
+       
     }
 
     return (
