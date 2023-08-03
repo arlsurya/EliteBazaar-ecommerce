@@ -19,6 +19,7 @@ function home() {
     const [products, setProducts] = useState([]);
     const [orders, setOrders] = useState([]);
     const [categoryModule, setCategoryModule] = useState(false)
+    const [sales, setSales] = useState('')
     const [productModule, setProductModule] = useState(true)
     const [orderModule, setOrderModule] = useState(false)
     const [dashboardModule, setDashboardModule] = useState(false)
@@ -35,20 +36,22 @@ function home() {
 
     }
     const selectOrder = () => {
+        console.log("====")
+        console.log(sales)
         setCategoryModule(false)
         setProductModule(false)
         setOrderModule(true)
 
     }
 
-    const getProducts = async()=>{
+    const getProducts = async () => {
         try {
 
             let token = localStorage.getItem("_token")
             console.log(token)
 
             setToken(token)
-        
+
             const response = await fetch('http://127.0.0.1:3001/api/admin/products', {
                 method: 'GET',
                 headers: {
@@ -63,21 +66,21 @@ function home() {
             console.log(responseData)
 
             setProducts(responseData.data);
-            
+
         } catch (error) {
             console.log(error)
-            
+
         }
 
 
     }
 
-    const getOrders = async()=>{
+    const getOrders = async () => {
         let token = localStorage.getItem("_token")
         console.log(token)
 
         setToken(token)
-    
+
         const response = await fetch('http://127.0.0.1:3001/api/admin/orders', {
             method: 'GET',
             headers: {
@@ -92,6 +95,8 @@ function home() {
         console.log(responseData)
 
         setOrders(responseData.data);
+        setSales(responseData.sales)
+
 
     }
 
@@ -167,7 +172,7 @@ function home() {
             .required('Required')
 
     });
-    
+
     const productSchema = Yup.object().shape({
 
         productName: Yup.string()
@@ -230,9 +235,9 @@ function home() {
         }
     }
 
-    const productSubmit = async(data)=>{
+    const productSubmit = async (data) => {
         try {
-            
+
             const response = await fetch('http://127.0.0.1:3001/api/admin/addproduct', {
                 method: 'POST',
                 headers: {
@@ -246,9 +251,9 @@ function home() {
 
             const responseData = await response.json();
             console.log(responseData)
-              // if error then show error on toast and throw error message
+            // if error then show error on toast and throw error message
 
-              if (responseData.Code == 0) {
+            if (responseData.Code == 0) {
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
 
             }
@@ -259,17 +264,17 @@ function home() {
                     setIsProductModalOpen(false);
                 }, 2000)
 
-   
+
 
             }
 
-          
-            
+
+
         } catch (error) {
             console.log(error)
-            
+
         }
-       
+
     }
 
     return (
@@ -303,7 +308,7 @@ function home() {
                 <div class="dashboard-card">
                     <div class="card-content">
                         <h2>Sales</h2>
-                        <p>Total Sales: $5000</p>
+                        <h1>{sales.length > 0 ? sales[0].totalSalesAmount : ''}</h1>
                     </div>
                 </div>
                 <div class="dashboard-card">
@@ -415,7 +420,7 @@ function home() {
                                     <button onClick={handleCloseModal}>Close Modal</button>
                                 </Modal>
 
-                               
+
 
 
 
@@ -534,7 +539,7 @@ function home() {
                             productDiscountedPrice: '',
                             productCategory: '',
                             productQuantity: '',
-                        
+
                         }}
                         validationSchema={productSchema}
                         onSubmit={productSubmit}>
@@ -583,45 +588,45 @@ function home() {
                     products ? (
 
                         <div className='orders'>
-                                    {orders.length > 0 ? (
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>User Name</th>
-                                                    <th>User Mobile</th>
-                                                    <th>User Email</th>
-                                                    <th> Product Name</th>
-                                                    <th> Product Amount</th>
-                                                    <th> Product Quantity</th>
-                                                    <th> Transaction Amount</th>
-                                                    <th> Transaction ID</th>
-                                                    <th> Payment Gateway</th>
-                                                
+                            {orders.length > 0 ? (
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>User Name</th>
+                                            <th>User Mobile</th>
+                                            <th>User Email</th>
+                                            <th> Product Name</th>
+                                            <th> Product Amount</th>
+                                            <th> Product Quantity</th>
+                                            <th> Transaction Amount</th>
+                                            <th> Transaction ID</th>
+                                            <th> Payment Gateway</th>
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {orders.map((order) => (
 
-                                                    <tr key={order.id}>
-                                                        <td>{order.userDetails.fullName}</td>
-                                                        <td>{order.userDetails.mobile}</td>
-                                                        <td>{order.userDetails.email}</td>
-                                                        <td>{order.productName}</td>
-                                                        <td>{order.productAmount}</td>
-                                                        <td>{order.productQuantity}</td>
-                                                        <td>{order.transactionAmount}</td>
-                                                        <td>{order.transactionId}</td>
-                                                        <td>{order.paymentGateway}</td>
-                                                     
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    ) : (
-                                        <p>No data to display.</p>
-                                    )}
-                                </div>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {orders.map((order) => (
+
+                                            <tr key={order.id}>
+                                                <td>{order.userDetails.fullName}</td>
+                                                <td>{order.userDetails.mobile}</td>
+                                                <td>{order.userDetails.email}</td>
+                                                <td>{order.productName}</td>
+                                                <td>{order.productAmount}</td>
+                                                <td>{order.productQuantity}</td>
+                                                <td>{order.transactionAmount}</td>
+                                                <td>{order.transactionId}</td>
+                                                <td>{order.paymentGateway}</td>
+
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <p>No data to display.</p>
+                            )}
+                        </div>
 
 
                     ) : ('')
