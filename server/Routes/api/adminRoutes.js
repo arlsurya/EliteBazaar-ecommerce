@@ -12,6 +12,7 @@ router.post('/register',adminController.register)
 router.post('/login',adminController.login)
 router.post('/changepassword',isAuth,adminController.changePassword)
 router.post('/addproduct',isAuth,adminController.addProduct)
+router.get('/products',isAuth,adminController.getProduct)
 router.post('/editproduct',isAuth, adminController.editProduct)
 router.post('/uploadSliderImage',isAuth, adminController.uploadSliderImage)
 

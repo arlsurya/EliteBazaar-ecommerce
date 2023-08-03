@@ -341,6 +341,21 @@ module.exports = {
 
         }
     },
+    getProduct: async(req,res)=>{
+        try {
+            let products = await productModel.find()
+
+            return res.status(200).json({
+                statusCode:200,
+                message:"All products",
+                data:products
+            })
+        } catch (error) {
+            console.log(error)
+            
+        }
+    }
+    ,
 
     editProduct: async (req, res) => {
         try {
