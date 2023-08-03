@@ -7,6 +7,7 @@ const adminModel = require('../Models/adminModel')
 const productModel = require('../Models/productModel')
 const sliderImageModel = require('../Models/sliderImageModel')
 const categoryModel = require('../Models/categoryModel')
+const transactionModel = require('../Models/transactionModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities');
 const fileService = require('../Services/fileService');
@@ -529,6 +530,52 @@ module.exports = {
                 Code:0,
                 message: 'Internal server error'
             })
+        }
+    },
+    getAllOrders: async(req,res)=>{
+
+        try {
+            let orders = await transactionModel.aggregate([
+                {$match:{}},
+                {$lookup:{
+                    from:'users',
+                    localField:'userId',
+                    foreignField:'_id',
+                    as:"userDetails"
+                }},
+                {$unwind:"$userDetails"},
+                {
+                    $project:{
+                        transactionId:1,
+                        productName:1,
+                        productAmount:1,
+                        productQuantity:1,
+                        transactionAmount:1,
+                        paymentGateway:1,
+                        createdAt:1,
+                        userDetails:{
+                            "fullName": "$userDetails.fullName",
+                            "mobile": "$userDetails.mobile",
+                            "email": "$userDetails.email",
+
+                        }
+                    }
+                }
+            ])
+
+           return res.status(200).json({
+            statusCode:200,
+            message:'Order list',
+            data:orders
+           })
+        } catch (error) {
+            console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
+            
         }
     }
 }

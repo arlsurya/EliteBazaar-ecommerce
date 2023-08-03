@@ -20,4 +20,7 @@ router.post('/uploadSliderImage',isAuth, adminController.uploadSliderImage)
 router.post('/addcategory',isAuth,adminController.addCategory)
 router.get('/categories',isAuth,adminController.getAllCategories)
 
+// order
+router.get('/orders',isAuth,adminController.getAllOrders)
+
 module.exports = router;
