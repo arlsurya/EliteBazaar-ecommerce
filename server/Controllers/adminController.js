@@ -535,6 +535,13 @@ module.exports = {
     getAllOrders: async(req,res)=>{
 
         try {
+            let sales = await transactionModel.aggregate([
+            {$group:{
+                _id:null,
+                totalSalesAmount: {$sum:"$transactionAmount"}
+            }}
+               
+            ])
             let orders = await transactionModel.aggregate([
                 {$match:{}},
                 {$lookup:{
@@ -562,11 +569,13 @@ module.exports = {
                     }
                 }
             ])
+            
 
            return res.status(200).json({
             statusCode:200,
             message:'Order list',
-            data:orders
+            data:orders,
+            sales:sales
            })
         } catch (error) {
             console.log(error)
