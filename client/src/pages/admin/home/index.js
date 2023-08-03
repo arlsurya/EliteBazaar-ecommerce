@@ -14,6 +14,7 @@ function home() {
     const [isOpen, setIsOpen] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [productModule, setProductModule] = useState(false)
 
     const tableData = [
         {
@@ -192,88 +193,104 @@ function home() {
                     </div>
                 </div>
             </div>
-            <div className='btnPosition'>
 
-                <button onClick={handleOpenModal} className='addButton'>Add Category</button>
+            <div>
+                
+                <div className='categoryModule'>
+                 
 
-            </div>
+                    
 
-            <div className='category'>
-                <div className='addCatagory'>
+                    <div className='btnPosition'>
 
-                </div>
-                <div className='categoryTable'>
-                {categories.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Category Name</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((category) => (
-               
-              <tr key={category.id}>
-                <td>{category.categoryName}</td>
-                <td>
-                  <button className={category.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
-                    {category.status == false ? 'Inactive' : 'Active'}
-                  </button>
-                </td>
-                <td>{category.updatedAt}</td>
-                <td>
-                  <button>E</button>
-                  <button>D</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No data to display.</p>
-      )}
-                </div>
+                        <button onClick={handleOpenModal} className='addButton'>Add Category</button>
 
-                <div>
+                    </div>
 
+                    <div className='category'>
+                        <div className='addCatagory'>
 
+                        </div>
+                        <div className='categoryTable'>
+                            {categories.length > 0 ? (
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Category Name</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {categories.map((category) => (
 
-
-                    <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                        <h1>Add Category</h1>
-
-                        <Formik
-                            initialValues={{
-                                categoryName: '',
-                            }}
-                            validationSchema={categorySchema}
-                            onSubmit={categorySubmit}
-                        >
-                            {({ errors, touched }) => (
-                                <Form>
-
-                                    <Field type="text" placeholder="product category name" name="categoryName" />
-                                    {errors.categoryName && touched.categoryName ? (
-                                        <div>{errors.categoryName}</div>
-                                    ) : null}
-
-                                    <button type="submit">Add</button>
-                                    <ToastContainer />
-
-                                </Form>
+                                            <tr key={category.id}>
+                                                <td>{category.categoryName}</td>
+                                                <td>
+                                                    <button className={category.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
+                                                        {category.status == false ? 'Inactive' : 'Active'}
+                                                    </button>
+                                                </td>
+                                                <td>{category.updatedAt}</td>
+                                                <td>
+                                                    <button>E</button>
+                                                    <button>D</button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <p>No data to display.</p>
                             )}
-                        </Formik>
+                        </div>
 
-                        <button onClick={handleCloseModal}>Close Modal</button>
-                    </Modal>
+
+
+
+
+                        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                            <h1>Add Category</h1>
+
+                            <Formik
+                                initialValues={{
+                                    categoryName: '',
+                                }}
+                                validationSchema={categorySchema}
+                                onSubmit={categorySubmit}>
+                                {({ errors, touched }) => (
+                                    <Form>
+
+                                        <Field type="text" placeholder="product category name" name="categoryName" />
+                                        {errors.categoryName && touched.categoryName ? (
+                                            <div>{errors.categoryName}</div>
+                                        ) : null}
+
+                                        <button type="submit">Add</button>
+                                        <ToastContainer />
+
+                                    </Form>
+                                )}
+                            </Formik>
+
+                            <button onClick={handleCloseModal}>Close Modal</button>
+                        </Modal>
+
+
+                    </div>
+
+
                 </div>
 
-            </div>
 
+
+
+
+
+            </div>
         </div>
+
     )
 }
 
