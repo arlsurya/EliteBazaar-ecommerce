@@ -5,6 +5,7 @@ const saltRound = 10
 const jwt = require('jsonwebtoken')
 const userModel = require('../Models/userModel')
 const productModel = require('../Models/productModel')
+const transactionModel = require('../Models/transactionModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities')
 const FileService = require('../Services/fileService')
@@ -445,7 +446,14 @@ module.exports = {
 
     orderProduct : async(req,res)=>{
         try {
-            
+
+            let {transactionId, productName, productAmount,productQuantity, transactionAmount,paymentGateway,productId, userId} = req.body
+
+            let order = transactionModel(req.body)
+            order = await order.save()
+
+            res.send(order)
+
             
         } catch (error) {
 
