@@ -17,12 +17,19 @@
     padding: 20px;
   }
   .subHeading{
-    position: absolute;
-    left: 280px;
-   display: flex;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 280px;
+
+
+
+  }
+
+  .productModule{
+    padding-left: 280px;
+  
+ 
    
-
-
 
   }
   
