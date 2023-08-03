@@ -72,6 +72,29 @@ function home() {
 
     }
 
+    const getOrders = async()=>{
+        let token = localStorage.getItem("_token")
+        console.log(token)
+
+        setToken(token)
+    
+        const response = await fetch('http://127.0.0.1:3001/api/admin/orders', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+
+        });
+
+
+        const responseData = await response.json();
+        console.log(responseData)
+
+        setOrders(responseData.data);
+
+    }
+
 
 
 
@@ -106,6 +129,7 @@ function home() {
 
         }
         getProducts()
+        getOrders()
 
     }, [])
 
@@ -551,6 +575,57 @@ function home() {
 
                     <button onClick={handleCloseModal}>Close Modal</button>
                 </Modal>
+
+            </div>
+
+            <div className='orderModule'>
+                {
+                    products ? (
+
+                        <div className='orders'>
+                                    {orders.length > 0 ? (
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>User Name</th>
+                                                    <th>User Mobile</th>
+                                                    <th>User Email</th>
+                                                    <th> Product Name</th>
+                                                    <th> Product Amount</th>
+                                                    <th> Product Quantity</th>
+                                                    <th> Transaction Amount</th>
+                                                    <th> Transaction ID</th>
+                                                    <th> Payment Gateway</th>
+                                                
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {orders.map((order) => (
+
+                                                    <tr key={order.id}>
+                                                        <td>{order.userDetails.fullName}</td>
+                                                        <td>{order.userDetails.mobile}</td>
+                                                        <td>{order.userDetails.email}</td>
+                                                        <td>{order.productName}</td>
+                                                        <td>{order.productAmount}</td>
+                                                        <td>{order.productQuantity}</td>
+                                                        <td>{order.transactionAmount}</td>
+                                                        <td>{order.transactionId}</td>
+                                                        <td>{order.paymentGateway}</td>
+                                                     
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    ) : (
+                                        <p>No data to display.</p>
+                                    )}
+                                </div>
+
+
+                    ) : ('')
+                }
 
             </div>
         </div>
