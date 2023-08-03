@@ -32,21 +32,7 @@ function home() {
 
     }
 
-    const tableData = [
-        {
-            description: 'This is something desc 1',
-            status: 'Active',
-            date: 'July 12, 2023',
-            id: 1,
-        },
-        {
-            description: 'This is something desc 2',
-            status: 'Inactive',
-            date: 'July 15, 2023',
-            id: 2,
-        },
-        // Add more data objects as needed
-    ];
+
 
 
     useState(async () => {
@@ -105,7 +91,7 @@ function home() {
 
 
 
-    //   
+    //   category schema
     const categorySchema = Yup.object().shape({
 
         categoryName: Yup.string()
@@ -114,6 +100,24 @@ function home() {
             .required('Required')
 
     });
+    
+    const productSchema = Yup.object().shape({
+
+        productName: Yup.string()
+            .required('Required'),
+        productDescription: Yup.string()
+            .required('Required'),
+        productPrice: Yup.string()
+            .required('Required'),
+        productDiscountedPrice: Yup.string()
+            .required('Required'),
+        productCategory: Yup.string()
+            .required('Required'),
+        productQuantity: Yup.string()
+            .required('Required'),
+
+    });
+
 
     const categorySubmit = async (data) => {
 
@@ -163,6 +167,10 @@ function home() {
             console.log(error)
 
         }
+    }
+
+    const productSubmit = async(data)=>{
+        console.log(data)
     }
 
     return (
@@ -416,16 +424,42 @@ function home() {
 
                     <Formik
                         initialValues={{
-                            categoryName: '',
+                            productName: '',
+                            productDescription: '',
+                            productPrice: '',
+                            productDiscountedPrice: '',
+                            productCategory: '',
+                            productQuantity: '',
+                        
                         }}
-                        validationSchema={categorySchema}
-                        onSubmit={categorySubmit}>
+                        validationSchema={productSchema}
+                        onSubmit={productSubmit}>
                         {({ errors, touched }) => (
                             <Form>
 
-                                <Field type="text" placeholder="product category name" name="categoryName" />
-                                {errors.categoryName && touched.categoryName ? (
-                                    <div>{errors.categoryName}</div>
+                                <Field type="text" placeholder="product name" name="productName" />
+                                {errors.productName && touched.productName ? (
+                                    <div>{errors.productName}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product description" name="productDescription" />
+                                {errors.productDescription && touched.productDescription ? (
+                                    <div>{errors.productDescription}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product price" name="productPrice" />
+                                {errors.productPrice && touched.productPrice ? (
+                                    <div>{errors.productPrice}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product discounted price" name="productDiscountedPrice" />
+                                {errors.productDiscountedPrice && touched.productDiscountedPrice ? (
+                                    <div>{errors.productDiscountedPrice}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product category" name="productCategory" />
+                                {errors.productCategory && touched.productCategory ? (
+                                    <div>{errors.productCategory}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product quantity" name="productQuantity" />
+                                {errors.productQuantity && touched.productQuantity ? (
+                                    <div>{errors.productQuantity}</div>
                                 ) : null}
 
                                 <button type="submit">Add</button>
