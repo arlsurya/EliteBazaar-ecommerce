@@ -447,16 +447,21 @@ function home() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {categories.map((category) => (
+                                                {products.map((product) => (
 
-                                                    <tr key={category.id}>
-                                                        <td>{category.categoryName}</td>
+                                                    <tr key={product.id}>
+                                                        <td>{product.productName}</td>
+                                                        <td>{product.productDescription}</td>
+                                                        <td>{product.productPrice}</td>
+                                                        <td>{product.productDiscountedPrice}</td>
+                                                        <td>{product.productCategory}</td>
+                                                        <td>{product.productQuantity}</td>
                                                         <td>
-                                                            <button className={category.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
-                                                                {category.status == false ? 'Inactive' : 'Active'}
+                                                            <button className={product.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
+                                                                {product.status == false ? 'Inactive' : 'Active'}
                                                             </button>
                                                         </td>
-                                                        <td>{category.updatedAt}</td>
+                                                        <td>img</td>
                                                         <td>
                                                             <button>E</button>
                                                             <button>D</button>
