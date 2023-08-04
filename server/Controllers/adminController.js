@@ -345,11 +345,14 @@ module.exports = {
     getProduct: async(req,res)=>{
         try {
             let products = await productModel.find()
+            let productCount = await productModel.countDocuments()
+
 
             return res.status(200).json({
                 statusCode:200,
                 message:"All products",
-                data:products
+                data:products,
+                productCount:productCount
             })
         } catch (error) {
             console.log(error)
@@ -513,12 +516,14 @@ module.exports = {
                 }}
 
             ])
+            let countCategory = await categoryModel.countDocuments()
           
             if(categories != undefined){
                 return res.status(200).json({
                     statusCode:200,
                     message:"all categories",
-                    data: categories
+                    data: categories,
+                    countCategory:countCategory
                 })
             }
             
@@ -569,13 +574,17 @@ module.exports = {
                     }
                 }
             ])
+
+            let countOrder = await transactionModel.countDocuments()
+
             
 
            return res.status(200).json({
             statusCode:200,
             message:'Order list',
             data:orders,
-            sales:sales
+            sales:sales,
+            orderCount:countOrder
            })
         } catch (error) {
             console.log(error)

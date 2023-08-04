@@ -18,6 +18,9 @@ function home() {
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
     const [orders, setOrders] = useState([]);
+    const [orderCount, setOrderCount] = useState([])
+    const [productCount, setProductCount] = useState([])
+    const [categoryCount, setCategoryCount] = useState([])
     const [categoryModule, setCategoryModule] = useState(false)
     const [sales, setSales] = useState('')
     const [productModule, setProductModule] = useState(true)
@@ -66,6 +69,7 @@ function home() {
             console.log(responseData)
 
             setProducts(responseData.data);
+            setProductCount(responseData.productCount)
 
         } catch (error) {
             console.log(error)
@@ -95,7 +99,8 @@ function home() {
         console.log(responseData)
 
         setOrders(responseData.data);
-        setSales(responseData.sales)
+        setSales(responseData.sales);
+        setOrderCount(responseData.orderCount)
 
 
     }
@@ -124,6 +129,8 @@ function home() {
             console.log(responseData)
 
             setCategories(responseData.data);
+            setCategoryCount(responseData.countCategory)
+
 
 
 
@@ -308,27 +315,28 @@ function home() {
                 <div class="dashboard-card">
                     <div class="card-content">
                         <h2>Sales</h2>
-                        <h1>{sales.length > 0 ? sales[0].totalSalesAmount : ''}</h1>
+
+                        <h1 className='text-gray-400 text-lg'>Total Sales: {sales.length > 0 ? sales[0].totalSalesAmount : ''}</h1>
                     </div>
                 </div>
                 <div class="dashboard-card">
                     <div class="card-content">
                         <h2>Order</h2>
-                        <p>Total Order: 300</p>
+                        <p>Total Order: {orderCount ? orderCount : 0}</p>
                     </div>
                 </div>
 
                 <div class="dashboard-card">
                     <div class="card-content">
                         <h2>Product</h2>
-                        <p>Total Product: 100</p>
+                        <p>Total Product: {productCount ? productCount : 0}</p>
                     </div>
                 </div>
 
                 <div class="dashboard-card">
                     <div class="card-content">
                         <h2>Category</h2>
-                        <p>Total Category: 10</p>
+                        <p>Total Category: {categoryCount ? categoryCount : 0}</p>
                     </div>
                 </div>
             </div>
