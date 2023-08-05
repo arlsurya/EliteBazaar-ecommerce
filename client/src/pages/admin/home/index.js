@@ -27,6 +27,9 @@ function home() {
     const [orderModule, setOrderModule] = useState(false)
     const [dashboardModule, setDashboardModule] = useState(false)
 
+    // category
+    const [initialCategoryName, setInitialCategoryName]= useState('')
+
     const selectCatogary = () => {
         console.log('category')
         setCategoryModule(true)
@@ -284,9 +287,33 @@ function home() {
 
     }
 
-    const editCatagory = (type,id) =>{
-        console.log(type)
-        console.log(id)
+    const editCategory = (data)=>{
+        console.log(data)
+    
+        setIsCategoryModalOpen(true)
+        setInitialCategoryName(data.categoryName)
+
+        
+
+    }
+    const editProduct = (data)=>{
+
+
+    }
+
+    const edit = (type,data) =>{
+        
+        if(type === 'category'){
+            editCategory(data)
+        }
+        if(type === 'product'){
+            console.log(type)
+            console.log(data)
+           editProduct(data)
+
+
+        }
+    
     }
 
     return (
@@ -388,7 +415,7 @@ function home() {
                                                         </td>
                                                         <td>{category.updatedAt}</td>
                                                         <td>
-                                                            <button onClick={()=>editCatagory('category',category.categoryName)} >E</button>
+                                                            <button onClick={()=>edit('category',category)} >E</button>
                                                             <button>D</button>
                                                         </td>
                                                     </tr>
@@ -411,7 +438,7 @@ function home() {
 
                                     <Formik
                                         initialValues={{
-                                            categoryName: '',
+                                            categoryName: initialCategoryName,
                                         }}
                                         validationSchema={categorySchema}
                                         onSubmit={categorySubmit}>
@@ -512,7 +539,7 @@ function home() {
                                                         </td>
                                                         <td>img</td>
                                                         <td>
-                                                            <button>E</button>
+                                                            <button onClick={()=>edit('product',product._id)}>E</button>
                                                             <button>D</button>
                                                         </td>
                                                     </tr>
