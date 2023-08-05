@@ -29,6 +29,14 @@ function home() {
 
     // category
     const [initialCategoryName, setInitialCategoryName]= useState('')
+    // product
+    const [initialProductName, setInitialProductName]= useState('')
+    const [initialProductDescription, setInitialProductDescription]= useState('')
+    const [initialProductPrice, setInitialProductPrice]= useState('')
+    const [initialProductDiscountedPrice, setInitialProductDiscountedPrice]= useState('')
+    const [initialProductCategory, setInitialProductCategory]= useState('')
+    const [initialProductQuantity, setInitialProductQuantity]= useState('')
+
 
     const selectCatogary = () => {
         console.log('category')
@@ -288,15 +296,23 @@ function home() {
     }
 
     const editCategory = (data)=>{
-        console.log(data)
-    
+        console.log(data)  
         setIsCategoryModalOpen(true)
         setInitialCategoryName(data.categoryName)
 
-        
 
     }
     const editProduct = (data)=>{
+        console.log(data)  
+        setIsProductModalOpen(true)
+
+        setInitialProductName(data.productName)
+        setInitialProductDescription(data.productDescription)
+        setInitialProductPrice(data.productPrice)
+        setInitialProductDiscountedPrice(data.productDiscountedPrice)
+        setInitialProductCategory(data.productCategory)
+        setInitialProductQuantity(data.productQuantity)
+
 
 
     }
@@ -307,8 +323,7 @@ function home() {
             editCategory(data)
         }
         if(type === 'product'){
-            console.log(type)
-            console.log(data)
+
            editProduct(data)
 
 
@@ -539,7 +554,7 @@ function home() {
                                                         </td>
                                                         <td>img</td>
                                                         <td>
-                                                            <button onClick={()=>edit('product',product._id)}>E</button>
+                                                            <button onClick={()=>edit('product',product)}>E</button>
                                                             <button>D</button>
                                                         </td>
                                                     </tr>
@@ -573,12 +588,12 @@ function home() {
 
                     <Formik
                         initialValues={{
-                            productName: '',
-                            productDescription: '',
-                            productPrice: '',
-                            productDiscountedPrice: '',
-                            productCategory: '',
-                            productQuantity: '',
+                            productName: initialProductName,
+                            productDescription: initialProductDescription,
+                            productPrice: initialProductPrice,
+                            productDiscountedPrice: initialProductDiscountedPrice,
+                            productCategory: initialProductCategory,
+                            productQuantity: initialProductQuantity,
 
                         }}
                         validationSchema={productSchema}
