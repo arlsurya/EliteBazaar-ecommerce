@@ -264,6 +264,7 @@ function home() {
         setInitialProductQuantity('')
 
         // reset the category initial value 
+        setInitialCategoryName('')
         setCategoryActionType('')
     };
 
