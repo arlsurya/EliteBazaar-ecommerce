@@ -29,6 +29,10 @@ function home() {
 
     // category
     const [initialCategoryName, setInitialCategoryName]= useState('')
+    const [updateCategoryId , setUpdateCategoryId] = useState('')
+
+    // this is for dynamic name for modal like (add category or edit category)
+    const [categoryActionType, setCategoryActionType]= useState('')
     // product
     const [initialProductName, setInitialProductName]= useState('')
     const [initialProductDescription, setInitialProductDescription]= useState('')
@@ -36,6 +40,9 @@ function home() {
     const [initialProductDiscountedPrice, setInitialProductDiscountedPrice]= useState('')
     const [initialProductCategory, setInitialProductCategory]= useState('')
     const [initialProductQuantity, setInitialProductQuantity]= useState('')
+
+    // this is for dynamic name for modal like (add product or edit product)
+    const [productActionType, setProductActionType]= useState('')
 
 
     const selectCatogary = () => {
@@ -163,10 +170,11 @@ function home() {
     const handleOpenModal = (type) => {
 
         if (type === 'category') {
+            setCategoryActionType('Add')
             setIsCategoryModalOpen(true)
         }
         if (type === 'product') {
-
+            setProductActionType('Add')
             setIsProductModalOpen(true)
         }
 
@@ -175,8 +183,20 @@ function home() {
     };
 
     const handleCloseModal = () => {
+
         setIsCategoryModalOpen(false);
         setIsProductModalOpen(false)
+        // reset the product initial value 
+        setInitialProductName('')
+        setInitialProductDescription('')
+        setInitialProductPrice('')
+        setInitialProductDiscountedPrice('')
+        setInitialProductCategory('')
+        setInitialProductQuantity('')
+
+        // reset the category initial value 
+        setCategoryActionType('')
+
     };
 
 
@@ -209,7 +229,8 @@ function home() {
     });
 
 
-    const categorySubmit = async (data) => {
+    // add category method
+    const addCategory = async(data) =>{
 
         try {
 
@@ -251,6 +272,74 @@ function home() {
             console.log(error)
 
         }
+
+
+    }
+
+    const updateExistCategory = async(data)=>{
+        console.log(data)
+        
+        try {
+
+            let token = localStorage.getItem('_token')
+         
+       
+            const response = await fetch('http://127.0.0.1:3001/api/admin/editcategory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(data),
+            });
+
+            console.log(response)
+
+            const responseData = await response.json();
+            console.log(responseData)
+            // if error then show error on toast and throw error message
+
+            if (responseData.Code == 0) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+
+            }
+            // if success then show success on toast and throw success message
+            if (responseData.Code == 1) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+                setTimeout(() => {
+                    setIsCategoryModalOpen(false);
+                }, 2000)
+
+            }
+
+
+        } catch (error) {
+            console.log(error)
+
+        }
+
+    }
+
+  
+
+
+    const categorySubmit = async (data) => {
+
+        if(categoryActionType == 'Add'){
+        addCategory(data)
+
+        }if(categoryActionType == 'Update'){ //update exist category
+            
+        let payload = {
+            id: updateCategoryId,
+            categoryName: data.categoryName
+        }
+     
+        updateExistCategory(payload)
+        }
+        
+
+      
     }
 
     const productSubmit = async (data) => {
@@ -296,6 +385,8 @@ function home() {
     }
 
     const editCategory = (data)=>{
+        setCategoryActionType('Update')
+        setUpdateCategoryId(data._id)
         console.log(data)  
         setIsCategoryModalOpen(true)
         setInitialCategoryName(data.categoryName)
@@ -304,15 +395,15 @@ function home() {
     }
     const editProduct = (data)=>{
         console.log(data)  
-        setIsProductModalOpen(true)
-
         setInitialProductName(data.productName)
         setInitialProductDescription(data.productDescription)
         setInitialProductPrice(data.productPrice)
         setInitialProductDiscountedPrice(data.productDiscountedPrice)
         setInitialProductCategory(data.productCategory)
         setInitialProductQuantity(data.productQuantity)
-
+        setProductActionType('Update')
+        setIsProductModalOpen(true)
+        
 
 
     }
@@ -449,7 +540,7 @@ function home() {
 
 
                                 <Modal isOpen={isCategoryModalOpen} onClose={handleCloseModal}>
-                                    <h1>Add Category</h1>
+                                    <h1>{categoryActionType} Category</h1>
 
                                     <Formik
                                         initialValues={{
@@ -465,7 +556,7 @@ function home() {
                                                     <div>{errors.categoryName}</div>
                                                 ) : null}
 
-                                                <button type="submit">Add</button>
+                                                <button type="submit">{categoryActionType}</button>
                                                 <ToastContainer />
 
                                             </Form>
@@ -584,7 +675,7 @@ function home() {
                 }
 
                 <Modal isOpen={isProductModalOpen} onClose={handleCloseModal}>
-                    <h1>Add Product</h1>
+                    <h1>{productActionType} Product</h1>
 
                     <Formik
                         initialValues={{
@@ -626,7 +717,7 @@ function home() {
                                     <div>{errors.productQuantity}</div>
                                 ) : null}
 
-                                <button type="submit">Add</button>
+                                <button type="submit">{productActionType}</button>
                                 <ToastContainer />
 
                             </Form>

@@ -595,5 +595,28 @@ module.exports = {
             })
             
         }
+    },
+
+    editCategory: async(req,res)=>{
+        try {
+            let {id, categoryName} = req.body
+
+            let updateCategory = await categoryModel.findOneAndUpdate({_id:id},{$set:{categoryName:categoryName}})
+           
+            res.status(200).json({
+                statusCode:200,
+                Code:1,
+                message:'Category Updated'
+            })
+
+        } catch (error) {
+            console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
+            
+        }
     }
 }

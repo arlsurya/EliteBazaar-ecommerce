@@ -18,6 +18,7 @@ router.post('/uploadSliderImage',isAuth, adminController.uploadSliderImage)
 
 // add category
 router.post('/addcategory',isAuth,adminController.addCategory)
+router.post('/editcategory',isAuth,adminController.editCategory)
 router.get('/categories',isAuth,adminController.getAllCategories)
 
 // order
