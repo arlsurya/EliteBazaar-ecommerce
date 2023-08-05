@@ -5,10 +5,14 @@ import * as Yup from 'yup';
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 
 
 function home() {
+
+    // route
+    const router = useRouter();
 
     // api url
     const apiURL = process.env.API_BASE_URL
@@ -37,218 +41,131 @@ function home() {
     const [dashboardModule, setDashboardModule] = useState(false)
 
     // category dynamic initial value
-    const [initialCategoryName, setInitialCategoryName]= useState('')
+    const [initialCategoryName, setInitialCategoryName] = useState('')
     // get update category id
-    const [updateCategoryId , setUpdateCategoryId] = useState('')
+    const [updateCategoryId, setUpdateCategoryId] = useState('')
 
     // this is for dynamic name for modal like (add category or edit category)
-    const [categoryActionType, setCategoryActionType]= useState('')
+    const [categoryActionType, setCategoryActionType] = useState('')
     // product dynamic initial value
-    const [initialProductName, setInitialProductName]= useState('')
-    const [initialProductDescription, setInitialProductDescription]= useState('')
-    const [initialProductPrice, setInitialProductPrice]= useState('')
-    const [initialProductDiscountedPrice, setInitialProductDiscountedPrice]= useState('')
-    const [initialProductCategory, setInitialProductCategory]= useState('')
-    const [initialProductQuantity, setInitialProductQuantity]= useState('')
+    const [initialProductName, setInitialProductName] = useState('')
+    const [initialProductDescription, setInitialProductDescription] = useState('')
+    const [initialProductPrice, setInitialProductPrice] = useState('')
+    const [initialProductDiscountedPrice, setInitialProductDiscountedPrice] = useState('')
+    const [initialProductCategory, setInitialProductCategory] = useState('')
+    const [initialProductQuantity, setInitialProductQuantity] = useState('')
     // get update profile id
-    const [updateProductId, setUpdateProductId]= useState('')
+    const [updateProductId, setUpdateProductId] = useState('')
 
     // this is for dynamic name for modal like (add product or edit product)
-    const [productActionType, setProductActionType]= useState('')
+    const [productActionType, setProductActionType] = useState('')
 
 
     // left sidebar modules
     // category module
     const selectCatogary = () => {
-        setCategoryModule(true)
+        setCategoryModule(true);
+        setDashboardModule(false);
+        setProductModule(false);
+        setOrderModule(false);
     }
     // product module
     const selectProduct = () => {
-        setCategoryModule(false)
-        setProductModule(true)
+        setDashboardModule(false);
+        setCategoryModule(false);
+        setProductModule(true);
+        setOrderModule(false);
     }
     // order module
     const selectOrder = () => {
-        setCategoryModule(false)
-        setProductModule(false)
-        setOrderModule(true)
+        setDashboardModule(false);
+    setCategoryModule(false);
+    setProductModule(false);
+    setOrderModule(true);
 
     }
 
 
+
+    useEffect(() => {
+        // get token from the localstorage and set the token to state
+        tokenExe()
+        getProducts()
+        getOrders()
+        getCategory()
+
+    }, [])
+
+    const tokenExe = () => {
+        let getToken = localStorage.getItem('_token')
+        if (getToken != null) {
+            setToken(getToken)
+            console.log(getToken)
+        } else {
+            router.push('/admin/login')
+        }
+
+    }
 
     const getProducts = async () => {
         try {
-
-            let token = localStorage.getItem("_token")
-            console.log(token)
-
-            setToken(token)
-
-            const response = await fetch(`${apiURL}/api/admin/product`, {
+            let getToken = localStorage.getItem(process.env.localStorage.token)
+            const response = await fetch(`${apiURL}/api/admin/products`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
+                    'authorization': `Bearer ${getToken}`
                 },
-
             });
-
-
             const responseData = await response.json();
-            console.log(responseData)
-
             setProducts(responseData.data);
             setProductCount(responseData.productCount)
-
+            console.log(responseData)
         } catch (error) {
             console.log(error)
-
         }
-
-
     }
 
     const getOrders = async () => {
-        let token = localStorage.getItem("_token")
-        console.log(token)
-
-        setToken(token)
-
+        let getToken = localStorage.getItem(process.env.localStorage.token)
         const response = await fetch(`${apiURL}/api/admin/orders`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${token}`
+                'authorization': `Bearer ${getToken}`
             },
-
         });
-
-
         const responseData = await response.json();
         console.log(responseData)
-
         setOrders(responseData.data);
         setSales(responseData.sales);
         setOrderCount(responseData.orderCount)
-
-
     }
 
-
-
-
-    useState(async () => {
-        console.log(process.env.API_BASE_URL)
-        console.log(process.env.localStorage.token)
+    const getCategory = async () => {
         try {
-            let token = localStorage.getItem("_token")
-            console.log(token)
-
-            setToken(token)
-
+            let getToken = localStorage.getItem(process.env.localStorage.token)
             const response = await fetch(`${apiURL}/api/admin/categories`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
+                    'authorization': `Bearer ${getToken}`
                 },
-
             });
-
-
             const responseData = await response.json();
             console.log(responseData)
-
             setCategories(responseData.data);
             setCategoryCount(responseData.countCategory)
-
-
-
-
-
-
         } catch (error) {
             console.log(error)
 
         }
-        getProducts()
-        getOrders()
-
-    }, [])
-
-
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen)
     }
-    const handleOpenModal = (type) => {
-
-        if (type === 'category') {
-            setCategoryActionType('Add')
-            setIsCategoryModalOpen(true)
-        }
-        if (type === 'product') {
-            setProductActionType('Add')
-            setIsProductModalOpen(true)
-        }
-
-        console.log(type)
-        setIsCategoryModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-
-        setIsCategoryModalOpen(false);
-        setIsProductModalOpen(false)
-        // reset the product initial value 
-        setInitialProductName('')
-        setInitialProductDescription('')
-        setInitialProductPrice('')
-        setInitialProductDiscountedPrice('')
-        setInitialProductCategory('')
-        setInitialProductQuantity('')
-
-        // reset the category initial value 
-        setCategoryActionType('')
-
-    };
-
-
-
-    //   category schema
-    const categorySchema = Yup.object().shape({
-
-        categoryName: Yup.string()
-            .min(2, 'Too Short!')
-            .max(50, 'Too Long!')
-            .required('Required')
-
-    });
-
-    const productSchema = Yup.object().shape({
-
-        productName: Yup.string()
-            .required('Required'),
-        productDescription: Yup.string()
-            .required('Required'),
-        productPrice: Yup.string()
-            .required('Required'),
-        productDiscountedPrice: Yup.string()
-            .required('Required'),
-        productCategory: Yup.string()
-            .required('Required'),
-        productQuantity: Yup.string()
-            .required('Required'),
-
-    });
-
 
     // add category method
-    const addCategory = async(data) =>{
-
+    const addCategory = async (data) => {
         try {
-
-            let token = localStorage.getItem('_token')
+            let token = localStorage.getItem(process.env.localStorage.token)
             let payload = {
                 token: token,
                 categoryName: data.categoryName
@@ -275,87 +192,21 @@ function home() {
             // if success then show success on toast and throw success message
             if (responseData.Code == 1) {
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                setTimeout(() => {
-                    setIsCategoryModalOpen(false);
-                }, 2000)
+
+                setIsCategoryModalOpen(false);
 
             }
 
+            getCategory()
 
         } catch (error) {
             console.log(error)
-
         }
-
-
     }
 
-    const updateExistCategory = async(data)=>{
-        console.log(data)
-        
+    // add product
+    const addProduct = async (data) => {
         try {
-
-            let token = localStorage.getItem('_token')
-         
-       
-            const response = await fetch(`${api}/api/admin/editcategory`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(data),
-            });
-
-            console.log(response)
-
-            const responseData = await response.json();
-            console.log(responseData)
-            // if error then show error on toast and throw error message
-
-            if (responseData.Code == 0) {
-                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
-
-            }
-            // if success then show success on toast and throw success message
-            if (responseData.Code == 1) {
-                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                setTimeout(() => {
-                    setIsCategoryModalOpen(false);
-                }, 2000)
-
-            }
-
-
-        } catch (error) {
-            console.log(error)
-
-        }
-
-    }
-
-  
-
-
-    const categorySubmit = async (data) => {
-
-        if(categoryActionType == 'Add'){
-        addCategory(data)
-
-        }if(categoryActionType == 'Update'){ //update exist category
-
-        let payload = {
-            id: updateCategoryId,
-            categoryName: data.categoryName
-        }
-        updateExistCategory(payload)
-        }
-
-    }
-
-    const addProduct = async(data)=>{
-        try {
-
             const response = await fetch(`${apiURL}/api/admin/addproduct`, {
                 method: 'POST',
                 headers: {
@@ -364,6 +215,97 @@ function home() {
                 },
                 body: JSON.stringify(data),
             });
+            const responseData = await response.json();
+            console.log(responseData)
+
+            // if error then show error on toast and throw error message
+            if (responseData.Code == 0) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+
+            }
+            // if success then show success on toast and throw success message
+            if (responseData.Code == 1) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+                setIsProductModalOpen(false);
+            }
+            getProducts()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const toggleSidebar = () => {
+        setIsOpen(!isOpen)
+    }
+
+    const handleOpenModal = (type) => {
+        if (type === 'category') {
+            setCategoryActionType('Add')
+            setIsCategoryModalOpen(true)
+        }
+        if (type === 'product') {
+            setProductActionType('Add')
+            setIsProductModalOpen(true)
+        }
+    };
+
+    const handleCloseModal = () => {
+
+        setIsCategoryModalOpen(false);
+        setIsProductModalOpen(false)
+        // reset the product initial value 
+
+        setInitialProductName('')
+        setInitialProductDescription('')
+        setInitialProductPrice('')
+        setInitialProductDiscountedPrice('')
+        setInitialProductCategory('')
+        setInitialProductQuantity('')
+
+        // reset the category initial value 
+        setCategoryActionType('')
+    };
+
+
+    // category schema
+    const categorySchema = Yup.object().shape({
+        categoryName: Yup.string()
+            .min(2, 'Too Short!')
+            .max(50, 'Too Long!')
+            .required('Required')
+    });
+
+    // product schema
+    const productSchema = Yup.object().shape({
+        productName: Yup.string()
+            .required('Required'),
+        productDescription: Yup.string()
+            .required('Required'),
+        productPrice: Yup.string()
+            .required('Required'),
+        productDiscountedPrice: Yup.string()
+            .required('Required'),
+        productCategory: Yup.string()
+            .required('Required'),
+        productQuantity: Yup.string()
+            .required('Required'),
+
+    });
+
+
+
+    const updateExistCategory = async (data) => {
+        console.log(data)
+
+        try {
+            const response = await fetch(`${apiURL}/api/admin/editcategory`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(data),
+            });
 
             console.log(response)
 
@@ -378,29 +320,40 @@ function home() {
             // if success then show success on toast and throw success message
             if (responseData.Code == 1) {
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                setTimeout(() => {
-                    setIsProductModalOpen(false);
-                }, 2000)
-
-
+                setIsCategoryModalOpen(false);
 
             }
-
-
-
+            getCategory()
         } catch (error) {
             console.log(error)
-
         }
 
     }
 
-    const updateExistProduct = async(data)=>{
-        try {
 
+
+
+    const categorySubmit = async (data) => {
+
+        if (categoryActionType == 'Add') {
+            addCategory(data)
+
+        } if (categoryActionType == 'Update') { //update exist category
+
+            let payload = {
+                id: updateCategoryId,
+                categoryName: data.categoryName
+            }
+            updateExistCategory(payload)
+        }
+
+    }
+
+
+
+    const updateExistProduct = async (data) => {
+        try {
             let token = localStorage.getItem('_token')
-         
-       
             const response = await fetch(`${apiURL}/api/admin/updateproduct`, {
                 method: 'POST',
                 headers: {
@@ -410,63 +363,55 @@ function home() {
                 body: JSON.stringify(data),
             });
 
-            console.log(response)
-
             const responseData = await response.json();
             console.log(responseData)
             // if error then show error on toast and throw error message
 
             if (responseData.Code == 0) {
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
-
             }
             // if success then show success on toast and throw success message
             if (responseData.Code == 1) {
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                setTimeout(() => {
-                    setIsCategoryModalOpen(false);
-                }, 2000)
-
+                setIsProductModalOpen(false);
             }
 
+            getProducts()
 
         } catch (error) {
             console.log(error)
-
         }
 
 
     }
 
     const productSubmit = async (data) => {
-
-       console.log(productActionType)
-       if(productActionType == "Add"){
-        addProduct(data)
-       }
-       if(productActionType == 'Update'){
-        console.log(updateProductId)
-        // adding id field to data
-        data.id = updateProductId
-        console.log(data)
-        updateExistProduct(data)
-
-
-       }
+        console.log(productActionType)
+        if (productActionType == "Add") {
+            addProduct(data)
+        }
+        if (productActionType == 'Update') {
+            console.log(updateProductId)
+            // adding id field to data
+            data.id = updateProductId
+            console.log(data)
+            updateExistProduct(data)
+        }
 
     }
 
-    const editCategory = (data)=>{
+    const editCategory = (data) => {
         setCategoryActionType('Update')
         setUpdateCategoryId(data._id)
-        console.log(data)  
+        console.log(data)
         setIsCategoryModalOpen(true)
         setInitialCategoryName(data.categoryName)
 
 
     }
-    const editProduct = (data)=>{
-        console.log(data)  
+
+    const editProduct = (data) => {
+        console.log(data)
         setUpdateProductId(data._id)
         setInitialProductName(data.productName)
         setInitialProductDescription(data.productDescription)
@@ -476,35 +421,30 @@ function home() {
         setInitialProductQuantity(data.productQuantity)
         setProductActionType('Update')
         setIsProductModalOpen(true)
-        
-
 
     }
 
-    const edit = (type,data) =>{
-        
-        if(type === 'category'){
+    const edit = (type, data) => {
+        if (type === 'category') {
             editCategory(data)
         }
-        if(type === 'product'){
+        if (type === 'product') {
 
-           editProduct(data)
-
-
+            editProduct(data)
         }
-    
+
     }
 
     return (
         <div className='main'>
             <div className='header'>
 
-
                 <h3>.</h3>
                 <h3>Elite Bazar</h3>
                 <h3>user icon</h3>
 
             </div>
+
             <div className={`sidebar ${isOpen ? 'open' : ''} `}>
                 <div className='toggleBtn' onClick={toggleSidebar}>
                     <div className='bar'></div>
@@ -514,7 +454,7 @@ function home() {
                 <nav className='sideNav'>
 
                     <ul className='customUl'>
-                        <li>Dashboard</li>
+                        <li onClick={selectProduct} >Dashboard</li>
                         <li onClick={selectCatogary}>Category</li>
                         <li onClick={selectProduct}>Product</li>
                         <li onClick={selectOrder} >Order</li>
@@ -523,29 +463,29 @@ function home() {
             </div>
 
             <div className='subHeading'>
-                <div class="dashboard-card">
-                    <div class="card-content">
+                <div className="dashboard-card">
+                    <div className="card-content">
                         <h2>Sales</h2>
 
                         <h1 className='text-gray-400 text-lg'>Total Sales: {sales.length > 0 ? sales[0].totalSalesAmount : ''}</h1>
                     </div>
                 </div>
-                <div class="dashboard-card">
-                    <div class="card-content">
+                <div className="dashboard-card">
+                    <div className="card-content">
                         <h2>Order</h2>
                         <p>Total Order: {orderCount ? orderCount : 0}</p>
                     </div>
                 </div>
 
-                <div class="dashboard-card">
-                    <div class="card-content">
+                <div className="dashboard-card">
+                    <div className="card-content">
                         <h2>Product</h2>
                         <p>Total Product: {productCount ? productCount : 0}</p>
                     </div>
                 </div>
 
-                <div class="dashboard-card">
-                    <div class="card-content">
+                <div className="dashboard-card">
+                    <div className="card-content">
                         <h2>Category</h2>
                         <p>Total Category: {categoryCount ? categoryCount : 0}</p>
                     </div>
@@ -557,19 +497,11 @@ function home() {
                 {
                     categoryModule ? (
                         <div className='categoryModule'>
-
-
-
-
                             <div className='btnPosition'>
-
                                 <button onClick={() => handleOpenModal('category')} className='addButton'>Add Category</button>
-
                             </div>
-
                             <div className='category'>
                                 <div className='addCatagory'>
-
                                 </div>
                                 <div className='categoryTable'>
                                     {categories.length > 0 ? (
@@ -594,7 +526,7 @@ function home() {
                                                         </td>
                                                         <td>{category.updatedAt}</td>
                                                         <td>
-                                                            <button onClick={()=>edit('category',category)} >E</button>
+                                                            <button onClick={() => edit('category', category)} >E</button>
                                                             <button>D</button>
                                                         </td>
                                                     </tr>
@@ -606,12 +538,7 @@ function home() {
                                     )}
                                 </div>
 
-
-
-
                                 {/* add category modal */}
-
-
                                 <Modal isOpen={isCategoryModalOpen} onClose={handleCloseModal}>
                                     <h1>{categoryActionType} Category</h1>
 
@@ -630,7 +557,6 @@ function home() {
                                                 ) : null}
 
                                                 <button type="submit">{categoryActionType}</button>
-                                                <ToastContainer />
 
                                             </Form>
                                         )}
@@ -651,38 +577,21 @@ function home() {
 
 
                     ) : ("")
-
                 }
-
-
-
-
-
 
 
             </div>
 
 
             <div >
-
-
-
                 {
                     productModule ? (
                         <div className='productModule'>
-
-
-
-
                             <div className=''>
-
                                 <button onClick={() => handleOpenModal('product')} className='addButton'>Add Product</button>
-
                             </div>
-
                             <div className='product'>
                                 <div className='addProduct'>
-
                                 </div>
                                 <div className='productCategory'>
                                     {categories.length > 0 ? (
@@ -718,7 +627,7 @@ function home() {
                                                         </td>
                                                         <td>img</td>
                                                         <td>
-                                                            <button onClick={()=>edit('product',product)}>E</button>
+                                                            <button onClick={() => edit('product', product)}>E</button>
                                                             <button>D</button>
                                                         </td>
                                                     </tr>
@@ -728,12 +637,10 @@ function home() {
                                     ) : (
                                         <p>No data to display.</p>
                                     )}
+
+                                    <ToastContainer />
+
                                 </div>
-
-
-
-
-
 
 
                             </div>
@@ -745,66 +652,14 @@ function home() {
 
                     ) : ("")
 
+
                 }
-
-                <Modal isOpen={isProductModalOpen} onClose={handleCloseModal}>
-                    <h1>{productActionType} Product</h1>
-
-                    <Formik
-                        initialValues={{
-                            productName: initialProductName,
-                            productDescription: initialProductDescription,
-                            productPrice: initialProductPrice,
-                            productDiscountedPrice: initialProductDiscountedPrice,
-                            productCategory: initialProductCategory,
-                            productQuantity: initialProductQuantity,
-
-                        }}
-                        validationSchema={productSchema}
-                        onSubmit={productSubmit}>
-                        {({ errors, touched }) => (
-                            <Form>
-
-                                <Field type="text" placeholder="product name" name="productName" />
-                                {errors.productName && touched.productName ? (
-                                    <div>{errors.productName}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product description" name="productDescription" />
-                                {errors.productDescription && touched.productDescription ? (
-                                    <div>{errors.productDescription}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product price" name="productPrice" />
-                                {errors.productPrice && touched.productPrice ? (
-                                    <div>{errors.productPrice}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product discounted price" name="productDiscountedPrice" />
-                                {errors.productDiscountedPrice && touched.productDiscountedPrice ? (
-                                    <div>{errors.productDiscountedPrice}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product category" name="productCategory" />
-                                {errors.productCategory && touched.productCategory ? (
-                                    <div>{errors.productCategory}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product quantity" name="productQuantity" />
-                                {errors.productQuantity && touched.productQuantity ? (
-                                    <div>{errors.productQuantity}</div>
-                                ) : null}
-
-                                <button type="submit">{productActionType}</button>
-                                <ToastContainer />
-
-                            </Form>
-                        )}
-                    </Formik>
-
-                    <button onClick={handleCloseModal}>Close Modal</button>
-                </Modal>
 
             </div>
 
             <div className='orderModule'>
                 {
-                    products ? (
+                    orderModule ? (
 
                         <div className='orders'>
                             {orders.length > 0 ? (

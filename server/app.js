@@ -27,7 +27,7 @@ const limiter = rateLimit({
     max:100,
 
 })
-app.use(limiter)
+// app.use(limiter)
 
 app.use('/',indexRoutes)
 app.use('/api',apiRoutes)
