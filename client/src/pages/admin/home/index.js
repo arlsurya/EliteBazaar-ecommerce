@@ -8,63 +8,70 @@ import { ToastContainer } from 'react-toastify';
 
 
 
-
-
 function home() {
+    // get token from the localstorage
     const [token, setToken] = useState('')
+    // left sidebar
     const [isOpen, setIsOpen] = useState(false)
+
+    // category modal
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+    // product modal
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+    // data from the backend
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
     const [orders, setOrders] = useState([]);
     const [orderCount, setOrderCount] = useState([])
     const [productCount, setProductCount] = useState([])
     const [categoryCount, setCategoryCount] = useState([])
+    // left side bar modules
     const [categoryModule, setCategoryModule] = useState(false)
     const [sales, setSales] = useState('')
     const [productModule, setProductModule] = useState(true)
     const [orderModule, setOrderModule] = useState(false)
     const [dashboardModule, setDashboardModule] = useState(false)
 
-    // category
+    // category dynamic initial value
     const [initialCategoryName, setInitialCategoryName]= useState('')
+    // get update category id
     const [updateCategoryId , setUpdateCategoryId] = useState('')
 
     // this is for dynamic name for modal like (add category or edit category)
     const [categoryActionType, setCategoryActionType]= useState('')
-    // product
+    // product dynamic initial value
     const [initialProductName, setInitialProductName]= useState('')
     const [initialProductDescription, setInitialProductDescription]= useState('')
     const [initialProductPrice, setInitialProductPrice]= useState('')
     const [initialProductDiscountedPrice, setInitialProductDiscountedPrice]= useState('')
     const [initialProductCategory, setInitialProductCategory]= useState('')
     const [initialProductQuantity, setInitialProductQuantity]= useState('')
+    // get update profile id
     const [updateProductId, setUpdateProductId]= useState('')
 
     // this is for dynamic name for modal like (add product or edit product)
     const [productActionType, setProductActionType]= useState('')
 
 
+    // left sidebar modules
+    // category module
     const selectCatogary = () => {
-        console.log('category')
         setCategoryModule(true)
-
     }
+    // product module
     const selectProduct = () => {
         setCategoryModule(false)
-
         setProductModule(true)
-
     }
+    // order module
     const selectOrder = () => {
-        console.log("====")
-        console.log(sales)
         setCategoryModule(false)
         setProductModule(false)
         setOrderModule(true)
 
     }
+
+
 
     const getProducts = async () => {
         try {
@@ -128,13 +135,14 @@ function home() {
 
 
     useState(async () => {
+        console.log(process.env.API_BASE_URL)
         try {
             let token = localStorage.getItem("_token")
             console.log(token)
 
             setToken(token)
 
-            const response = await fetch('http://127.0.0.1:3001/api/admin/categories', {
+            const response = await fetch(`${process.env.API_BASE_URL}/api/admin/categories`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
