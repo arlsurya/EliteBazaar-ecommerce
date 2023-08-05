@@ -663,5 +663,30 @@ module.exports = {
         })
         
      }
+    },
+    deleteCategory: async(req,res)=>{
+       
+        
+     try {
+        let {categoryId} = req.body;
+        console.log(categoryId)
+
+        let deleteCategory = await categoryModel.findOneAndDelete({_id:categoryId})
+
+        res.status(200).json({
+            statusCode:200,
+            Code:1,
+            message:"Category Deleted"
+        })
+        
+     } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            statusCode:500,
+            Code:0,
+            message: 'Internal server error'
+        })
+        
+     }
     }
 }

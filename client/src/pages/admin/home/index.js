@@ -425,12 +425,8 @@ function home() {
 
     }
 
-    const deleteCategory = async(id) =>{
-        console.log(id)
-        
-    }
+ 
     const deleteProduct = async(id) =>{
-
         try {
             let payload = {
                 productId:id
@@ -455,6 +451,39 @@ function home() {
             }
             
             getProducts()
+            
+        } catch (error) {
+            console.log(error)
+            
+        }
+     
+
+    }
+    const deleteCategory = async(id) =>{
+        try {
+            let payload = {
+                categoryId:id
+            }
+            const response = await fetch(`${apiURL}/api/admin/deletecategory`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload),
+            });
+            const responseData = await response.json();
+            console.log(responseData)
+
+            if (responseData.Code == 0) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+            }
+            // if success then show success on toast and throw success message
+            if (responseData.Code == 1) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+            }
+            
+            getCategory()
             
         } catch (error) {
             console.log(error)
@@ -595,6 +624,8 @@ function home() {
                                     ) : (
                                         <p>No data to display.</p>
                                     )}
+                                    <ToastContainer />
+
                                 </div>
 
 
