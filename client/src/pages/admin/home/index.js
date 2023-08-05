@@ -9,6 +9,10 @@ import { ToastContainer } from 'react-toastify';
 
 
 function home() {
+
+    // api url
+    const apiURL = process.env.API_BASE_URL
+
     // get token from the localstorage
     const [token, setToken] = useState('')
     // left sidebar
@@ -81,7 +85,7 @@ function home() {
 
             setToken(token)
 
-            const response = await fetch('http://127.0.0.1:3001/api/admin/products', {
+            const response = await fetch(`${apiURL}/api/admin/product`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -111,7 +115,7 @@ function home() {
 
         setToken(token)
 
-        const response = await fetch('http://127.0.0.1:3001/api/admin/orders', {
+        const response = await fetch(`${apiURL}/api/admin/orders`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -136,13 +140,14 @@ function home() {
 
     useState(async () => {
         console.log(process.env.API_BASE_URL)
+        console.log(process.env.localStorage.token)
         try {
             let token = localStorage.getItem("_token")
             console.log(token)
 
             setToken(token)
 
-            const response = await fetch(`${process.env.API_BASE_URL}/api/admin/categories`, {
+            const response = await fetch(`${apiURL}/api/admin/categories`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -249,7 +254,7 @@ function home() {
                 categoryName: data.categoryName
             }
             console.log(payload)
-            const response = await fetch('http://127.0.0.1:3001/api/admin/addcategory', {
+            const response = await fetch(`${apiURL}/api/admin/addcategory`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -293,7 +298,7 @@ function home() {
             let token = localStorage.getItem('_token')
          
        
-            const response = await fetch('http://127.0.0.1:3001/api/admin/editcategory', {
+            const response = await fetch(`${api}/api/admin/editcategory`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -351,7 +356,7 @@ function home() {
     const addProduct = async(data)=>{
         try {
 
-            const response = await fetch('http://127.0.0.1:3001/api/admin/addproduct', {
+            const response = await fetch(`${apiURL}/api/admin/addproduct`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -396,7 +401,7 @@ function home() {
             let token = localStorage.getItem('_token')
          
        
-            const response = await fetch('http://127.0.0.1:3001/api/admin/updateproduct', {
+            const response = await fetch(`${apiURL}/api/admin/updateproduct`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
