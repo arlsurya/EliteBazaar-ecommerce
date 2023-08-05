@@ -508,7 +508,7 @@ module.exports = {
             let categories = await categoryModel.aggregate([
                 {$match:{}},
                 {$project:{
-                    _id:0,
+                  
                     categoryName:1,
                     status:1,
                     updatedAt:1,

@@ -284,6 +284,11 @@ function home() {
 
     }
 
+    const editCatagory = (type,id) =>{
+        console.log(type)
+        console.log(id)
+    }
+
     return (
         <div className='main'>
             <div className='header'>
@@ -383,7 +388,7 @@ function home() {
                                                         </td>
                                                         <td>{category.updatedAt}</td>
                                                         <td>
-                                                            <button>E</button>
+                                                            <button onClick={()=>editCatagory('category',category.categoryName)} >E</button>
                                                             <button>D</button>
                                                         </td>
                                                     </tr>
