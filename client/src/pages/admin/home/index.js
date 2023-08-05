@@ -40,6 +40,7 @@ function home() {
     const [initialProductDiscountedPrice, setInitialProductDiscountedPrice]= useState('')
     const [initialProductCategory, setInitialProductCategory]= useState('')
     const [initialProductQuantity, setInitialProductQuantity]= useState('')
+    const [updateProductId, setUpdateProductId]= useState('')
 
     // this is for dynamic name for modal like (add product or edit product)
     const [productActionType, setProductActionType]= useState('')
@@ -329,20 +330,17 @@ function home() {
         addCategory(data)
 
         }if(categoryActionType == 'Update'){ //update exist category
-            
+
         let payload = {
             id: updateCategoryId,
             categoryName: data.categoryName
         }
-     
         updateExistCategory(payload)
         }
-        
 
-      
     }
 
-    const productSubmit = async (data) => {
+    const addProduct = async(data)=>{
         try {
 
             const response = await fetch('http://127.0.0.1:3001/api/admin/addproduct', {
@@ -384,6 +382,67 @@ function home() {
 
     }
 
+    const updateExistProduct = async(data)=>{
+        try {
+
+            let token = localStorage.getItem('_token')
+         
+       
+            const response = await fetch('http://127.0.0.1:3001/api/admin/updateproduct', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(data),
+            });
+
+            console.log(response)
+
+            const responseData = await response.json();
+            console.log(responseData)
+            // if error then show error on toast and throw error message
+
+            if (responseData.Code == 0) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+
+            }
+            // if success then show success on toast and throw success message
+            if (responseData.Code == 1) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+                setTimeout(() => {
+                    setIsCategoryModalOpen(false);
+                }, 2000)
+
+            }
+
+
+        } catch (error) {
+            console.log(error)
+
+        }
+
+
+    }
+
+    const productSubmit = async (data) => {
+
+       console.log(productActionType)
+       if(productActionType == "Add"){
+        addProduct(data)
+       }
+       if(productActionType == 'Update'){
+        console.log(updateProductId)
+        // adding id field to data
+        data.id = updateProductId
+        console.log(data)
+        updateExistProduct(data)
+
+
+       }
+
+    }
+
     const editCategory = (data)=>{
         setCategoryActionType('Update')
         setUpdateCategoryId(data._id)
@@ -395,6 +454,7 @@ function home() {
     }
     const editProduct = (data)=>{
         console.log(data)  
+        setUpdateProductId(data._id)
         setInitialProductName(data.productName)
         setInitialProductDescription(data.productDescription)
         setInitialProductPrice(data.productPrice)
