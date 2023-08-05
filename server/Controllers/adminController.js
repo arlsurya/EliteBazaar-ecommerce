@@ -640,5 +640,28 @@ module.exports = {
             })
             
         }
+    },
+
+    deleteProduct: async(req,res)=>{
+     try {
+        let {productId} = req.body;
+
+        let deleteProduct = await productModel.findOneAndDelete({_id:productId})
+
+        res.status(200).json({
+            statusCode:200,
+            Code:1,
+            message:"Product Deleted"
+        })
+        
+     } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            statusCode:500,
+            Code:0,
+            message: 'Internal server error'
+        })
+        
+     }
     }
 }

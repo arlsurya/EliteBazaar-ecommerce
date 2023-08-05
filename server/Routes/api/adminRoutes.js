@@ -17,6 +17,8 @@ router.post('/editproduct',isAuth, adminController.editProduct)
 router.post('/updateproduct',isAuth, adminController.updateProduct)
 router.post('/uploadSliderImage',isAuth, adminController.uploadSliderImage)
 
+router.post('/deleteproduct',isAuth, adminController.deleteProduct)
+
 // add category
 router.post('/addcategory',isAuth,adminController.addCategory)
 router.post('/editcategory',isAuth,adminController.editCategory)

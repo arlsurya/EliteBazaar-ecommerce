@@ -64,8 +64,8 @@ function home() {
     // left sidebar modules
     // category module
     const selectCatogary = () => {
-        setCategoryModule(true);
         setDashboardModule(false);
+        setCategoryModule(true);
         setProductModule(false);
         setOrderModule(false);
     }
@@ -75,13 +75,14 @@ function home() {
         setCategoryModule(false);
         setProductModule(true);
         setOrderModule(false);
+    
     }
     // order module
     const selectOrder = () => {
         setDashboardModule(false);
-    setCategoryModule(false);
-    setProductModule(false);
-    setOrderModule(true);
+        setCategoryModule(false);
+        setProductModule(false);
+        setOrderModule(true);
 
     }
 
@@ -192,8 +193,8 @@ function home() {
             // if success then show success on toast and throw success message
             if (responseData.Code == 1) {
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-
-                setIsCategoryModalOpen(false);
+         
+                    setIsCategoryModalOpen(false);
 
             }
 
@@ -320,8 +321,8 @@ function home() {
             // if success then show success on toast and throw success message
             if (responseData.Code == 1) {
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                setIsCategoryModalOpen(false);
-
+                    setIsCategoryModalOpen(false);
+       
             }
             getCategory()
         } catch (error) {
@@ -373,9 +374,9 @@ function home() {
             // if success then show success on toast and throw success message
             if (responseData.Code == 1) {
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                setIsProductModalOpen(false);
+                    setIsProductModalOpen(false);
             }
-
+            
             getProducts()
 
         } catch (error) {
@@ -424,6 +425,45 @@ function home() {
 
     }
 
+    const deleteCategory = async(id) =>{
+        console.log(id)
+        
+    }
+    const deleteProduct = async(id) =>{
+
+        try {
+            let payload = {
+                productId:id
+            }
+            const response = await fetch(`${apiURL}/api/admin/deleteproduct`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload),
+            });
+            const responseData = await response.json();
+            console.log(responseData)
+
+            if (responseData.Code == 0) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'error' })
+            }
+            // if success then show success on toast and throw success message
+            if (responseData.Code == 1) {
+                toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+            }
+            
+            getProducts()
+            
+        } catch (error) {
+            console.log(error)
+            
+        }
+     
+
+    }
+
     const edit = (type, data) => {
         if (type === 'category') {
             editCategory(data)
@@ -431,6 +471,17 @@ function home() {
         if (type === 'product') {
 
             editProduct(data)
+        }
+
+    }
+    const deleteMethod = (type, id) => {
+
+        if (type === 'category') {
+   
+            deleteCategory(id)
+        }
+        if (type === 'product') {
+            deleteProduct(id)
         }
 
     }
@@ -444,7 +495,7 @@ function home() {
                 <h3>user icon</h3>
 
             </div>
-
+            
             <div className={`sidebar ${isOpen ? 'open' : ''} `}>
                 <div className='toggleBtn' onClick={toggleSidebar}>
                     <div className='bar'></div>
@@ -454,7 +505,7 @@ function home() {
                 <nav className='sideNav'>
 
                     <ul className='customUl'>
-                        <li onClick={selectProduct} >Dashboard</li>
+                        <li>Dashboard</li>
                         <li onClick={selectCatogary}>Category</li>
                         <li onClick={selectProduct}>Product</li>
                         <li onClick={selectOrder} >Order</li>
@@ -497,11 +548,19 @@ function home() {
                 {
                     categoryModule ? (
                         <div className='categoryModule'>
+
+
+
+
                             <div className='btnPosition'>
+
                                 <button onClick={() => handleOpenModal('category')} className='addButton'>Add Category</button>
+
                             </div>
+
                             <div className='category'>
                                 <div className='addCatagory'>
+
                                 </div>
                                 <div className='categoryTable'>
                                     {categories.length > 0 ? (
@@ -527,7 +586,7 @@ function home() {
                                                         <td>{category.updatedAt}</td>
                                                         <td>
                                                             <button onClick={() => edit('category', category)} >E</button>
-                                                            <button>D</button>
+                                                            <button  onClick={() => deleteMethod('category', category._id)}  >D</button>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -538,7 +597,12 @@ function home() {
                                     )}
                                 </div>
 
+
+
+
                                 {/* add category modal */}
+
+
                                 <Modal isOpen={isCategoryModalOpen} onClose={handleCloseModal}>
                                     <h1>{categoryActionType} Category</h1>
 
@@ -577,21 +641,38 @@ function home() {
 
 
                     ) : ("")
+
                 }
+
+
+
+
+
 
 
             </div>
 
 
             <div >
+
+
+
                 {
                     productModule ? (
                         <div className='productModule'>
+
+
+
+
                             <div className=''>
+
                                 <button onClick={() => handleOpenModal('product')} className='addButton'>Add Product</button>
+
                             </div>
+
                             <div className='product'>
                                 <div className='addProduct'>
+
                                 </div>
                                 <div className='productCategory'>
                                     {categories.length > 0 ? (
@@ -628,7 +709,7 @@ function home() {
                                                         <td>img</td>
                                                         <td>
                                                             <button onClick={() => edit('product', product)}>E</button>
-                                                            <button>D</button>
+                                                            <button onClick={()=> deleteMethod('product',product._id)} >D</button>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -643,6 +724,11 @@ function home() {
                                 </div>
 
 
+
+
+
+
+
                             </div>
 
 
@@ -652,8 +738,60 @@ function home() {
 
                     ) : ("")
 
-
                 }
+
+                <Modal isOpen={isProductModalOpen} onClose={handleCloseModal}>
+                    <h1>{productActionType} Product</h1>
+
+                    <Formik
+                        initialValues={{
+                            productName: initialProductName,
+                            productDescription: initialProductDescription,
+                            productPrice: initialProductPrice,
+                            productDiscountedPrice: initialProductDiscountedPrice,
+                            productCategory: initialProductCategory,
+                            productQuantity: initialProductQuantity,
+
+                        }}
+                        validationSchema={productSchema}
+                        onSubmit={productSubmit}>
+                        {({ errors, touched }) => (
+                            <Form>
+
+                                <Field type="text" placeholder="product name" name="productName" />
+                                {errors.productName && touched.productName ? (
+                                    <div>{errors.productName}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product description" name="productDescription" />
+                                {errors.productDescription && touched.productDescription ? (
+                                    <div>{errors.productDescription}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product price" name="productPrice" />
+                                {errors.productPrice && touched.productPrice ? (
+                                    <div>{errors.productPrice}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product discounted price" name="productDiscountedPrice" />
+                                {errors.productDiscountedPrice && touched.productDiscountedPrice ? (
+                                    <div>{errors.productDiscountedPrice}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product category" name="productCategory" />
+                                {errors.productCategory && touched.productCategory ? (
+                                    <div>{errors.productCategory}</div>
+                                ) : null}
+                                <Field type="text" placeholder="product quantity" name="productQuantity" />
+                                {errors.productQuantity && touched.productQuantity ? (
+                                    <div>{errors.productQuantity}</div>
+                                ) : null}
+
+                                <button type="submit">{productActionType}</button>
+                                <ToastContainer />
+
+                            </Form>
+                        )}
+                    </Formik>
+
+                    <button onClick={handleCloseModal}>Close Modal</button>
+                </Modal>
 
             </div>
 
