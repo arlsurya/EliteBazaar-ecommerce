@@ -6,10 +6,10 @@ import { Inter } from 'next/font/google'
 import { VscAccount } from "react-icons/vsc";
 import { useState, useEffect } from 'react'
 import { FaBeer } from 'react-icons/fa';
-import { BsSortUp,BsSearch,BsSortDown } from 'react-icons/bs';
+import { BsSortUp, BsSearch, BsSortDown } from 'react-icons/bs';
 import { RiShoppingBag3Line } from "react-icons/ri";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
-import { FaBars,FaFilter } from 'react-icons/fa';
+import { FaBars, FaFilter } from 'react-icons/fa';
 import Tooltip from '@mui/material/Tooltip';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -37,7 +37,10 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { createTheme } from '@mui/material/styles';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
+import userLogin from './user/login'
 
 const cardContainerStyle = {
   display: 'flex',
@@ -94,7 +97,7 @@ const theme = createTheme({
   },
 });
 
-const products = [
+const productData = [
   {
     id: 1,
     title: 'Product 1',
@@ -155,16 +158,60 @@ const products = [
 ];
 
 
+// api url
+const apiURL = process.env.API_BASE_URL
+
 export default function Home() {
-  
-const [sortToggleBtn,setSortToggleBtn]= useState(false)
+
+  const router = useRouter();
+
+
+
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  const [sortToggleBtn, setSortToggleBtn] = useState(false)
   const [age, setAge] = useState('')
   const [name, setName] = useState('')
-  
-const sortToggle = ()=>{
-  setSortToggleBtn((prevState)=>!prevState)
-  
+
+
+
+  const getProducts = async () => {
+    try {
+      // let getToken = localStorage.getItem(process.env.localStorage.token)
+      const response = await fetch(`${apiURL}/api/user/products`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'authorization': `Bearer ${getToken}`
+        },
+      });
+      const responseData = await response.json();
+      setProducts(responseData.data.products);
+      console.log(responseData)
+    } catch (error) {
+      console.log(error)
+    }
   }
+
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+  const sortToggle = () => {
+    console.log(products.products)
+
+    setSortToggleBtn((prevState) => !prevState)
+
+  }
+
+  const clickLogin = () =>{
+
+    router.push('/user/login')
+  }
+
+  
 
   const bull = (
     <Box
@@ -280,61 +327,67 @@ const sortToggle = ()=>{
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Elite Bazar
             </Typography>
-            <Button color="inherit">Login</Button>
+         
+            <Button onClick={clickLogin}  color="inherit">Login</Button>
           </Toolbar>
         </AppBar>
       </Box>
 
       <div>
-      <img
-        src="https://img.freepik.com/free-vector/modern-black-friday-sale-banner-template-with-3d-background-red-splash_1361-1877.jpg?w=1060&t=st=1691337012~exp=1691337612~hmac=a09d43e26f6eee03e09f41061e7aa4b79b1d3c1130ac8b1f03bd2bb4f9cc2012"
-        alt="img"
-        style={imageStyle}
-      />
-    </div>
+        <img
+          src="https://img.freepik.com/free-vector/modern-black-friday-sale-banner-template-with-3d-background-red-splash_1361-1877.jpg?w=1060&t=st=1691337012~exp=1691337612~hmac=a09d43e26f6eee03e09f41061e7aa4b79b1d3c1130ac8b1f03bd2bb4f9cc2012"
+          alt="img"
+          style={imageStyle}
+        />
+      </div>
 
-    <div className='m-10 flex justify-between'>
-      <div className='cursor-pointer'>
-      <IconButton>
-        <FaFilter/>
-        </IconButton>
+      <div className='m-10 flex justify-between'>
+        <div className='cursor-pointer'>
+          <IconButton>
+            <FaFilter />
+          </IconButton>
         </div>
-      <div onClick={sortToggle} className='cursor-pointer' >
-      <Tooltip title={sortToggleBtn ? 'Low To High' : "High To Low"}>
-      <IconButton>
-      {sortToggleBtn ?  <BsSortUp/> : <BsSortDown/> }
-      </IconButton>
-    </Tooltip>
-       </div>
-     
-  
-      <div className='cursor-pointer'>
-      <IconButton>
-        <BsSearch/>
-        </IconButton>
+        <div onClick={sortToggle} className='cursor-pointer' >
+          <Tooltip title={sortToggleBtn ? 'Low To High' : "High To Low"}>
+            <IconButton>
+              {sortToggleBtn ? <BsSortUp /> : <BsSortDown />}
+            </IconButton>
+          </Tooltip>
         </div>
 
-    </div>
 
-    <div>
-      <div style={cardContainerStyle}>
-        {products.map((product) => (
-          <div key={product.id} style={cardStyle}>
+        <div className='cursor-pointer'>
+          <IconButton>
+            <BsSearch />
+          </IconButton>
+        </div>
+
+      </div>
+
+      <div className='flex'>
+        {
+        products ? (
+          products.map((product) => (
+            <div key={product._id} style={cardStyle}>
             <img
-              src={product.imageUrl}
+              src='https://img.freepik.com/free-vector/modern-black-friday-sale-banner-template-with-3d-background-red-splash_1361-1877.jpg?w=1060&t=st=1691337012~exp=1691337612~hmac=a09d43e26f6eee03e09f41061e7aa4b79b1d3c1130ac8b1f03bd2bb4f9cc2012'
               alt={product.title}
               style={imageStyle}
             />
-            <div style={titleStyle}>{product.title}</div>
-            <div style={priceStyle}>Price: ${product.price}</div>
-            <div style={descStyle}>{product.description}</div>
+            <div style={titleStyle}>{product.productName}</div>
+            <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
+            <div >{product.productDescription}</div>
           </div>
-        ))}
+         
+          ))
+          ) : "" 
+        }
+
+
       </div>
     </div>
-    </div>
 
-);
+  );
 
 
 
