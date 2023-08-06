@@ -295,7 +295,6 @@ function home() {
     });
 
 
-
     const updateExistCategory = async (data) => {
         console.log(data)
 
@@ -331,8 +330,6 @@ function home() {
         }
 
     }
-
-
 
 
     const categorySubmit = async (data) => {
