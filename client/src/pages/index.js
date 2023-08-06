@@ -10,6 +10,7 @@ import { BsSortUp,BsSearch,BsSortDown } from 'react-icons/bs';
 import { RiShoppingBag3Line } from "react-icons/ri";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { FaBars,FaFilter } from 'react-icons/fa';
+import Tooltip from '@mui/material/Tooltip';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -293,12 +294,25 @@ const sortToggle = ()=>{
     </div>
 
     <div className='m-10 flex justify-between'>
-      <div><FaFilter/></div>
+      <div className='cursor-pointer'>
+      <IconButton>
+        <FaFilter/>
+        </IconButton>
+        </div>
       <div onClick={sortToggle} className='cursor-pointer' >
-        {sortToggleBtn ?  <BsSortUp/> : <BsSortDown/> }
+      <Tooltip title={sortToggleBtn ? 'Low To High' : "High To Low"}>
+      <IconButton>
+      {sortToggleBtn ?  <BsSortUp/> : <BsSortDown/> }
+      </IconButton>
+    </Tooltip>
        </div>
+     
   
-      <div><BsSearch/></div>
+      <div className='cursor-pointer'>
+      <IconButton>
+        <BsSearch/>
+        </IconButton>
+        </div>
 
     </div>
 
