@@ -349,7 +349,6 @@ function home() {
     }
 
 
-
     const updateExistProduct = async (data) => {
         try {
             let token = localStorage.getItem('_token')
