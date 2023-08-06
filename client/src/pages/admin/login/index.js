@@ -70,8 +70,9 @@ return(
 
 
 
-  <div>
-    <h1>User Login</h1>
+  <div className='flex justify-center items-cente'>
+    <div>
+    <h1 className='text-3xl text-center mt-14 font-semibold my-5 text-neutral-600'>User Login</h1>
     <Formik
       initialValues={{
         email: '',
@@ -81,8 +82,8 @@ return(
       onSubmit= {loginSubmit }
     >
       {({ errors, touched }) => (
-        <Form>
-          <Field placeholder="email" name="email" />
+        <Form className='flex flex-col p-8 border-2 gap-5 w-[400px] rounded-3xl drop-shadow-2xl'>
+          <Field className="" placeholder="email" name="email" />
           {errors.email && touched.email ? (
             <div>{errors.email}</div>
           ) : null}
@@ -91,12 +92,13 @@ return(
             <div>{errors.password}</div>
           ) : null}
  
-          <button type="submit">Submit</button>
+          <button className='rounded-full transition duration-500 hover:bg-[#E7D2CC] hover:text-zinc-800 uppercase font-semibold tracking-wide px-3 bg-stone-500 w-[100px] h-8 text-stone-300' type="submit">Submit</button>
           <ToastContainer />
 
         </Form>
       )}
     </Formik>
+    </div>
   </div>
 );
 }
