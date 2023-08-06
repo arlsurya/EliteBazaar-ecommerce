@@ -1,7 +1,6 @@
 const express = require('express')
 const cors = require('cors')
 const app = express()
-const cors = require('cors')
 const dotenv = require('./env')
 const DB = require('./Core/db')
 const indexRoutes = require('./Routes/index')
@@ -28,7 +27,7 @@ const limiter = rateLimit({
     max:100,
 
 })
-app.use(limiter)
+// app.use(limiter)
 
 app.use('/',indexRoutes)
 app.use('/api',apiRoutes)

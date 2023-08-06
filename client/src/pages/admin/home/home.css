@@ -1,0 +1,228 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+.sidebar {
+    background-color: #333;
+    color: #fff;
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px; 
+    transition: left 0.3s ease-in-out;
+    padding: 20px;
+  }
+  .subHeading{
+    display: flex;
+    justify-content: space-between;
+    padding-left: 280px;
+
+
+
+  }
+
+  .productModule{
+    padding-left: 280px;
+
+
+  }
+  .orderModule{
+    padding-left: 280px;
+
+
+  }
+  
+  .open {
+    left: 0;
+  }
+  
+  .toggleBtn {
+    display: inline-block;
+    cursor: pointer;
+    padding: 5px;
+    position: absolute;
+    right: 7px;
+
+  }
+  
+  .bar {
+    
+    width: 18px; 
+    height: 3px; 
+    background-color: #fff;
+    border-radius: 2px;
+    margin: 1px;
+  }
+  
+  
+  
+  .toggleBtn.open .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-4px, 4px);
+  }
+  
+  .toggleBtn.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .toggleBtn.open .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-4px, -4px);
+  }
+  
+
+  .dashboard-card {
+    width: 250px; /* Set the width of the card */
+    height: 150px; /* Set the height of the card */
+    background-color: #fff; /* Set the background color */
+    border-radius: 8px; /* Round the corners of the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a box shadow */
+    padding: 16px; /* Add some padding to the card content */
+    margin: 16px; /* Add some margin between cards */
+  }
+  
+  .card-content h2 {
+    margin-top: 0; /* Remove the default margin from the heading */
+  }
+  
+  .card-content p {
+    margin-bottom: 0; /* Remove margin from the paragraph to avoid extra space */
+  }
+
+  .sideNav{
+    margin-top: 50px;
+  }
+  .customUl{
+    padding-left: 0;
+    list-style: none;
+    /* border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; */
+  }
+
+ .customUl li{
+    text-align: center;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    padding: 40px; 
+    margin: 16px;
+
+  }
+ .customUl li:hover{
+    font-size: large;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(217, 202, 202, 0.1); 
+    padding: 40px; 
+    margin: 16px;
+
+  }
+
+  .btn{
+    background-color: green;
+    color: white;
+  }
+
+
+  /* tableStyles.css */
+
+/* Basic table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Table header styles */
+th {
+  background-color: #f2f2f2;
+}
+
+/* Table row styles */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Hover effect on rows */
+tr:hover {
+  background-color: #e0e0e0;
+}
+
+/* Optional: Add some responsive styles for smaller screens */
+@media (max-width: 768px) {
+  th,
+  td {
+    padding: 10px 12px;
+  }
+}
+
+.categoryTable{
+  width: 80%;
+  position: relative;
+  left: 290px;
+  top: 250px;
+}
+
+.addButton{
+  background-color: blue;
+  color: white;
+
+}
+.btnPosition{
+  position: relative;
+  top: 245px;
+  left: 290px
+}
+
+/* modal css */
+/* Modal.module.css */
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  max-width: 500px;
+  width: 90%;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.label{
+  display:flex;
+  flex-direction: row;
+}
+.form-control{
+  display:flex;
+  flex-direction: row;
+}

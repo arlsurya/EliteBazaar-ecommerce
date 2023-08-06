@@ -23,7 +23,7 @@ const productSchema = new Schema({
         required: true
     },
     productQuantity:{
-        type: Number,
+        type: String,
         required: true
     },  
     productStatus:{
@@ -32,7 +32,7 @@ const productSchema = new Schema({
     },
     productImage:{
         type: String,
-        required:true
+        // required:true
     }
 },
 {

@@ -5,12 +5,13 @@ const saltRound = 10
 const jwt = require('jsonwebtoken')
 const userModel = require('../Models/userModel')
 const productModel = require('../Models/productModel')
+const transactionModel = require('../Models/transactionModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities')
 const FileService = require('../Services/fileService')
 module.exports = {
     register: async (req, res) => {
-        console.log(req.body)
+    
         try {
             let { fullName, email, mobile, password } = req.body;
             if (!fullName) {
@@ -64,16 +65,30 @@ module.exports = {
 
             req.body.password = hashedPassword;
 
+            // req.body save to userModel
             let user = new userModel(req.body)
             user = await user.save()
 
             let payload = {
                 id: user._id
             }
+            // create jwt token 
 
             const authToken = jwt.sign(payload, Constants.jwtSectet, {
                 expiresIn: '7days'
             })
+
+            let currentDate = new Date()
+
+            let device = {
+                deviceName: req.body.deviceName,
+                deviceToken: authToken.split(' ')[0],
+                lastLoggedIn:currentDate
+            }
+
+            // device details push to device array
+            user.device.push(device)
+            user = await user.save()
 
             return res.status(200).json({
                 statusCode: 200,
@@ -153,11 +168,48 @@ module.exports = {
                 Constants.jwtSectet,
                 { expiresIn: '7days' }
             )
+       
+            const currentDate = new Date(); 
+
+
+            // Payload for the new device
+            const device = {
+                deviceName: req.body.deviceName,
+                deviceToken: authToken,
+                lastLoggedIn: currentDate,
+            };
+
+            console.log(device)
+
+
+
+            // Check if the 'deviceName' already exists in the 'user.device' array
+            const isSameDevice = user.device.some(item => item.deviceName === device.deviceName);
+
+            if (!isSameDevice) {
+                // If the 'deviceName' is not already present, add the new device to the 'user.device' array
+                user.device.push(device);
+            } else {
+                // If the 'deviceName' already exists, update the 'lastLoggedIn' property of the existing device
+                user.device.forEach(item => {
+                    if (item.deviceName === device.deviceName) {
+                        item.lastLoggedIn = currentDate; // Update 'lastLoggedIn' to the current date and time
+                    }
+                });
+            }
+
+            user.lastLoggedIn = currentDate; 
+
+            user = await user.save();
+
+
+
 
             return res.status(200).json({
                 statusCode: 200,
                 Code: 1,
-                token: `Bearer ${authToken}`
+                token: `Bearer ${authToken}`,
+                message: 'user logged in'
             })
 
         } catch (error) {
@@ -385,8 +437,32 @@ module.exports = {
 
         } catch (error) {
             console.log(error)
+            return res.status(401).json({
+                statusCode: 401,
+                message: "Internal Server Error"
+            })
+        }
+    },
 
+    orderProduct : async(req,res)=>{
+        try {
 
+            let {transactionId, productName, productAmount,productQuantity, transactionAmount,paymentGateway,productId, userId} = req.body
+
+            let order = transactionModel(req.body)
+            order = await order.save()
+
+            res.send(order)
+
+            
+        } catch (error) {
+
+            console.log(error)
+            return res.status(401).json({
+                statusCode: 401,
+                message: "Internal Server Error"
+            })
+            
         }
     }
 

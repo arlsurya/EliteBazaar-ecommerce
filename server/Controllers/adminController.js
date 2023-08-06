@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken')
 const adminModel = require('../Models/adminModel')
 const productModel = require('../Models/productModel')
 const sliderImageModel = require('../Models/sliderImageModel')
+const categoryModel = require('../Models/categoryModel')
+const transactionModel = require('../Models/transactionModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities');
 const fileService = require('../Services/fileService');
@@ -340,6 +342,24 @@ module.exports = {
 
         }
     },
+    getProduct: async(req,res)=>{
+        try {
+            let products = await productModel.find()
+            let productCount = await productModel.countDocuments()
+
+
+            return res.status(200).json({
+                statusCode:200,
+                message:"All products",
+                data:products,
+                productCount:productCount
+            })
+        } catch (error) {
+            console.log(error)
+            
+        }
+    }
+    ,
 
     editProduct: async (req, res) => {
         try {
@@ -445,5 +465,228 @@ module.exports = {
             })
 
         }
+    },
+    addCategory: async(req,res)=>{
+        try {
+           let {categoryName} = req.body;
+           let payload = {
+            categoryName: categoryName
+           }
+
+           let category = categoryModel(payload)
+           category = await category.save()
+
+           if(category != null){
+            return res.status(200).json({
+                statusCode:200,
+                Code:1,
+                message: 'Category added'
+            })
+           }
+           return res.status(200).json({
+            statusCode:500,
+            Code:0,
+            message: 'Error while adding category'
+        })
+
+
+            
+        } catch (error) {
+            console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
+            
+        }
+    },
+
+    getAllCategories: async(req,res)=>{
+        try {
+
+            let categories = await categoryModel.aggregate([
+                {$match:{}},
+                {$project:{
+                  
+                    categoryName:1,
+                    status:1,
+                    updatedAt:1,
+                   
+                }}
+
+            ])
+            let countCategory = await categoryModel.countDocuments()
+          
+            if(categories != undefined){
+                return res.status(200).json({
+                    statusCode:200,
+                    message:"all categories",
+                    data: categories,
+                    countCategory:countCategory
+                })
+            }
+            
+        } catch (error) {
+
+              console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
+        }
+    },
+    getAllOrders: async(req,res)=>{
+
+        try {
+            let sales = await transactionModel.aggregate([
+            {$group:{
+                _id:null,
+                totalSalesAmount: {$sum:"$transactionAmount"}
+            }}
+               
+            ])
+            let orders = await transactionModel.aggregate([
+                {$match:{}},
+                {$lookup:{
+                    from:'users',
+                    localField:'userId',
+                    foreignField:'_id',
+                    as:"userDetails"
+                }},
+                {$unwind:"$userDetails"},
+                {
+                    $project:{
+                        transactionId:1,
+                        productName:1,
+                        productAmount:1,
+                        productQuantity:1,
+                        transactionAmount:1,
+                        paymentGateway:1,
+                        createdAt:1,
+                        userDetails:{
+                            "fullName": "$userDetails.fullName",
+                            "mobile": "$userDetails.mobile",
+                            "email": "$userDetails.email",
+
+                        }
+                    }
+                }
+            ])
+
+            let countOrder = await transactionModel.countDocuments()
+
+            
+
+           return res.status(200).json({
+            statusCode:200,
+            message:'Order list',
+            data:orders,
+            sales:sales,
+            orderCount:countOrder
+           })
+        } catch (error) {
+            console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
+            
+        }
+    },
+
+    editCategory: async(req,res)=>{
+        try {
+            let {id, categoryName} = req.body
+
+            let updateCategory = await categoryModel.findOneAndUpdate({_id:id},{$set:{categoryName:categoryName}})
+           
+            res.status(200).json({
+                statusCode:200,
+                Code:1,
+                message:'Category Updated'
+            })
+
+        } catch (error) {
+            console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
+            
+        }
+    },
+    updateProduct: async(req,res)=>{
+        try {
+            let {id} = req.body
+            console.log(id)
+
+            let updateProduct = await productModel.findOneAndUpdate({_id:id},{$set:req.body})
+            
+           res.status(200).json({
+            statusCode:200,
+            Code:1,
+            message:'Product Updated'
+           })
+        } catch (error) {
+            console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
+            
+        }
+    },
+
+    deleteProduct: async(req,res)=>{
+     try {
+        let {productId} = req.body;
+
+        let deleteProduct = await productModel.findOneAndDelete({_id:productId})
+
+        res.status(200).json({
+            statusCode:200,
+            Code:1,
+            message:"Product Deleted"
+        })
+        
+     } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            statusCode:500,
+            Code:0,
+            message: 'Internal server error'
+        })
+        
+     }
+    },
+    deleteCategory: async(req,res)=>{
+       
+        
+     try {
+        let {categoryId} = req.body;
+        console.log(categoryId)
+
+        let deleteCategory = await categoryModel.findOneAndDelete({_id:categoryId})
+
+        res.status(200).json({
+            statusCode:200,
+            Code:1,
+            message:"Category Deleted"
+        })
+        
+     } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            statusCode:500,
+            Code:0,
+            message: 'Internal server error'
+        })
+        
+     }
     }
 }
