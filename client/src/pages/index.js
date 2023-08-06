@@ -42,12 +42,7 @@ import { useRouter } from 'next/router';
 
 import userLogin from './user/login'
 
-const cardContainerStyle = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'space-between',
-  padding: '20px',
-};
+
 
 const cardStyle = {
   width: '300px',
@@ -97,74 +92,16 @@ const theme = createTheme({
   },
 });
 
-const productData = [
-  {
-    id: 1,
-    title: 'Product 1',
-    price: 25.99,
-    description: 'This is the description of product 1.',
-    imageUrl: 'product1.jpg',
-  },
-  {
-    id: 2,
-    title: 'Product 2',
-    price: 19.99,
-    description: 'This is the description of product 2.',
-    imageUrl: 'product2.jpg',
-  },
-  {
-    id: 2,
-    title: 'Product 2',
-    price: 19.99,
-    description: 'This is the description of product 2.',
-    imageUrl: 'product2.jpg',
-  },
-  {
-    id: 2,
-    title: 'Product 2',
-    price: 19.99,
-    description: 'This is the description of product 2.',
-    imageUrl: 'product2.jpg',
-  },
-  {
-    id: 2,
-    title: 'Product 2',
-    price: 19.99,
-    description: 'This is the description of product 2.',
-    imageUrl: 'product2.jpg',
-  },
-  {
-    id: 2,
-    title: 'Product 2',
-    price: 19.99,
-    description: 'This is the description of product 2.',
-    imageUrl: 'product2.jpg',
-  },
-  {
-    id: 2,
-    title: 'Product 2',
-    price: 19.99,
-    description: 'This is the description of product 2.',
-    imageUrl: 'product2.jpg',
-  },
-  {
-    id: 2,
-    title: 'Product 2',
-    price: 19.99,
-    description: 'This is the description of product 2.',
-    imageUrl: 'product2.jpg',
-  },
-  // Add more products here
-];
-
 
 // api url
 const apiURL = process.env.API_BASE_URL
 
 export default function Home() {
 
+  // router
   const router = useRouter();
 
+  const [isLoginUser, setIsLoginUser] = useState(false)
 
 
   const [categories, setCategories] = useState([]);
@@ -264,7 +201,12 @@ export default function Home() {
               {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
 
             </ListItemIcon>
-            <h1>Login / Signup</h1>
+           
+            {
+              isLoginUser ? (<h1>User Name</h1>) : (  <h1>Login / Signup</h1>)
+
+            }
+
             <ListItemText />
             <VscAccount />
           </ListItemButton>
@@ -328,7 +270,11 @@ export default function Home() {
               Elite Bazar
             </Typography>
          
-            <Button onClick={clickLogin}  color="inherit">Login</Button>
+         {
+          isLoginUser ? (<h1>Hello User</h1>) : ( <Button onClick={clickLogin}  color="inherit">Login</Button>)
+
+         }
+           
           </Toolbar>
         </AppBar>
       </Box>
