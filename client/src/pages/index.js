@@ -102,14 +102,9 @@ export default function Home() {
   const router = useRouter();
 
   const [isLoginUser, setIsLoginUser] = useState(false)
-
-
-  const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-
+  const [categories, setCategories] = useState([]);
   const [sortToggleBtn, setSortToggleBtn] = useState(false)
-  const [age, setAge] = useState('')
-  const [name, setName] = useState('')
 
 
 
@@ -147,20 +142,6 @@ export default function Home() {
 
     router.push('/user/login')
   }
-
-  
-
-  const bull = (
-    <Box
-      component="span"
-      sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-    >
-      •
-    </Box>
-  );
-
-  const { loading = true } = true;
-
 
 
 
