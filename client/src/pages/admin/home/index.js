@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/router';
+import Image from 'next/image'
 
 
 
@@ -519,6 +520,7 @@ function home() {
                 <h3>.</h3>
                 <h3>Elite Bazar</h3>
                 <h3>user icon</h3>
+               
 
             </div>
             
