@@ -9,6 +9,8 @@ import { useRouter } from 'next/router';
 import Image from 'next/image'
 
 
+import { HiOutlineChevronDoubleRight } from "react-icons/hi";
+import IconButton from '@mui/material/IconButton';
 
 function home() {
 
@@ -238,6 +240,7 @@ function home() {
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen)
+    
     }
 
     const handleOpenModal = (type) => {
@@ -514,16 +517,43 @@ function home() {
     }
 
     return (
-        <div className='main'>
-            <div className='header'>
+        <div className='m-0 p-0'>
+            <div className='flex justify-between bg-gray-200 h-10 align-center pb-2 pt-2'>
 
-                <h3>.</h3>
-                <h3>Elite Bazar</h3>
-                <h3>user icon</h3>
+           
+                <IconButton onClick={toggleSidebar}>
+            <HiOutlineChevronDoubleRight />
+          </IconButton>
+
+
+          
+                <h3 >Elite Bazar</h3>
+                <h3 className='pr-3'>user icon</h3>
                
 
             </div>
-            
+            <div
+      className={`sidebar ${isOpen ? 'left-0' : '-left-250'} transition-left duration-300 ease-in-out bg-gray-900 text-white h-screen w-60 p-5`}
+    >
+      <div className="toggleBtn" onClick={toggleSidebar}>
+        <div className={`bar ${isOpen ? 'rotate-45 translate-x-[-4px] translate-y-[4px]' : ''}`} />
+        <div className={`bar ${isOpen ? 'opacity-0' : ''}`} />
+        <div className={`bar ${isOpen ? 'rotate-[-45deg] translate-x-[-4px] translate-y-[-4px]' : ''}`} />
+      </div>
+      <nav className="sideNav">
+        <ul className="customUl">
+          <li className='p-10 cursor-pointer '>Dashboard</li>
+          <li className='p-10 cursor-pointer ' onClick={selectCatogary}>Category</li>
+          <li className='p-10 cursor-pointer ' onClick={selectProduct}>Product</li>
+          <li className='p-10 cursor-pointer ' onClick={selectOrder}>Order</li>
+        </ul>
+      </nav>
+    </div>
+  
+
+
+
+
             <div className={`sidebar ${isOpen ? 'open' : ''} `}>
                 <div className='toggleBtn' onClick={toggleSidebar}>
                     <div className='bar'></div>
