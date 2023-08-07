@@ -606,52 +606,55 @@ function home() {
                     </div>
 
                     <Divider className='mt-5' light />
-{
-    productModule ? (
+                    {
+                        productModule ? (
 
-        <TableContainer>
-        <Table aria-label="simple table">
-            <TableHead>
-                <TableRow>
-                    <TableCell align="right">Product Name</TableCell>
-                    <TableCell align="right">Description</TableCell>
-                    <TableCell align="right">Price</TableCell>
-                    <TableCell align="right">Discount Price</TableCell>
-                    <TableCell align="right">Category</TableCell>
-                    <TableCell align="right">Quantity</TableCell>
-                    <TableCell align="right">Status</TableCell>
-                    <TableCell align="right">Image</TableCell>
-                    <TableCell align="right">Action</TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-
-               
-                    {products.map((product)=>{
-                <TableRow key={product.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                        
-                    <TableCell component="th" scope="row">
-                    {product.productName}
-                    </TableCell>
-                    <TableCell align="right">{product.productName}</TableCell>
-                    <TableCell align="right">skdfjlk</TableCell>
-                    <TableCell align="right">skdfjlk</TableCell>
-                    <TableCell align="right">skdfjlk</TableCell>
-
-
-
-                </TableRow>
-                    })}
-             
-
-            </TableBody>
-        </Table>
-    </TableContainer>
+                            <TableContainer>
+                                <Table aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell align="right">Product Name</TableCell>
+                                            <TableCell align="right">Description</TableCell>
+                                            <TableCell align="right">Price</TableCell>
+                                            <TableCell align="right">Discount Price</TableCell>
+                                            <TableCell align="right">Category</TableCell>
+                                            <TableCell align="right">Quantity</TableCell>
+                                            <TableCell align="right">Status</TableCell>
+                                            <TableCell align="right">Image</TableCell>
+                                            <TableCell align="right">Action</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {products.map((product) => (
+                                            <TableRow key={product.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                                <TableCell  align="right">
+                                                    {product.productName}
+                                                </TableCell>
+                                                <TableCell align="right">{product.productDescription}</TableCell>
+                                                <TableCell align="right">{product.productPrice}</TableCell>
+                                                <TableCell align="right">{product.productDiscountedPrice}</TableCell>
+                                                <TableCell align="right">{product.productCategory}</TableCell>
+                                                <TableCell align="right">{product.productQuantity}</TableCell>
+                                                <TableCell align="right"><button className={product.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
+                                                                {product.status == false ? 'Inactive' : 'Active'}
+                                                            </button></TableCell>
+                                                <TableCell align="right"><button onClick={() => edit('product', product)}>E</button></TableCell>
+                                                <TableCell align="right"><button onClick={() => deleteMethod('product', product._id)} >D</button></TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                         
 
 
-    ) : ''
-}
-                  
+
+
+                                </Table>
+                            </TableContainer>
+
+
+                        ) : ''
+                    }
+
 
 
 
