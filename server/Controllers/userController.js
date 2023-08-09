@@ -404,7 +404,16 @@ module.exports = {
                  "productName": {$regex: ".*" + search + ".*" , $options: 'i'}   
                 }
             }
+
+
             console.log(query)
+
+            if(category != undefined && category != ""){
+                query = {
+                    "productCategory": {$regex: ".*" + category + ".*" , $options: 'i'}   
+                   }
+
+            }
 
             const pipeline = [
                 { $match: query },
@@ -426,7 +435,7 @@ module.exports = {
             console.log(pipeline)
 
             let products = await productModel.aggregate(pipeline)
-
+            console.log(products)
             res.status(200).json({
                 statusCode: 200,
                 Code: 1,

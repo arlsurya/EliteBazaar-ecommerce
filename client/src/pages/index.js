@@ -107,6 +107,34 @@ export default function Home() {
     console.log(categories)
     setAnchorEl(event.currentTarget);
   };
+  const handleSelect = (value)=>{
+    handleClose()
+    console.log(value)
+    getFilterCategoryProduct(value)
+
+
+  }
+
+  const getFilterCategoryProduct = async(value)=>{
+    
+    try {
+      // let getToken = localStorage.getItem(process.env.localStorage.token)
+      const response = await fetch(`${apiURL}/api/user/products?category=${value}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'authorization': `Bearer ${getToken}`
+        },
+      });
+      const responseData = await response.json();
+      setProducts(responseData.data.products);
+      console.log(responseData)
+    } catch (error) {
+      console.log(error)
+    }
+
+
+  }
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -360,9 +388,9 @@ export default function Home() {
         onClose={handleClose}
       >
            {categories.map((item) => (
-          <MenuItem key={item.id} onClick={handleClose}>
-            {item.categoryName}
-          </MenuItem>
+         <MenuItem key={item.id} onClick={() => handleSelect(item.categoryName)}>
+         {item.categoryName}
+       </MenuItem>
         ))}
       </Menu>
     </div>
