@@ -43,6 +43,9 @@ import userLogin from './user/login'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+import {useDispatch, useSelector} from "react-redux";
+import { increment } from './redux/reducerSlices/counterSlice';
+
 
 
 
@@ -99,6 +102,10 @@ const theme = createTheme({
 const apiURL = process.env.API_BASE_URL
 
 export default function Home() {
+
+
+  const dispatch = useDispatch()
+  const {count} = useSelector(state=>state.count)
 
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -370,12 +377,9 @@ export default function Home() {
             <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
             <div >{product.productDescription}</div>
 
-            <Button
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-       
-      >
-        Open Menu
+              {count}
+            <Button>
+              <button onClick={()=>dispatch(increment())}>+</button>
       </Button>
       
 
