@@ -104,6 +104,7 @@ export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
+    console.log(categories)
     setAnchorEl(event.currentTarget);
   };
 
@@ -138,10 +139,30 @@ export default function Home() {
       console.log(error)
     }
   }
+  const getCategory = async () => {
+    try {
+        let getToken = localStorage.getItem(process.env.localStorage.token)
+        const response = await fetch(`${apiURL}/api/admin/categories`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${getToken}`
+            },
+        });
+        const responseData = await response.json();
+        console.log(responseData)
+        setCategories(responseData.data);
+        setCategoryCount(responseData.countCategory)
+    } catch (error) {
+        console.log(error)
+
+    }
+}
 
 
   useEffect(() => {
     getProducts()
+    getCategory()
   }, [])
 
   const sortToggle = () => {
@@ -325,6 +346,9 @@ export default function Home() {
       >
         Open Menu
       </Button>
+      
+
+    <div> 
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}
@@ -332,10 +356,17 @@ export default function Home() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Option 1</MenuItem>
-        <MenuItem onClick={handleClose}>Option 2</MenuItem>
-        <MenuItem onClick={handleClose}>Option 3</MenuItem>
+           {categories.map((item) => (
+          <MenuItem key={item.id} onClick={handleClose}>
+            {item.categoryName}
+          </MenuItem>
+        ))}
       </Menu>
+    </div>
+  
+
+
+   
           </div>
          
           ))
