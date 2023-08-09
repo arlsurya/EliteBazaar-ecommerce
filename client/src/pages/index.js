@@ -304,9 +304,12 @@ export default function Home() {
 
       <div className='m-10 flex justify-between'>
         <div className='cursor-pointer'>
+         <Tooltip title="category">
           <IconButton  onClick={handleClick}>
             <FaFilter />
           </IconButton>
+          </Tooltip>
+
         </div>
         <div onClick={sortToggle} className='cursor-pointer' >
           <Tooltip title={sortToggleBtn ? 'Low To High' : "High To Low"}>
