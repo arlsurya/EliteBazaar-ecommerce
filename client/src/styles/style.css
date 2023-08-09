@@ -41,3 +41,6 @@
     transform: rotate(45deg) translate(-4px, -4px);
   }
   
+  .cardContainer{
+    display: flex;
+  }

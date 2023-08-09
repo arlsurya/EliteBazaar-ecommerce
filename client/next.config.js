@@ -7,7 +7,14 @@ const nextConfig = {
       token: '_token'
     }
    
-  }
+  },
+
+  images: {
+    domains: [
+      // image domain configuration 
+      "img.etimg.com",
+    ],
+  },
 
 }
 
