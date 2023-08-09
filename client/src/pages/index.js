@@ -39,8 +39,10 @@ import MailIcon from '@mui/icons-material/Mail';
 import { createTheme } from '@mui/material/styles';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { useRouter } from 'next/router';
-
 import userLogin from './user/login'
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
 
 
 
@@ -97,6 +99,17 @@ const theme = createTheme({
 const apiURL = process.env.API_BASE_URL
 
 export default function Home() {
+
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // router
   const router = useRouter();
@@ -270,7 +283,7 @@ export default function Home() {
 
       <div className='m-10 flex justify-between'>
         <div className='cursor-pointer'>
-          <IconButton>
+          <IconButton  onClick={handleClick}>
             <FaFilter />
           </IconButton>
         </div>
@@ -284,7 +297,7 @@ export default function Home() {
 
 
         <div className='cursor-pointer'>
-          <IconButton>
+          <IconButton >
             <BsSearch />
           </IconButton>
         </div>
@@ -304,6 +317,25 @@ export default function Home() {
             <div style={titleStyle}>{product.productName}</div>
             <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
             <div >{product.productDescription}</div>
+
+            <Button
+        aria-controls="simple-menu"
+        aria-haspopup="true"
+       
+      >
+        Open Menu
+      </Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>Option 1</MenuItem>
+        <MenuItem onClick={handleClose}>Option 2</MenuItem>
+        <MenuItem onClick={handleClose}>Option 3</MenuItem>
+      </Menu>
           </div>
          
           ))

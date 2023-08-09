@@ -1,15 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
-import userSlice from "../reducerSlices/userSlice"
-
-const reducer = combineReducers({
-  user: userSlice,
-//other slices will be here
-});
-
+import logger from 'redux-logger';
+import counterSlice from '../reducerSlices/counterSlice';
 
 const store = configureStore({
-    reducer,
+  reducer: {
+    count: counterSlice.reducer,
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export default store;
