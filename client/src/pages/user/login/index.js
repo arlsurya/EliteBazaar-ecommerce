@@ -5,11 +5,32 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import {setUserDetails} from '../../redux/reducerSlices/userSlice'
+import { Link } from 'react-router-dom';
 
+
+
+import {useDispatch, useSelector} from "react-redux";
 
 
 
 export const userLogin = () => {
+
+ const {isLoggedIn} = useSelector(state => state.user)
+
+
+  const  dispatch = useDispatch()
+  
+
+  useEffect(()=>{
+    console.log(isLoggedIn)
+  })
+
+
+
+
+
   const router = useRouter();
 
   const LoginSchema = Yup.object().shape({
@@ -45,14 +66,18 @@ export const userLogin = () => {
       }
       // if success then show success on toast and throw success message
       if (responseData.Code == 1) {
+        console.log(responseData)
+        dispatch(setUserDetails(responseData))
+  
           toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
       
       // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
   
-      const token = responseData.token.split(' ')[1]
-      localStorage.setItem('authToken',token)
+
+      // const token = responseData.token.split(' ')[1]
+      // localStorage.setItem('authToken',token)
   
-      router.push('/');
+      // router.push('/');
   
   
       }
@@ -68,9 +93,8 @@ export const userLogin = () => {
 
 return(
 
-
-
   <div>
+ 
     <h1>User Login</h1>
     <Formik
       initialValues={{

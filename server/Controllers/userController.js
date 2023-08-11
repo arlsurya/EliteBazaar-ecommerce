@@ -203,12 +203,14 @@ module.exports = {
             user = await user.save();
 
 
+            // const {password, ...allOthers} = user._doc
 
 
             return res.status(200).json({
                 statusCode: 200,
                 Code: 1,
                 token: `Bearer ${authToken}`,
+                userDetails:user,
                 message: 'user logged in'
             })
 
