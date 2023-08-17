@@ -73,12 +73,12 @@ export const userLogin = () => {
         toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
 
         // we have jwt token in responseDate.token (split bearer form the token and store on localstorage)
+        
+        
+        const token = responseData.token.split(' ')[1]
+        localStorage.setItem('authToken',token)
+        router.push('/');
 
-
-        // const token = responseData.token.split(' ')[1]
-        // localStorage.setItem('authToken',token)
-
-        // router.push('/');
 
 
       }
