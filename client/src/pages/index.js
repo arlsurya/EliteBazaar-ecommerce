@@ -284,11 +284,12 @@ export default function Home() {
   );
 
   return (
-    <div>
+ 
 
 
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" style={{ backgroundColor: '#808080' }}>
+    <div >
+      <Box>
+        <AppBar  position="static" style={{ backgroundColor: '#808080' }}>
           <Toolbar>
             {['left'].map((anchor) => (
               <React.Fragment key={anchor}>
@@ -328,6 +329,7 @@ export default function Home() {
           </Toolbar>
         </AppBar>
       </Box>
+      
 
       <div>
         <img
