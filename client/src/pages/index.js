@@ -105,7 +105,7 @@ export default function Home() {
 
 
   const dispatch = useDispatch()
-  const {count} = useSelector(state=>state.count)
+  // const {count} = useSelector(state=>state.count)
 
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -177,7 +177,7 @@ export default function Home() {
   const getCategory = async () => {
     try {
         let getToken = localStorage.getItem(process.env.localStorage.token)
-        const response = await fetch(`${apiURL}/api/admin/categories`, {
+        const response = await fetch(`${apiURL}/api/user/categories`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -377,7 +377,7 @@ export default function Home() {
             <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
             <div >{product.productDescription}</div>
 
-              {count}
+              {/* {count} */}
             <Button>
               <button onClick={()=>dispatch(increment())}>+</button>
       </Button>

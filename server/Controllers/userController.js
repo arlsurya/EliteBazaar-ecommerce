@@ -5,6 +5,7 @@ const saltRound = 10
 const jwt = require('jsonwebtoken')
 const userModel = require('../Models/userModel')
 const productModel = require('../Models/productModel')
+const categoryModel = require('../Models/categoryModel')
 const transactionModel = require('../Models/transactionModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities')
@@ -475,6 +476,43 @@ module.exports = {
             })
             
         }
+    },
+
+    categories: async(req,res)=>{
+        try {
+
+            let categories = await categoryModel.aggregate([
+                {$match:{}},
+                {$project:{
+                  
+                    categoryName:1,
+                    status:1,
+                    updatedAt:1,
+                   
+                }}
+
+            ])
+            let countCategory = await categoryModel.countDocuments()
+          
+            if(categories != undefined){
+                return res.status(200).json({
+                    statusCode:200,
+                    message:"all categories",
+                    data: categories,
+                    countCategory:countCategory
+                })
+            }
+            
+        } catch (error) {
+
+              console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
+        }
+
     }
 
 
