@@ -22,11 +22,12 @@ const UserSlice = createSlice({
      
       },
       handleLogout: (state,actions) =>{
+        return initialState
 
       }
     }
   });
 
 
-export const {setUserDetails} = UserSlice.actions;
+export const {setUserDetails, handleLogout} = UserSlice.actions;
 export default UserSlice.reducer;

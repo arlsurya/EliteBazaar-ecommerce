@@ -7,7 +7,8 @@ import { ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import {setUserDetails} from '../../redux/reducerSlices/userSlice'
-import { Link } from 'react-router-dom';
+import {handleLogout} from '../../redux/reducerSlices/userSlice'
+
 
 
 
@@ -117,6 +118,7 @@ return(
  
           <button type="submit">Submit</button>
           <ToastContainer />
+          <button onClick={()=>dispatch(handleLogout)} >Logout</button>
 
         </Form>
       )}
