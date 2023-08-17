@@ -8,8 +8,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { setUserDetails } from '../../redux/reducerSlices/userSlice'
 import { handleLogout } from '../../redux/reducerSlices/userSlice'
-
-
+import {Home}  from '../home'
 
 
 import { useDispatch, useSelector } from "react-redux";
@@ -91,78 +90,80 @@ export const userLogin = () => {
   }
 
 
-
-  return (
-
-    <div>
-
-
-      <div className=' bg-gradient-to-t from-cyan-500 to-blue-500 h-screen flex justify-center items-center'>
-        <div className='w-4/5 rounded-xl bg-gray-100  py-8 xl:w-1/4'>
-          <div className='flex flex-col  gap-4'>
-            <h3 className='uppercase text-center text-xl font-semibold tracking-wider'>User Login</h3>
-
-            <div className='pt-4 flex ml-7 flex-col gap-4  w-4/5'>
-
-            <Formik
-                initialValues={{
-                  email: '',
-                  password: ''
-                }}
-                validationSchema={LoginSchema}
-                onSubmit={loginSubmit}
-              >
-                {({ errors, touched }) => (
-                  <Form>
-                    <label
-								htmlFor="email"
-								className="block text-sm font-medium leading-6 text-gray-900 mt-5"
-							>
-								Email
-							</label>
-                    <Field className="block mt-2  w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6 outline-none" placeholder="email" name="email" />
-                    {errors.email && touched.email ? (
-                      <div className="text-red-500">{errors.email}</div>
-                    ) : null}
-                       <label
-								htmlFor="password"
-								className="block text-sm font-medium leading-6 text-gray-900 mt-5"
-							>
-								Password
-							</label>
-                    <Field className="block mt-2  w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6 outline-none" type="password" placeholder="password" name="password" />
-                    {errors.password && touched.password ? (
-                      <div className="text-red-500">{errors.password}</div>
-                    ) : null}
-
-
-                      <div className='flex justify-center'>
-
-                    <button className="flex mt-6 w-full justify-center rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:bg-indigo-800" type="submit">Login</button>
-
-                      </div>
-                         {/* <Link to='/register' >  <p className=' text-gray-500 cursor-pointer hover:text-gray-900'>Don't have an account?</p> </Link>  
-                <Link to='/forgotpassword'><p  className=' text-gray-500 cursor-pointer hover:text-gray-900'>Forgot Password?</p></Link> */}
-                    <ToastContainer />
-                    {/* <button onClick={()=>dispatch(handleLogout)} >Logout</button> */}
-
-
-                  </Form>
-                )}
-              </Formik>
-
-              <ToastContainer position="top-right" />
+    return (
+  
+      <div>
+  
+  
+        <div className=' bg-gradient-to-t from-cyan-500 to-blue-500 h-screen flex justify-center items-center'>
+          <div className='w-4/5 rounded-xl bg-gray-100  py-8 xl:w-1/4'>
+            <div className='flex flex-col  gap-4'>
+              <h3 className='uppercase text-center text-xl font-semibold tracking-wider'>User Login</h3>
+  
+              <div className='pt-4 flex ml-7 flex-col gap-4  w-4/5'>
+  
+              <Formik
+                  initialValues={{
+                    email: '',
+                    password: ''
+                  }}
+                  validationSchema={LoginSchema}
+                  onSubmit={loginSubmit}
+                >
+                  {({ errors, touched }) => (
+                    <Form>
+                      <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 text-gray-900 mt-5"
+                >
+                  Email
+                </label>
+                      <Field className="block mt-2  w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6 outline-none" placeholder="email" name="email" />
+                      {errors.email && touched.email ? (
+                        <div className="text-red-500">{errors.email}</div>
+                      ) : null}
+                         <label
+                  htmlFor="password"
+                  className="block text-sm font-medium leading-6 text-gray-900 mt-5"
+                >
+                  Password
+                </label>
+                      <Field className="block mt-2  w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6 outline-none" type="password" placeholder="password" name="password" />
+                      {errors.password && touched.password ? (
+                        <div className="text-red-500">{errors.password}</div>
+                      ) : null}
+  
+  
+                        <div className='flex justify-center'>
+  
+                      <button className="flex mt-6 w-full justify-center rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:bg-indigo-800" type="submit">Login</button>
+  
+                        </div>
+                           {/* <Link to='/register' >  <p className=' text-gray-500 cursor-pointer hover:text-gray-900'>Don't have an account?</p> </Link>  
+                  <Link to='/forgotpassword'><p  className=' text-gray-500 cursor-pointer hover:text-gray-900'>Forgot Password?</p></Link> */}
+                      <ToastContainer />
+                      {/* <button onClick={()=>dispatch(handleLogout)} >Logout</button> */}
+  
+  
+                    </Form>
+                  )}
+                </Formik>
+  
+                <ToastContainer position="top-right" />
+              </div>
+  
+         
+  
+  
             </div>
-
-       
-
-
           </div>
         </div>
+  
+     
       </div>
+    );
 
-   
-    </div>
-  );
+
+
 }
 export default userLogin
