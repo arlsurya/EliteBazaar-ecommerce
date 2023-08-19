@@ -68,9 +68,6 @@ export const adminLogin = () => {
   }
 
 
-  if(isLoggedIn){
-    return <Home/>
-  }else{
 
     return (
   
@@ -136,7 +133,7 @@ export const adminLogin = () => {
         </div>
       </div>
     );
-  }
+  
 
 }
 export default adminLogin

@@ -22,7 +22,8 @@ const UserSlice = createSlice({
      
       },
       handleLogout: (state,actions) =>{
-        return initialState
+        state.isLoggedIn = false;
+        state.userDetailsData = {}
 
       }
     }
