@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { setUserDetails } from '../../redux/reducerSlices/userSlice'
-import { handleLogout } from '../../redux/reducerSlices/userSlice'
+// import { handleLogout } from '../../redux/reducerSlices/userSlice'
 import {Home}  from '../home'
 
 
@@ -67,6 +67,7 @@ export const userLogin = () => {
       // if success then show success on toast and throw success message
       if (responseData.Code == 1) {
         console.log(responseData)
+      
         dispatch(setUserDetails(responseData))
 
         toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })

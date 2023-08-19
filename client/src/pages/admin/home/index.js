@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Modal from '../home/modal';
+// import Modal from '../home/modal';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { toast } from "react-toastify";
@@ -19,6 +19,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import {Modal} from '../../../components/modal'
 
 function home() {
 
@@ -606,6 +607,13 @@ function home() {
                     </div>
 
                     <Divider className='mt-5' light />
+
+
+                <input type='file'></input>
+                    
+
+                    <Divider className='mt-5' light />
+
                     {
                         productModule ? (
 
