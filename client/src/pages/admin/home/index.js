@@ -22,9 +22,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-// import {Modal} from '../../../components/modal'
 
-const IMG_URL = 'http://127.0.0.1:3001/api/uploads'
+// import {Modal} from '../../../components/modal'
 
 const home = () => {
 
@@ -77,6 +76,9 @@ const home = () => {
     // this is for dynamic name for modal like (add product or edit product)
     const [productActionType, setProductActionType] = useState('')
 
+    const [selectedImage, setSelectedImage] = useState('')
+    const [imageData, setImageData] = useState('')
+
 
     // left sidebar modules
     // category module
@@ -113,6 +115,35 @@ const home = () => {
         getCategory()
 
     }, [])
+
+    const imageSelected = (event) => {
+
+        const selectedFile = event[0];
+        setImageData(selectedFile)
+
+        const readImage = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    resolve(event.target.result);
+                };
+                reader.onerror = (error) => {
+                    reject(error);
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+
+        readImage(selectedFile)
+            .then((dataUrl) => {
+                setSelectedImage(dataUrl);
+                console.log(dataUrl);
+            })
+            .catch((error) => {
+                console.error('Error reading image:', error);
+            });
+    };
+
 
     const tokenExe = () => {
         let getToken = localStorage.getItem('_token')
@@ -224,17 +255,32 @@ const home = () => {
 
     // add product
     const addProduct = async (data) => {
+
+        console.log(data)
+
+        var formData = new FormData()
+
+        Object.entries(data).map((item)=>{
+            formData.append(item[0],item[1])
+            
+        })
+        formData.append('productImage',imageData)
+       
+
         try {
             const response = await fetch(`${apiURL}/api/admin/addproduct`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
+                    'authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjQwOGJlZjZmY2I0MmY1ZThkMmRiMyIsImlhdCI6MTY5MjQ5OTEzMCwiZXhwIjoxNjkzMTAzOTMwfQ.yrmlXiHXQMWhVZWHkda_iVvXvgy8aCK3MxjDZ_dxFgM`
                 },
-                body: JSON.stringify(data),
+                // body: JSON.stringify(formData),
+                body: formData,
             });
             const responseData = await response.json();
             console.log(responseData)
+            console.log(responseData.Code)
+
+       
 
             // if error then show error on toast and throw error message
             if (responseData.Code == 0) {
@@ -243,6 +289,7 @@ const home = () => {
             }
             // if success then show success on toast and throw success message
             if (responseData.Code == 1) {
+
                 toast(responseData.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
                 setIsProductModalOpen(false);
             }
@@ -582,7 +629,7 @@ const home = () => {
 
                 </div>
                 <div className='h-8 w-16 vh-100 w-full p-5  '>
-                    <div className='flex justify-between'>
+                    <div className='flex justify-between '>
                         <div className="bg-white rounded-lg shadow-md p-4">
                             <div className="card-content">
                                 <h2>Sales</h2>
@@ -622,7 +669,7 @@ const home = () => {
 
                     {
                         productModule ? (
-                            <div className='productModule'>
+                            <div className='productModule '>
                                 <div className='btnPosition'>
 
                                     <button onClick={() => handleOpenModal('product')} className='addButton p-2 mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded'>Add Product</button>
@@ -634,7 +681,7 @@ const home = () => {
 
 
 
-                                <TableContainer className='mt-3'>
+                                <TableContainer className='mt-3 max-h-[500px] overflow-y-auto '>
                                     <Table aria-label="simple table">
                                         <TableHead className='font-bold bg-gray-100 text-center'>
                                             <TableRow >
@@ -664,7 +711,7 @@ const home = () => {
                                                     <TableCell align="center"><button className={product.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
                                                         {product.status == false ? 'Inactive' : 'Active'}
                                                     </button></TableCell>
-                                                    <TableCell align="center"><img   src={`${IMG_URL}/${product.productImage}`} className='h-20 w-20 bg-black'></img></TableCell>
+                                                    <TableCell align="center"><img src={`http://127.0.0.1:3001/api/uploads/${product.productImage}`} className='h-20 w-20 bg-black'></img></TableCell>
                                                     <TableCell align="center"><button onClick={() => edit('product', product)}> <IconButton > <MdEdit /></IconButton></button></TableCell>
                                                     <TableCell align="center"><button onClick={() => deleteMethod('product', product._id)} ><IconButton><MdDelete /></IconButton></button></TableCell>
                                                 </TableRow>
@@ -681,31 +728,78 @@ const home = () => {
                                 {/* add product modal */}
 
 
-                                <Modal isOpen={isProductModalOpen} onClose={handleCloseModal}>
-                                    <h1>{productActionType} Category</h1>
 
-                                    <Formik
-                                        initialValues={{
-                                            categoryName: initialProductName,
-                                        }}
-                                        validationSchema={productSchema}
-                                        onSubmit={productSubmit}>
-                                        {({ errors, touched }) => (
-                                            <Form>
 
-                                                <Field type="text" placeholder="product category name" name="categoryName" />
-                                                {errors.categoryName && touched.categoryName ? (
-                                                    <div>{errors.categoryName}</div>
-                                                ) : null}
+                                <Modal className="fixed inset-0 flex items-center justify-center" isOpen={isProductModalOpen} onClose={handleCloseModal}>
+                                    <div className='bg-white w-96 p-6 rounded-lg'>
 
-                                                <button type="submit">{productActionType}</button>
+                                        <h1 className='text-2xl font-bold mb-4'>{productActionType} Product</h1>
 
-                                            </Form>
-                                        )}
-                                    </Formik>
+                                        <Formik
+                                            initialValues={{
+                                                productName: initialProductName,
+                                                productDescription: initialProductDescription,
+                                                productPrice: initialProductPrice,
+                                                productDiscountedPrice: initialProductDiscountedPrice,
+                                                productCategory: initialProductCategory,
+                                                productQuantity: initialProductQuantity,
 
-                                    <button onClick={handleCloseModal}>Close Modal</button>
+                                            }}
+                                            validationSchema={productSchema}
+                                            onSubmit={productSubmit}>
+                                            {({ errors, touched }) => (
+                                                <Form>
+
+                                                    <Field type="text" className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 mt-2" placeholder="product name" name="productName" />
+                                                    {errors.productName && touched.productName ? (
+                                                        <div className='text-red-500'>{errors.productName}</div>
+                                                    ) : null}
+                                                    <Field type="text" className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 mt-2" placeholder="product description" name="productDescription" />
+                                                    {errors.productDescription && touched.productDescription ? (
+                                                        <div className='text-red-500'>{errors.productDescription}</div>
+                                                    ) : null}
+                                                    <Field type="text" className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 mt-2" placeholder="product price" name="productPrice" />
+                                                    {errors.productPrice && touched.productPrice ? (
+                                                        <div className='text-red-500'>{errors.productPrice}</div>
+                                                    ) : null}
+                                                    <Field type="text" className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 mt-2" placeholder="product discounted price" name="productDiscountedPrice" />
+                                                    {errors.productDiscountedPrice && touched.productDiscountedPrice ? (
+                                                        <div className='text-red-500'>{errors.productDiscountedPrice}</div>
+                                                    ) : null}
+                                                    <Field type="text" className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 mt-2" placeholder="product category" name="productCategory" />
+                                                    {errors.productCategory && touched.productCategory ? (
+                                                        <div className='text-red-500'>{errors.productCategory}</div>
+                                                    ) : null}
+                                                    <Field type="text" className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 mt-2" placeholder="product quantity" name="productQuantity" />
+                                                    {errors.productQuantity && touched.productQuantity ? (
+                                                        <div className='text-red-500'>{errors.productQuantity}</div>
+                                                    ) : null}
+
+                                                    <div className='mt-3'>
+                                                        <input onChange={(e) => imageSelected(e.target.files)} type='file' />
+
+                                                        <div className='h-100 w-150 mt-3 '>
+                                                            <img className='rounded-md' src={selectedImage}></img>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div className='flex justify-between'>
+
+                                                        <button className='mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md' onClick={handleCloseModal}>Close</button>
+                                                        <button className='mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md' type="submit">{productActionType}</button>
+
+                                                    </div>
+                                                    <ToastContainer />
+
+                                                </Form>
+                                            )}
+                                        </Formik>
+
+
+                                    </div>
                                 </Modal>
+
 
                             </div>
 
@@ -813,8 +907,8 @@ const home = () => {
                                                             </button></TableCell>
                                                             <TableCell align="center">{category.updatedAt}</TableCell>
                                                             <TableCell align="center"><button onClick={() => edit('category', category)}> <IconButton > <MdEdit /></IconButton></button></TableCell>
-                                                    <TableCell align="center"><button onClick={() => deleteMethod('category', category._id)} ><IconButton><MdDelete /></IconButton></button></TableCell>
-  
+                                                            <TableCell align="center"><button onClick={() => deleteMethod('category', category._id)} ><IconButton><MdDelete /></IconButton></button></TableCell>
+
                                                         </TableRow>
                                                     ))}
                                                 </TableBody>
@@ -832,31 +926,61 @@ const home = () => {
                                     {/* add category modal */}
 
 
-                                    <Modal isOpen={isCategoryModalOpen} onClose={handleCloseModal}>
-                                        <h1>{categoryActionType} Category</h1>
+                                    <Modal isOpen={isCategoryModalOpen} onClose={handleCloseModal} className="fixed inset-0 flex items-center justify-center">
+                                        <div className="bg-white w-96 p-6 rounded-lg ">
+                                            {/* Modal Header */}
+                                            <h1 className="text-2xl font-bold mb-4">{categoryActionType} Category</h1>
 
-                                        <Formik
-                                            initialValues={{
-                                                categoryName: initialCategoryName,
-                                            }}
-                                            validationSchema={categorySchema}
-                                            onSubmit={categorySubmit}>
-                                            {({ errors, touched }) => (
-                                                <Form>
+                                            {/* Form with Formik */}
+                                            <Formik
+                                                initialValues={{
+                                                    categoryName: initialCategoryName,
+                                                }}
+                                                validationSchema={categorySchema}
+                                                onSubmit={categorySubmit}
+                                            >
+                                                {({ errors, touched }) => (
+                                                    <Form>
+                                                        {/* Input Field */}
+                                                        <Field
+                                                            type="text"
+                                                            placeholder="Product category name"
+                                                            name="categoryName"
+                                                            className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                                                        />
+                                                        {errors.categoryName && touched.categoryName ? (
+                                                            <div className="text-red-500">{errors.categoryName}</div>
+                                                        ) : null}
 
-                                                    <Field type="text" placeholder="product category name" name="categoryName" />
-                                                    {errors.categoryName && touched.categoryName ? (
-                                                        <div>{errors.categoryName}</div>
-                                                    ) : null}
+                                                        <div className='mt-3'>
+                                                            <input onChange={(e) => imageSelected(e.target.files)} type='file' />
 
-                                                    <button type="submit">{categoryActionType}</button>
+                                                            <div className='h-100 w-150 mt-3 '>
+                                                                <img className='rounded-md' src={selectedImage}></img>
+                                                            </div>
 
-                                                </Form>
-                                            )}
-                                        </Formik>
+                                                        </div>
+                                                        <div className='flex justify-between'>
+                                                            {/* Close Modal Button */}
+                                                            <button onClick={handleCloseModal} className="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                                                                Close
+                                                            </button>
+                                                            {/* Submit Button */}
+                                                            <button
+                                                                type="submit"
+                                                                className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+                                                            >
+                                                                {categoryActionType}
+                                                            </button>
 
-                                        <button onClick={handleCloseModal}>Close Modal</button>
+                                                        </div>
+                                                    </Form>
+                                                )}
+                                            </Formik>
+
+                                        </div>
                                     </Modal>
+
 
 
 
