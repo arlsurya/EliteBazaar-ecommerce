@@ -47,6 +47,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { increment } from './redux/reducerSlices/counterSlice';
 
 
+const IMG_URL = 'http://127.0.0.1:3001/api/uploads'
+
 
 
 
@@ -384,7 +386,7 @@ export default function Home() {
             products.map((product) => (
               <div key={product._id} style={cardStyle}>
                 <img
-                  src='https://img.freepik.com/free-vector/modern-black-friday-sale-banner-template-with-3d-background-red-splash_1361-1877.jpg?w=1060&t=st=1691337012~exp=1691337612~hmac=a09d43e26f6eee03e09f41061e7aa4b79b1d3c1130ac8b1f03bd2bb4f9cc2012'
+                  src={`${IMG_URL}/${product.productImage}`}
                   alt={product.title}
                   style={imageStyle}
                 />

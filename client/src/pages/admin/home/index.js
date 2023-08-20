@@ -24,6 +24,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 // import {Modal} from '../../../components/modal'
 
+const IMG_URL = 'http://127.0.0.1:3001/api/uploads'
+
 const home = () => {
 
     // route
@@ -662,7 +664,7 @@ const home = () => {
                                                     <TableCell align="center"><button className={product.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
                                                         {product.status == false ? 'Inactive' : 'Active'}
                                                     </button></TableCell>
-                                                    <TableCell align="center"><img src="#" className='h-20 w-20 bg-black'></img></TableCell>
+                                                    <TableCell align="center"><img   src={`${IMG_URL}/${product.productImage}`} className='h-20 w-20 bg-black'></img></TableCell>
                                                     <TableCell align="center"><button onClick={() => edit('product', product)}> <IconButton > <MdEdit /></IconButton></button></TableCell>
                                                     <TableCell align="center"><button onClick={() => deleteMethod('product', product._id)} ><IconButton><MdDelete /></IconButton></button></TableCell>
                                                 </TableRow>

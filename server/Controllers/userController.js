@@ -391,7 +391,7 @@ module.exports = {
             let { search, category, page, limit, sort, order, skip } = req.query
 
             page = parseInt(page) || 1;
-            limit = parseInt(limit) || 3;
+            limit = parseInt(limit) || 10;
             order = order == 'desc' ? -1 : 1;
             skip = (page - 1) * limit;
             sort = {
