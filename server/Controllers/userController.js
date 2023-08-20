@@ -5,6 +5,7 @@ const saltRound = 10
 const jwt = require('jsonwebtoken')
 const userModel = require('../Models/userModel')
 const productModel = require('../Models/productModel')
+const categoryModel = require('../Models/categoryModel')
 const transactionModel = require('../Models/transactionModel')
 const Constants = require('../Constants')
 const Utilities = require('../Utilities')
@@ -203,12 +204,14 @@ module.exports = {
             user = await user.save();
 
 
+            // const {password, ...allOthers} = user._doc
 
 
             return res.status(200).json({
                 statusCode: 200,
                 Code: 1,
                 token: `Bearer ${authToken}`,
+                userDetails:user,
                 message: 'user logged in'
             })
 
@@ -404,7 +407,16 @@ module.exports = {
                  "productName": {$regex: ".*" + search + ".*" , $options: 'i'}   
                 }
             }
+
+
             console.log(query)
+
+            if(category != undefined && category != ""){
+                query = {
+                    "productCategory": {$regex: ".*" + category + ".*" , $options: 'i'}   
+                   }
+
+            }
 
             const pipeline = [
                 { $match: query },
@@ -426,7 +438,7 @@ module.exports = {
             console.log(pipeline)
 
             let products = await productModel.aggregate(pipeline)
-
+            console.log(products)
             res.status(200).json({
                 statusCode: 200,
                 Code: 1,
@@ -464,6 +476,43 @@ module.exports = {
             })
             
         }
+    },
+
+    categories: async(req,res)=>{
+        try {
+
+            let categories = await categoryModel.aggregate([
+                {$match:{}},
+                {$project:{
+                  
+                    categoryName:1,
+                    status:1,
+                    updatedAt:1,
+                   
+                }}
+
+            ])
+            let countCategory = await categoryModel.countDocuments()
+          
+            if(categories != undefined){
+                return res.status(200).json({
+                    statusCode:200,
+                    message:"all categories",
+                    data: categories,
+                    countCategory:countCategory
+                })
+            }
+            
+        } catch (error) {
+
+              console.log(error)
+            return res.status(200).json({
+                statusCode:500,
+                Code:0,
+                message: 'Internal server error'
+            })
+        }
+
     }
 
 

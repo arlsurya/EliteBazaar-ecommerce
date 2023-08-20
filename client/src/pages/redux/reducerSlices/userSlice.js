@@ -1,8 +1,8 @@
-import {createSlice} from "@redux/toolkit"
-
-export const initialState = {
-    userDetails:{},
+import { createSlice } from "@reduxjs/toolkit";
+export let initialState = {
+    userDetailsData:{},
     isLoggedIn:false,
+    deviceToken:''
 }
 
 
@@ -11,10 +11,24 @@ const UserSlice = createSlice({
     initialState,
     reducers: {
       setUserDetails: (state, actions) => {
-        
+        debugger
+        return {
+          ...state,
+          userDetailsData:actions.payload.userDetails,
+          deviceToken: actions.payload.token,
+          isLoggedIn: true
+
+        }
+     
       },
+      handleLogout: (state,actions) =>{
+        state.isLoggedIn = false;
+        state.userDetailsData = {}
+
+      }
     }
   });
 
 
-export const {setUserDetails} = UserSlice.actions;
+export const {setUserDetails, handleLogout} = UserSlice.actions;
+export default UserSlice.reducer;

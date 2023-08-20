@@ -39,8 +39,15 @@ import MailIcon from '@mui/icons-material/Mail';
 import { createTheme } from '@mui/material/styles';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { useRouter } from 'next/router';
-
 import userLogin from './user/login'
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
+import { useDispatch, useSelector } from "react-redux";
+import { increment } from './redux/reducerSlices/counterSlice';
+
+
+
 
 
 
@@ -98,10 +105,59 @@ const apiURL = process.env.API_BASE_URL
 
 export default function Home() {
 
+  const { isLoggedIn, userDetailsData } = useSelector(state => state.user)
+
+
+  const dispatch = useDispatch()
+  // const {count} = useSelector(state=>state.count)
+
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    console.log(categories)
+    setAnchorEl(event.currentTarget);
+  };
+  const handleSelect = (value) => {
+    handleClose()
+    console.log(value)
+    getFilterCategoryProduct(value)
+
+
+  }
+
+  const getFilterCategoryProduct = async (value) => {
+    console.log(userDetailsData.fullName)
+    console.log(userFullName)
+
+    try {
+      // let getToken = localStorage.getItem(process.env.localStorage.token)
+      const response = await fetch(`${apiURL}/api/user/products?category=${value}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'authorization': `Bearer ${getToken}`
+        },
+      });
+      const responseData = await response.json();
+      setProducts(responseData.data.products);
+      console.log(responseData)
+    } catch (error) {
+      console.log(error)
+    }
+
+
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   // router
   const router = useRouter();
 
   const [isLoginUser, setIsLoginUser] = useState(false)
+  const [userFullName, setUserFullName] = useState('John Doe')
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [sortToggleBtn, setSortToggleBtn] = useState(false)
@@ -125,10 +181,34 @@ export default function Home() {
       console.log(error)
     }
   }
+  const getCategory = async () => {
+    try {
+      let getToken = localStorage.getItem(process.env.localStorage.token)
+      const response = await fetch(`${apiURL}/api/user/categories`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': `Bearer ${getToken}`
+        },
+      });
+      const responseData = await response.json();
+      console.log(responseData)
+      setCategories(responseData.data);
+      setCategoryCount(responseData.countCategory)
+    } catch (error) {
+      console.log(error)
+
+    }
+  }
 
 
   useEffect(() => {
+
+    isLoggedIn ? setIsLoginUser(true) : setIsLoginUser(false)
+    userDetailsData ? setUserFullName(userDetailsData.fullName) : setUserFullName('')
+
     getProducts()
+    getCategory()
   }, [])
 
   const sortToggle = () => {
@@ -138,7 +218,10 @@ export default function Home() {
 
   }
 
-  const clickLogin = () =>{
+  const clickLogin = () => {
+
+    console.log(isLoggedIn)
+
 
     router.push('/user/login')
   }
@@ -182,10 +265,9 @@ export default function Home() {
               {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
 
             </ListItemIcon>
-           
-            {
-              isLoginUser ? (<h1>User Name</h1>) : (  <h1>Login / Signup</h1>)
 
+            {
+              isLoggedIn ? <h1>{userFullName}</h1> : <h1>Login / Signup</h1>
             }
 
             <ListItemText />
@@ -215,10 +297,11 @@ export default function Home() {
   );
 
   return (
-    <div>
 
 
-      <Box sx={{ flexGrow: 1 }}>
+
+    <div >
+      <Box>
         <AppBar position="static" style={{ backgroundColor: '#808080' }}>
           <Toolbar>
             {['left'].map((anchor) => (
@@ -250,15 +333,16 @@ export default function Home() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Elite Bazar
             </Typography>
-         
-         {
-          isLoginUser ? (<h1>Hello User</h1>) : ( <Button onClick={clickLogin}  color="inherit">Login</Button>)
 
-         }
-           
+            {
+              isLoginUser ? (<h1>Hello {userFullName}</h1>) : (<Button onClick={clickLogin} color="inherit">Login</Button>)
+
+            }
+
           </Toolbar>
         </AppBar>
       </Box>
+
 
       <div>
         <img
@@ -270,9 +354,12 @@ export default function Home() {
 
       <div className='m-10 flex justify-between'>
         <div className='cursor-pointer'>
-          <IconButton>
-            <FaFilter />
-          </IconButton>
+          <Tooltip title="category">
+            <IconButton onClick={handleClick}>
+              <FaFilter />
+            </IconButton>
+          </Tooltip>
+
         </div>
         <div onClick={sortToggle} className='cursor-pointer' >
           <Tooltip title={sortToggleBtn ? 'Low To High' : "High To Low"}>
@@ -284,7 +371,7 @@ export default function Home() {
 
 
         <div className='cursor-pointer'>
-          <IconButton>
+          <IconButton >
             <BsSearch />
           </IconButton>
         </div>
@@ -293,21 +380,47 @@ export default function Home() {
 
       <div className='flex'>
         {
-        products ? (
-          products.map((product) => (
-            <div key={product._id} style={cardStyle}>
-            <img
-              src='https://img.freepik.com/free-vector/modern-black-friday-sale-banner-template-with-3d-background-red-splash_1361-1877.jpg?w=1060&t=st=1691337012~exp=1691337612~hmac=a09d43e26f6eee03e09f41061e7aa4b79b1d3c1130ac8b1f03bd2bb4f9cc2012'
-              alt={product.title}
-              style={imageStyle}
-            />
-            <div style={titleStyle}>{product.productName}</div>
-            <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
-            <div >{product.productDescription}</div>
-          </div>
-         
-          ))
-          ) : "" 
+          products ? (
+            products.map((product) => (
+              <div key={product._id} style={cardStyle}>
+                <img
+                  src='https://img.freepik.com/free-vector/modern-black-friday-sale-banner-template-with-3d-background-red-splash_1361-1877.jpg?w=1060&t=st=1691337012~exp=1691337612~hmac=a09d43e26f6eee03e09f41061e7aa4b79b1d3c1130ac8b1f03bd2bb4f9cc2012'
+                  alt={product.title}
+                  style={imageStyle}
+                />
+                <div style={titleStyle}>{product.productName}</div>
+                <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
+                <div >{product.productDescription}</div>
+
+                {/* {count} */}
+                <Button>
+                  <button onClick={() => dispatch(increment())}>+</button>
+                </Button>
+
+
+                <div>
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    {categories.map((item) => (
+                      <MenuItem key={item.id} onClick={() => handleSelect(item.categoryName)}>
+                        {item.categoryName}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </div>
+
+
+
+
+              </div>
+
+            ))
+          ) : ""
         }
 
 

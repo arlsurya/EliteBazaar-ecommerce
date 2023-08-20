@@ -8,6 +8,9 @@ import { ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/router';
 import Image from 'next/image'
 import Divider from '@mui/material/Divider';
+import EditIcon from '@mui/icons-material/Edit';
+import { BsSortUp, BsSearch, BsSortDown } from 'react-icons/bs';
+import { MdEdit, MdDelete } from "react-icons/md";
 
 import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 import IconButton from '@mui/material/IconButton';
@@ -19,8 +22,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+// import {Modal} from '../../../components/modal'
 
-function home() {
+const home = () => {
 
     // route
     const router = useRouter();
@@ -101,7 +105,7 @@ function home() {
 
     useEffect(() => {
         // get token from the localstorage and set the token to state
-        tokenExe()
+        // tokenExe()
         getProducts()
         getOrders()
         getCategory()
@@ -257,6 +261,7 @@ function home() {
             setIsCategoryModalOpen(true)
         }
         if (type === 'product') {
+
             setProductActionType('Add')
             setIsProductModalOpen(true)
         }
@@ -605,184 +610,84 @@ function home() {
                         </div>
                     </div>
 
+                    <Divider className='p-3' light />
+
+
+
+
+
                     <Divider className='mt-5' light />
+
                     {
                         productModule ? (
+                            <div className='productModule'>
+                                <div className='btnPosition'>
 
-                            <TableContainer>
-                                <Table aria-label="simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell align="right">Product Name</TableCell>
-                                            <TableCell align="right">Description</TableCell>
-                                            <TableCell align="right">Price</TableCell>
-                                            <TableCell align="right">Discount Price</TableCell>
-                                            <TableCell align="right">Category</TableCell>
-                                            <TableCell align="right">Quantity</TableCell>
-                                            <TableCell align="right">Status</TableCell>
-                                            <TableCell align="right">Image</TableCell>
-                                            <TableCell align="right">Action</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {products.map((product) => (
-                                            <TableRow key={product.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                                <TableCell  align="right">
-                                                    {product.productName}
-                                                </TableCell>
-                                                <TableCell align="right">{product.productDescription}</TableCell>
-                                                <TableCell align="right">{product.productPrice}</TableCell>
-                                                <TableCell align="right">{product.productDiscountedPrice}</TableCell>
-                                                <TableCell align="right">{product.productCategory}</TableCell>
-                                                <TableCell align="right">{product.productQuantity}</TableCell>
-                                                <TableCell align="right"><button className={product.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
-                                                                {product.status == false ? 'Inactive' : 'Active'}
-                                                            </button></TableCell>
-                                                <TableCell align="right"><button onClick={() => edit('product', product)}>E</button></TableCell>
-                                                <TableCell align="right"><button onClick={() => deleteMethod('product', product._id)} >D</button></TableCell>
+                                    <button onClick={() => handleOpenModal('product')} className='addButton p-2 mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded'>Add Product</button>
+
+                                </div>
+
+
+
+
+
+
+                                <TableContainer className='mt-3'>
+                                    <Table aria-label="simple table">
+                                        <TableHead className='font-bold bg-gray-100 text-center'>
+                                            <TableRow >
+                                                <TableCell align="center">Product Name</TableCell>
+                                                <TableCell align="center">Description</TableCell>
+                                                <TableCell align="center">Price</TableCell>
+                                                <TableCell align="center">Discount Price</TableCell>
+                                                <TableCell align="center">Category</TableCell>
+                                                <TableCell align="center">Quantity</TableCell>
+                                                <TableCell align="center">Status</TableCell>
+                                                <TableCell align="center">Image</TableCell>
+                                                <TableCell align="center">Edit</TableCell>
+                                                <TableCell align="center">Delete</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                         
+                                        </TableHead>
+                                        <TableBody>
+                                            {products.map((product) => (
+                                                <TableRow className='text-center' key={product.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                                    <TableCell align="center">
+                                                        {product.productName}
+                                                    </TableCell>
+                                                    <TableCell align="center">{product.productDescription}</TableCell>
+                                                    <TableCell align="center">{product.productPrice}</TableCell>
+                                                    <TableCell align="center">{product.productDiscountedPrice}</TableCell>
+                                                    <TableCell align="center">{product.productCategory}</TableCell>
+                                                    <TableCell align="center">{product.productQuantity}</TableCell>
+                                                    <TableCell align="center"><button className={product.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
+                                                        {product.status == false ? 'Inactive' : 'Active'}
+                                                    </button></TableCell>
+                                                    <TableCell align="center"><img src="#" className='h-20 w-20 bg-black'></img></TableCell>
+                                                    <TableCell align="center"><button onClick={() => edit('product', product)}> <IconButton > <MdEdit /></IconButton></button></TableCell>
+                                                    <TableCell align="center"><button onClick={() => deleteMethod('product', product._id)} ><IconButton><MdDelete /></IconButton></button></TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
 
 
 
 
-                                </Table>
-                            </TableContainer>
+
+                                    </Table>
+                                </TableContainer>
+
+                                {/* add product modal */}
 
 
-                        ) : ''
-                    }
-
-
-
-
-                </div>
-            </div>
-
-
-
-
-
-            <div className={`sidebar ${isOpen ? 'open' : ''} `}>
-                <div className='toggleBtn' onClick={toggleSidebar}>
-                    <div className='bar'></div>
-                    <div className='bar'></div>
-                    <div className='bar'></div>
-                </div>
-                <nav className='sideNav'>
-
-                    <ul className='customUl'>
-                        <li>Dashboard</li>
-                        <li onClick={selectCatogary}>Category</li>
-                        <li onClick={selectProduct}>Product</li>
-                        <li onClick={selectOrder} >Order</li>
-                    </ul>
-                </nav>
-            </div>
-
-            <div className='subHeading'>
-                <div className="dashboard-card">
-                    <div className="card-content">
-                        <h2>Sales</h2>
-
-                        <h1 className='text-gray-400 text-lg'>Total Sales: {sales.length > 0 ? sales[0].totalSalesAmount : ''}</h1>
-                    </div>
-                </div>
-                <div className="dashboard-card">
-                    <div className="card-content">
-                        <h2>Order</h2>
-                        <p>Total Order: {orderCount ? orderCount : 0}</p>
-                    </div>
-                </div>
-
-                <div className="dashboard-card">
-                    <div className="card-content">
-                        <h2>Product</h2>
-                        <p>Total Product: {productCount ? productCount : 0}</p>
-                    </div>
-                </div>
-
-                <div className="dashboard-card">
-                    <div className="card-content">
-                        <h2>Category</h2>
-                        <p>Total Category: {categoryCount ? categoryCount : 0}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-
-                {
-                    categoryModule ? (
-                        <div className='categoryModule'>
-
-
-
-
-                            <div className='btnPosition'>
-
-                                <button onClick={() => handleOpenModal('category')} className='addButton'>Add Category</button>
-
-                            </div>
-
-                            <div className='category'>
-                                <div className='addCatagory'>
-
-                                </div>
-                                <div className='categoryTable'>
-                                    {categories.length > 0 ? (
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Category Name</th>
-                                                    <th>Status</th>
-                                                    <th>Date</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {categories.map((category) => (
-
-                                                    <tr key={category.id}>
-                                                        <td>{category.categoryName}</td>
-                                                        <td>
-                                                            <button className={category.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
-                                                                {category.status == false ? 'Inactive' : 'Active'}
-                                                            </button>
-                                                        </td>
-                                                        <td>{category.updatedAt}</td>
-                                                        <td>
-                                                            <button onClick={() => edit('category', category)} >E</button>
-                                                            <button onClick={() => deleteMethod('category', category._id)}  >D</button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    ) : (
-                                        <p>No data to display.</p>
-                                    )}
-                                    <ToastContainer />
-
-                                </div>
-
-
-
-
-                                {/* add category modal */}
-
-
-                                <Modal isOpen={isCategoryModalOpen} onClose={handleCloseModal}>
-                                    <h1>{categoryActionType} Category</h1>
+                                <Modal isOpen={isProductModalOpen} onClose={handleCloseModal}>
+                                    <h1>{productActionType} Category</h1>
 
                                     <Formik
                                         initialValues={{
-                                            categoryName: initialCategoryName,
+                                            categoryName: initialProductName,
                                         }}
-                                        validationSchema={categorySchema}
-                                        onSubmit={categorySubmit}>
+                                        validationSchema={productSchema}
+                                        onSubmit={productSubmit}>
                                         {({ errors, touched }) => (
                                             <Form>
 
@@ -791,7 +696,7 @@ function home() {
                                                     <div>{errors.categoryName}</div>
                                                 ) : null}
 
-                                                <button type="submit">{categoryActionType}</button>
+                                                <button type="submit">{productActionType}</button>
 
                                             </Form>
                                         )}
@@ -800,222 +705,179 @@ function home() {
                                     <button onClick={handleCloseModal}>Close Modal</button>
                                 </Modal>
 
+                            </div>
 
+
+
+                        ) : ''
+                    }
+                    {
+                        orderModule ? (
+
+                            <div className='orders'>
+                                <TableContainer>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell align="right">User Name</TableCell>
+                                                <TableCell align="right">User Mobile</TableCell>
+                                                <TableCell align="right">User Email</TableCell>
+                                                <TableCell align="right">Product Name</TableCell>
+                                                <TableCell align="right">Product Amount</TableCell>
+                                                <TableCell align="right">Product Quantity</TableCell>
+                                                <TableCell align="right">Transaction Amount</TableCell>
+                                                <TableCell align="right">Transaction ID</TableCell>
+                                                <TableCell align="right">Payment Gateway</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+
+
+                                            {
+                                                orders.length > 0 ? (
+
+                                                    orders.map((order) => (
+                                                        <TableRow key={order.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+
+                                                            <TableCell align="right">{order.userDetails.fullName}</TableCell>
+                                                            <TableCell align="right">{order.userDetails.mobile}</TableCell>
+                                                            <TableCell align="right">{order.userDetails.email}</TableCell>
+                                                            <TableCell align="right">{order.productName}</TableCell>
+                                                            <TableCell align="right">{order.productAmount}</TableCell>
+                                                            <TableCell align="right">{order.productQuantity}</TableCell>
+                                                            <TableCell align="right">{order.transactionAmount}</TableCell>
+                                                            <TableCell align="right">{order.transactionId}</TableCell>
+                                                            <TableCell align="right">{order.paymentGateway}</TableCell>
+
+                                                        </TableRow>
+                                                    ))
+                                                ) : (<p>No data to display.</p>)
+                                            }
+
+
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
 
 
 
                             </div>
 
 
-                        </div>
-
-
-
-                    ) : ("")
-
-                }
-
-
+                        ) : ('')
+                    }
+                    {
+                        categoryModule ? (
+                            <div className='categoryModule'>
 
 
 
 
+                                <div className='btnPosition'>
 
-            </div>
-
-
-            <div >
-
-
-
-                {
-                    productModule ? (
-                        <div className='productModule'>
-
-
-
-
-                            <div className=''>
-
-                                <button onClick={() => handleOpenModal('product')} className='addButton'>Add Product</button>
-
-                            </div>
-
-                            <div className='product'>
-                                <div className='addProduct'>
-
-                                </div>
-                                <div className='productCategory'>
-                                    {categories.length > 0 ? (
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Product Name</th>
-                                                    <th> Description</th>
-                                                    <th> Price</th>
-                                                    <th> Discount Price</th>
-                                                    <th> Category</th>
-                                                    <th> Quantity</th>
-                                                    <th>Status</th>
-                                                    <th>Image</th>
-                                                    <th>Action</th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {products.map((product) => (
-
-                                                    <tr key={product.id}>
-                                                        <td>{product.productName}</td>
-                                                        <td>{product.productDescription}</td>
-                                                        <td>{product.productPrice}</td>
-                                                        <td>{product.productDiscountedPrice}</td>
-                                                        <td>{product.productCategory}</td>
-                                                        <td>{product.productQuantity}</td>
-                                                        <td>
-                                                            <button className={product.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
-                                                                {product.status == false ? 'Inactive' : 'Active'}
-                                                            </button>
-                                                        </td>
-                                                        <td>img</td>
-                                                        <td>
-                                                            <button onClick={() => edit('product', product)}>E</button>
-                                                            <button onClick={() => deleteMethod('product', product._id)} >D</button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    ) : (
-                                        <p>No data to display.</p>
-                                    )}
-
-                                    <ToastContainer />
+                                    <button onClick={() => handleOpenModal('category')} className='addButton p-2 mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded'>Add Category</button>
 
                                 </div>
 
+                                <div className='category'>
+                                    <div className='addCatagory'>
+
+                                    </div>
+                                    <div className='categoryTable'>
+                                        <TableContainer className='mt-3'>
+                                            <Table aria-label="simple table">
+                                                <TableHead className='bg-gray-100 text-center'>
+                                                    <TableRow>
+                                                        <TableCell align="center">Category Name</TableCell>
+                                                        <TableCell align="center">Status</TableCell>
+                                                        <TableCell align="center">Date</TableCell>
+                                                        <TableCell align="center">Edit</TableCell>
+                                                        <TableCell align="center">Delete</TableCell>
+
+
+                                                    </TableRow>
+
+                                                </TableHead>
+                                                <TableBody>
+                                                    {categories.map((category) => (
+
+                                                        <TableRow key={category.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                                            <TableCell align="center">
+                                                                {category.categoryName}
+                                                            </TableCell>
+
+                                                            <TableCell align="center"><button className={category.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
+                                                                {category.status == false ? 'Inactive' : 'Active'}
+                                                            </button></TableCell>
+                                                            <TableCell align="center">{category.updatedAt}</TableCell>
+                                                            <TableCell align="center"><button onClick={() => edit('category', category)}> <IconButton > <MdEdit /></IconButton></button></TableCell>
+                                                    <TableCell align="center"><button onClick={() => deleteMethod('category', category._id)} ><IconButton><MdDelete /></IconButton></button></TableCell>
+  
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+
+                                        </TableContainer>
+
+                                        <ToastContainer />
+
+                                    </div>
 
 
 
 
+                                    {/* add category modal */}
+
+
+                                    <Modal isOpen={isCategoryModalOpen} onClose={handleCloseModal}>
+                                        <h1>{categoryActionType} Category</h1>
+
+                                        <Formik
+                                            initialValues={{
+                                                categoryName: initialCategoryName,
+                                            }}
+                                            validationSchema={categorySchema}
+                                            onSubmit={categorySubmit}>
+                                            {({ errors, touched }) => (
+                                                <Form>
+
+                                                    <Field type="text" placeholder="product category name" name="categoryName" />
+                                                    {errors.categoryName && touched.categoryName ? (
+                                                        <div>{errors.categoryName}</div>
+                                                    ) : null}
+
+                                                    <button type="submit">{categoryActionType}</button>
+
+                                                </Form>
+                                            )}
+                                        </Formik>
+
+                                        <button onClick={handleCloseModal}>Close Modal</button>
+                                    </Modal>
+
+
+
+
+
+                                </div>
 
 
                             </div>
 
 
-                        </div>
+
+                        ) : ("")
+
+                    }
 
 
 
-                    ) : ("")
 
-                }
 
-                <Modal isOpen={isProductModalOpen} onClose={handleCloseModal}>
-                    <h1>{productActionType} Product</h1>
-
-                    <Formik
-                        initialValues={{
-                            productName: initialProductName,
-                            productDescription: initialProductDescription,
-                            productPrice: initialProductPrice,
-                            productDiscountedPrice: initialProductDiscountedPrice,
-                            productCategory: initialProductCategory,
-                            productQuantity: initialProductQuantity,
-
-                        }}
-                        validationSchema={productSchema}
-                        onSubmit={productSubmit}>
-                        {({ errors, touched }) => (
-                            <Form>
-
-                                <Field type="text" placeholder="product name" name="productName" />
-                                {errors.productName && touched.productName ? (
-                                    <div>{errors.productName}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product description" name="productDescription" />
-                                {errors.productDescription && touched.productDescription ? (
-                                    <div>{errors.productDescription}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product price" name="productPrice" />
-                                {errors.productPrice && touched.productPrice ? (
-                                    <div>{errors.productPrice}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product discounted price" name="productDiscountedPrice" />
-                                {errors.productDiscountedPrice && touched.productDiscountedPrice ? (
-                                    <div>{errors.productDiscountedPrice}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product category" name="productCategory" />
-                                {errors.productCategory && touched.productCategory ? (
-                                    <div>{errors.productCategory}</div>
-                                ) : null}
-                                <Field type="text" placeholder="product quantity" name="productQuantity" />
-                                {errors.productQuantity && touched.productQuantity ? (
-                                    <div>{errors.productQuantity}</div>
-                                ) : null}
-
-                                <button type="submit">{productActionType}</button>
-                                <ToastContainer />
-
-                            </Form>
-                        )}
-                    </Formik>
-
-                    <button onClick={handleCloseModal}>Close Modal</button>
-                </Modal>
-
+                </div>
             </div>
 
-            <div className='orderModule'>
-                {
-                    orderModule ? (
-
-                        <div className='orders'>
-                            {orders.length > 0 ? (
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>User Name</th>
-                                            <th>User Mobile</th>
-                                            <th>User Email</th>
-                                            <th> Product Name</th>
-                                            <th> Product Amount</th>
-                                            <th> Product Quantity</th>
-                                            <th> Transaction Amount</th>
-                                            <th> Transaction ID</th>
-                                            <th> Payment Gateway</th>
-
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {orders.map((order) => (
-
-                                            <tr key={order.id}>
-                                                <td>{order.userDetails.fullName}</td>
-                                                <td>{order.userDetails.mobile}</td>
-                                                <td>{order.userDetails.email}</td>
-                                                <td>{order.productName}</td>
-                                                <td>{order.productAmount}</td>
-                                                <td>{order.productQuantity}</td>
-                                                <td>{order.transactionAmount}</td>
-                                                <td>{order.transactionId}</td>
-                                                <td>{order.paymentGateway}</td>
-
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            ) : (
-                                <p>No data to display.</p>
-                            )}
-                        </div>
-
-
-                    ) : ('')
-                }
-
-            </div>
         </div>
 
     )

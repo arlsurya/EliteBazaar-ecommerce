@@ -15,6 +15,7 @@ router.post('/changepassword',isAuth, userController.changePassword)
 router.get('/product',isAuth,matchToken, userController.getProductById)
 router.get('/product/:id',isAuth, userController.getProductByParams)
 router.get('/products/', userController.products)
+router.get('/categories',userController.categories)
 
 // order
 router.post('/order',isAuth,matchToken, userController.orderProduct)
