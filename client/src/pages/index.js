@@ -46,8 +46,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { useDispatch, useSelector } from "react-redux";
 import { increment } from './redux/reducerSlices/counterSlice';
 
-
-const IMG_URL = 'http://127.0.0.1:3001/api/uploads'
+// from the next.config.ts
+const IMG_URL = process.env.IMG_BASE_URL
 
 
 
@@ -107,6 +107,7 @@ const apiURL = process.env.API_BASE_URL
 
 export default function Home() {
 
+
   const { isLoggedIn, userDetailsData } = useSelector(state => state.user)
 
 
@@ -126,6 +127,12 @@ export default function Home() {
     getFilterCategoryProduct(value)
 
 
+  }
+
+  const viewProduct = (productId) =>{
+    console.log(productId)
+    router.push(`/${productId}`)
+    
   }
 
   const getFilterCategoryProduct = async (value) => {
@@ -379,28 +386,8 @@ export default function Home() {
         </div>
 
       </div>
-
-      <div className='flex'>
-        {
-          products ? (
-            products.map((product) => (
-              <div key={product._id} style={cardStyle}>
-                <img
-                  src={`${IMG_URL}/${product.productImage}`}
-                  alt={product.title}
-                  style={imageStyle}
-                />
-                <div style={titleStyle}>{product.productName}</div>
-                <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
-                <div >{product.productDescription}</div>
-
-                {/* {count} */}
-                <Button>
-                  <button onClick={() => dispatch(increment())}>+</button>
-                </Button>
-
-
-                <div>
+      
+      <div>
                   <Menu
                     id="simple-menu"
                     anchorEl={anchorEl}
@@ -415,6 +402,27 @@ export default function Home() {
                     ))}
                   </Menu>
                 </div>
+
+      <div className='flex'>
+        {
+          products ? (
+            products.map((product) => (
+              <div onClick={()=>viewProduct(product._id)} className='cursor-pointer' key={product._id} style={cardStyle}>
+                <img
+                  src={`${IMG_URL}/${product.productImage}`}
+                  alt={product.title}
+                  style={imageStyle}
+                />
+                <div style={titleStyle}>{product.productName}</div>
+                <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
+                <div >{product.productDescription}</div>
+
+                {/* {count} */}
+                {/* <Button>
+                  <button onClick={() => dispatch(increment())}>+</button>
+                </Button> */}
+
+
 
 
 

@@ -848,9 +848,9 @@ const home = () => {
                         orderModule ? (
 
                             <div className='orders'>
-                                <TableContainer>
+                                <TableContainer className='mt-3 max-h-[500px] overflow-y-auto'>
                                     <Table>
-                                        <TableHead>
+                                        <TableHead className='bg-gray-100 text-center'>
                                             <TableRow>
                                                 <TableCell align="right">User Name</TableCell>
                                                 <TableCell align="right">User Mobile</TableCell>
@@ -917,7 +917,7 @@ const home = () => {
 
                                     </div>
                                     <div className='categoryTable'>
-                                        <TableContainer className='mt-3'>
+                                        <TableContainer className='mt-3 max-h-[500px] overflow-y-auto'>
                                             <Table aria-label="simple table">
                                                 <TableHead className='bg-gray-100 text-center'>
                                                     <TableRow>

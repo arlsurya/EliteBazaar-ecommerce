@@ -353,8 +353,8 @@ module.exports = {
     getProductByParams: async (req, res) => {
 
         // getting data from the user token 
-        let userId = req.userAuth.id
-        console.log(userId)
+        // let userId = req.userAuth.id
+        // console.log(userId)
         let { id } = req.params
 
         try {
