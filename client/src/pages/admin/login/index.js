@@ -6,12 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/router';
 import {Home} from '../../index'
+import { setUserDetails } from '@/pages/redux/reducerSlices/userSlice';
  
 import { useDispatch, useSelector } from 'react-redux';
 
 
 
 export const adminLogin = () => {
+  const dispatch = useDispatch()
   const {isLoggedIn} = useSelector(state => state.user)
   const router = useRouter();
 
@@ -54,6 +56,12 @@ export const adminLogin = () => {
 
         const token = responseData.token.split(' ')[1]
         localStorage.setItem('_token', token)
+
+        // save to redux
+        dispatch(setUserDetails(responseData))
+
+
+
 
         router.push('/admin/home');
 

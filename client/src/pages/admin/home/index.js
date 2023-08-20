@@ -11,10 +11,8 @@ import Divider from '@mui/material/Divider';
 import EditIcon from '@mui/icons-material/Edit';
 import { BsSortUp, BsSearch, BsSortDown } from 'react-icons/bs';
 import { MdEdit, MdDelete } from "react-icons/md";
-
 import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 import IconButton from '@mui/material/IconButton';
-
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,16 +20,21 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { setUserDetails } from '@/pages/redux/reducerSlices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-// import {Modal} from '../../../components/modal'
+
 
 const home = () => {
+    const {isLoggedIn, deviceToken} = useSelector(state=> state.user)
 
     // route
     const router = useRouter();
 
     // api url
     const apiURL = process.env.API_BASE_URL
+    // img url 
+    const IMG_URL = process.env.IMG_BASE_URL
 
     // get token from the localstorage
     const [token, setToken] = useState('')
@@ -73,11 +76,16 @@ const home = () => {
     // get update profile id
     const [updateProductId, setUpdateProductId] = useState('')
 
+    // last product image (for view on edit mode)
+    const [lastViewImage,setLastViewImage] = useState('')
+
     // this is for dynamic name for modal like (add product or edit product)
     const [productActionType, setProductActionType] = useState('')
 
     const [selectedImage, setSelectedImage] = useState('')
     const [imageData, setImageData] = useState('')
+
+    // 
 
 
     // left sidebar modules
@@ -108,15 +116,19 @@ const home = () => {
 
 
     useEffect(() => {
+
         // get token from the localstorage and set the token to state
-        // tokenExe()
+        tokenExe()
         getProducts()
         getOrders()
         getCategory()
-
+       
     }, [])
 
     const imageSelected = (event) => {
+        // reset edit mode image
+        setLastViewImage('')
+        
 
         const selectedFile = event[0];
         setImageData(selectedFile)
@@ -146,8 +158,10 @@ const home = () => {
 
 
     const tokenExe = () => {
-        let getToken = localStorage.getItem('_token')
+        // let getToken = localStorage.getItem('_token')
+        let getToken = deviceToken;
         if (getToken != null) {
+            getToken = getToken.split(' ')[1]
             setToken(getToken)
             console.log(getToken)
         } else {
@@ -163,7 +177,8 @@ const home = () => {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${getToken}`
+                    'authorization': `${deviceToken}`
+
                 },
             });
             const responseData = await response.json();
@@ -176,12 +191,13 @@ const home = () => {
     }
 
     const getOrders = async () => {
-        let getToken = localStorage.getItem(process.env.localStorage.token)
+        // let getToken = localStorage.getItem(process.env.localStorage.token)
         const response = await fetch(`${apiURL}/api/admin/orders`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${getToken}`
+                'authorization': `${deviceToken}`
+
             },
         });
         const responseData = await response.json();
@@ -193,12 +209,13 @@ const home = () => {
 
     const getCategory = async () => {
         try {
-            let getToken = localStorage.getItem(process.env.localStorage.token)
+            // let getToken = localStorage.getItem(process.env.localStorage.token)
             const response = await fetch(`${apiURL}/api/admin/categories`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${getToken}`
+                    'authorization': `${deviceToken}`
+
                 },
             });
             const responseData = await response.json();
@@ -224,6 +241,9 @@ const home = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'authorization': `${deviceToken}`
+
+
                 },
                 body: JSON.stringify(payload),
             });
@@ -271,7 +291,8 @@ const home = () => {
             const response = await fetch(`${apiURL}/api/admin/addproduct`, {
                 method: 'POST',
                 headers: {
-                    'authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjQwOGJlZjZmY2I0MmY1ZThkMmRiMyIsImlhdCI6MTY5MjQ5OTEzMCwiZXhwIjoxNjkzMTAzOTMwfQ.yrmlXiHXQMWhVZWHkda_iVvXvgy8aCK3MxjDZ_dxFgM`
+                    'authorization': `${deviceToken}`
+
                 },
                 // body: JSON.stringify(formData),
                 body: formData,
@@ -369,7 +390,8 @@ const home = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
+                    'authorization': `${deviceToken}`
+
                 },
                 body: JSON.stringify(data),
             });
@@ -422,7 +444,8 @@ const home = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
+                    'authorization': `${deviceToken}`
+
                 },
                 body: JSON.stringify(data),
             });
@@ -483,6 +506,7 @@ const home = () => {
         setInitialProductDiscountedPrice(data.productDiscountedPrice)
         setInitialProductCategory(data.productCategory)
         setInitialProductQuantity(data.productQuantity)
+        setLastViewImage(data.productImage)
         setProductActionType('Update')
         setIsProductModalOpen(true)
 
@@ -498,7 +522,8 @@ const home = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
+                    'authorization': `${deviceToken}`
+
                 },
                 body: JSON.stringify(payload),
             });
@@ -531,7 +556,8 @@ const home = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
+                    'authorization': `${deviceToken}`
+
                 },
                 body: JSON.stringify(payload),
             });
@@ -711,7 +737,7 @@ const home = () => {
                                                     <TableCell align="center"><button className={product.status === 'Active' ? 'btn btn-primary' : 'btn btn-inactive'}>
                                                         {product.status == false ? 'Inactive' : 'Active'}
                                                     </button></TableCell>
-                                                    <TableCell align="center"><img src={`http://127.0.0.1:3001/api/uploads/${product.productImage}`} className='h-20 w-20 bg-black'></img></TableCell>
+                                                    <TableCell align="center"><img src={`${IMG_URL}${product.productImage}`} className='h-20 w-20 bg-black'></img></TableCell>
                                                     <TableCell align="center"><button onClick={() => edit('product', product)}> <IconButton > <MdEdit /></IconButton></button></TableCell>
                                                     <TableCell align="center"><button onClick={() => deleteMethod('product', product._id)} ><IconButton><MdDelete /></IconButton></button></TableCell>
                                                 </TableRow>
@@ -743,6 +769,7 @@ const home = () => {
                                                 productDiscountedPrice: initialProductDiscountedPrice,
                                                 productCategory: initialProductCategory,
                                                 productQuantity: initialProductQuantity,
+
 
                                             }}
                                             validationSchema={productSchema}
@@ -780,6 +807,16 @@ const home = () => {
 
                                                         <div className='h-100 w-150 mt-3 '>
                                                             <img className='rounded-md' src={selectedImage}></img>
+
+
+                                                           {
+                                                               productActionType == 'Update' ? (
+                                                            <img className='rounded-md' src={`${IMG_URL}${lastViewImage}`}></img>
+                                                               
+
+
+                                                            ) : ('')
+                                                           }
                                                         </div>
 
                                                     </div>
