@@ -46,6 +46,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { useDispatch, useSelector } from "react-redux";
 import { increment } from './redux/reducerSlices/counterSlice';
 
+// from the next.config.ts
+const IMG_URL = process.env.IMG_BASE_URL
 
 
 
@@ -105,6 +107,7 @@ const apiURL = process.env.API_BASE_URL
 
 export default function Home() {
 
+
   const { isLoggedIn, userDetailsData } = useSelector(state => state.user)
 
 
@@ -124,6 +127,12 @@ export default function Home() {
     getFilterCategoryProduct(value)
 
 
+  }
+
+  const viewProduct = (productId) =>{
+    console.log(productId)
+    router.push(`/${productId}`)
+    
   }
 
   const getFilterCategoryProduct = async (value) => {
@@ -377,28 +386,8 @@ export default function Home() {
         </div>
 
       </div>
-
-      <div className='flex'>
-        {
-          products ? (
-            products.map((product) => (
-              <div key={product._id} style={cardStyle}>
-                <img
-                  src='https://img.freepik.com/free-vector/modern-black-friday-sale-banner-template-with-3d-background-red-splash_1361-1877.jpg?w=1060&t=st=1691337012~exp=1691337612~hmac=a09d43e26f6eee03e09f41061e7aa4b79b1d3c1130ac8b1f03bd2bb4f9cc2012'
-                  alt={product.title}
-                  style={imageStyle}
-                />
-                <div style={titleStyle}>{product.productName}</div>
-                <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
-                <div >{product.productDescription}</div>
-
-                {/* {count} */}
-                <Button>
-                  <button onClick={() => dispatch(increment())}>+</button>
-                </Button>
-
-
-                <div>
+      
+      <div>
                   <Menu
                     id="simple-menu"
                     anchorEl={anchorEl}
@@ -413,6 +402,27 @@ export default function Home() {
                     ))}
                   </Menu>
                 </div>
+
+      <div className='flex'>
+        {
+          products ? (
+            products.map((product) => (
+              <div onClick={()=>viewProduct(product._id)} className='cursor-pointer' key={product._id} style={cardStyle}>
+                <img
+                  src={`${IMG_URL}/${product.productImage}`}
+                  alt={product.title}
+                  style={imageStyle}
+                />
+                <div style={titleStyle}>{product.productName}</div>
+                <div style={priceStyle}>Price: रु‎ {product.productPrice}</div>
+                <div >{product.productDescription}</div>
+
+                {/* {count} */}
+                {/* <Button>
+                  <button onClick={() => dispatch(increment())}>+</button>
+                </Button> */}
+
+
 
 
 

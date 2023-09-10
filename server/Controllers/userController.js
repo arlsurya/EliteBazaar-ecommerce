@@ -12,7 +12,7 @@ const Utilities = require('../Utilities')
 const FileService = require('../Services/fileService')
 module.exports = {
     register: async (req, res) => {
-    
+
         try {
             let { fullName, email, mobile, password } = req.body;
             if (!fullName) {
@@ -84,7 +84,7 @@ module.exports = {
             let device = {
                 deviceName: req.body.deviceName,
                 deviceToken: authToken.split(' ')[0],
-                lastLoggedIn:currentDate
+                lastLoggedIn: currentDate
             }
 
             // device details push to device array
@@ -169,8 +169,8 @@ module.exports = {
                 Constants.jwtSectet,
                 { expiresIn: '7days' }
             )
-       
-            const currentDate = new Date(); 
+
+            const currentDate = new Date();
 
 
             // Payload for the new device
@@ -199,7 +199,7 @@ module.exports = {
                 });
             }
 
-            user.lastLoggedIn = currentDate; 
+            user.lastLoggedIn = currentDate;
 
             user = await user.save();
 
@@ -211,7 +211,7 @@ module.exports = {
                 statusCode: 200,
                 Code: 1,
                 token: `Bearer ${authToken}`,
-                userDetails:user,
+                userDetails: user,
                 message: 'user logged in'
             })
 
@@ -353,8 +353,8 @@ module.exports = {
     getProductByParams: async (req, res) => {
 
         // getting data from the user token 
-        let userId = req.userAuth.id
-        console.log(userId)
+        // let userId = req.userAuth.id
+        // console.log(userId)
         let { id } = req.params
 
         try {
@@ -391,7 +391,7 @@ module.exports = {
             let { search, category, page, limit, sort, order, skip } = req.query
 
             page = parseInt(page) || 1;
-            limit = parseInt(limit) || 3;
+            limit = parseInt(limit) || 10;
             order = order == 'desc' ? -1 : 1;
             skip = (page - 1) * limit;
             sort = {
@@ -402,19 +402,19 @@ module.exports = {
 
             let query = {}
 
-            if(search != undefined && search != ""){
-                 query = {
-                 "productName": {$regex: ".*" + search + ".*" , $options: 'i'}   
+            if (search != undefined && search != "") {
+                query = {
+                    "productName": { $regex: ".*" + search + ".*", $options: 'i' }
                 }
             }
 
 
             console.log(query)
 
-            if(category != undefined && category != ""){
+            if (category != undefined && category != "") {
                 query = {
-                    "productCategory": {$regex: ".*" + category + ".*" , $options: 'i'}   
-                   }
+                    "productCategory": { $regex: ".*" + category + ".*", $options: 'i' }
+                }
 
             }
 
@@ -456,17 +456,17 @@ module.exports = {
         }
     },
 
-    orderProduct : async(req,res)=>{
+    orderProduct: async (req, res) => {
         try {
 
-            let {transactionId, productName, productAmount,productQuantity, transactionAmount,paymentGateway,productId, userId} = req.body
+            let { transactionId, productName, productAmount, productQuantity, transactionAmount, paymentGateway, productId, userId } = req.body
 
             let order = transactionModel(req.body)
             order = await order.save()
 
             res.send(order)
 
-            
+
         } catch (error) {
 
             console.log(error)
@@ -474,41 +474,43 @@ module.exports = {
                 statusCode: 401,
                 message: "Internal Server Error"
             })
-            
+
         }
     },
 
-    categories: async(req,res)=>{
+    categories: async (req, res) => {
         try {
 
             let categories = await categoryModel.aggregate([
-                {$match:{}},
-                {$project:{
-                  
-                    categoryName:1,
-                    status:1,
-                    updatedAt:1,
-                   
-                }}
+                { $match: {} },
+                {
+                    $project: {
+
+                        categoryName: 1,
+                        status: 1,
+                        updatedAt: 1,
+
+                    }
+                }
 
             ])
             let countCategory = await categoryModel.countDocuments()
-          
-            if(categories != undefined){
+
+            if (categories != undefined) {
                 return res.status(200).json({
-                    statusCode:200,
-                    message:"all categories",
+                    statusCode: 200,
+                    message: "all categories",
                     data: categories,
-                    countCategory:countCategory
+                    countCategory: countCategory
                 })
             }
-            
+
         } catch (error) {
 
-              console.log(error)
+            console.log(error)
             return res.status(200).json({
-                statusCode:500,
-                Code:0,
+                statusCode: 500,
+                Code: 0,
                 message: 'Internal server error'
             })
         }

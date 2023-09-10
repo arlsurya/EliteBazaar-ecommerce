@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const Constants = require('../Constants')
 
 module.exports = (req,res,next)=>{
-    console.log(req)
+   
     try {
         let token = (req.headers.authorization ? req.headers.authorization.replace("Bearer ", "") : "") ||
             req.body.token
