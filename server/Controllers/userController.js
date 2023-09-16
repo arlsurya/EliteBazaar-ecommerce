@@ -371,7 +371,7 @@ module.exports = {
 
             return res.status(200).json({
                 statusCode: 200,
-                data: product,
+                data: [product],
                 message: "Product Details ."
             })
 
